@@ -7,7 +7,7 @@ import com.padell.padell.entity.Terrain;
 import com.padell.padell.entity.enums.TypeAdministrateur;
 import com.padell.padell.exception.BusinessException;
 import com.padell.padell.repository.AdministrateurRepository;
-import com.padell.padell.repository.MatchRepository; // Ajout de l'import
+import com.padell.padell.repository.MatchRepository;
 import com.padell.padell.service.impl.AdminAuthorizationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ class AdminAuthorizationServiceTest {
     @Mock
     private AdministrateurRepository administrateurRepository;
     @Mock
-    private MatchRepository matchRepository; // Ajout du mock
+    private MatchRepository matchRepository;
 
     private AdminAuthorizationService adminAuthorizationService;
     private Site siteLyon;
@@ -39,7 +39,6 @@ class AdminAuthorizationServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Modification du constructeur pour inclure matchRepository
         adminAuthorizationService = new AdminAuthorizationService(administrateurRepository, matchRepository);
         siteLyon = Site.builder().nom("Padel Club Lyon").build();
         siteLyon.setId(1L);
@@ -55,9 +54,10 @@ class AdminAuthorizationServiceTest {
     @Test
     @DisplayName("Un admin GLOBAL peut accéder à tous les sites")
     void globalAdminCanAccessEverySite() {
-        authenticate("admin@padel.com");
-        when(administrateurRepository.findByEmail("admin@padel.com"))
-                .thenReturn(Optional.of(admin(TypeAdministrateur.GLOBAL, null)));
+        String adminEmail = "admin@padel.com";
+        authenticate(adminEmail);
+        when(administrateurRepository.findByEmail(adminEmail))
+                .thenReturn(Optional.of(admin(adminEmail, TypeAdministrateur.GLOBAL, null)));
 
         adminAuthorizationService.checkSiteAccess(siteParis.getId());
     }
@@ -65,9 +65,10 @@ class AdminAuthorizationServiceTest {
     @Test
     @DisplayName("Un admin SITE peut accéder uniquement à son site")
     void siteAdminCanAccessOwnSiteOnly() {
-        authenticate("admin.lyon@padel.com");
-        when(administrateurRepository.findByEmail("admin.lyon@padel.com"))
-                .thenReturn(Optional.of(admin(TypeAdministrateur.SITE, siteLyon)));
+        String adminEmail = "admin.lyon@padel.com";
+        authenticate(adminEmail);
+        when(administrateurRepository.findByEmail(adminEmail))
+                .thenReturn(Optional.of(admin(adminEmail, TypeAdministrateur.SITE, siteLyon)));
 
         adminAuthorizationService.checkSiteAccess(siteLyon.getId());
         assertThatThrownBy(() -> adminAuthorizationService.checkSiteAccess(siteParis.getId()))
@@ -78,9 +79,10 @@ class AdminAuthorizationServiceTest {
     @Test
     @DisplayName("Un admin SITE sans site rattaché est refusé")
     void siteAdminWithoutSiteIsRejected() {
-        authenticate("admin.site@padel.com");
-        when(administrateurRepository.findByEmail("admin.site@padel.com"))
-                .thenReturn(Optional.of(admin(TypeAdministrateur.SITE, null)));
+        String adminEmail = "admin.site@padel.com";
+        authenticate(adminEmail);
+        when(administrateurRepository.findByEmail(adminEmail))
+                .thenReturn(Optional.of(admin(adminEmail, TypeAdministrateur.SITE, null)));
 
         assertThatThrownBy(() -> adminAuthorizationService.checkSiteAccess(siteLyon.getId()))
                 .isInstanceOf(BusinessException.class)
@@ -90,9 +92,12 @@ class AdminAuthorizationServiceTest {
     @Test
     @DisplayName("Un admin SITE ne peut gérer que les membres de son site")
     void siteAdminCanManageOnlyOwnMembers() {
-        authenticate("admin.lyon@padel.com");
-        when(administrateurRepository.findByEmail("admin@padel.com"))
-                .thenReturn(Optional.of(admin(TypeAdministrateur.SITE, siteLyon)));
+        String adminEmail = "admin.lyon@padel.com";
+        authenticate(adminEmail);
+        // La ligne suivante est la ligne 94 dans le fichier de test si le reste est identique.
+        // Elle doit stuber avec 'adminEmail' qui est "admin.lyon@padel.com"
+        when(administrateurRepository.findByEmail(adminEmail))
+                .thenReturn(Optional.of(admin(adminEmail, TypeAdministrateur.SITE, siteLyon)));
 
         Membre membreParis = Membre.builder().site(siteParis).build();
 
@@ -104,9 +109,10 @@ class AdminAuthorizationServiceTest {
     @Test
     @DisplayName("Un admin SITE ne peut gérer que les terrains de son site")
     void siteAdminCanManageOnlyOwnTerrains() {
-        authenticate("admin.lyon@padel.com");
-        when(administrateurRepository.findByEmail("admin.lyon@padel.com"))
-                .thenReturn(Optional.of(admin(TypeAdministrateur.SITE, siteLyon)));
+        String adminEmail = "admin.lyon@padel.com";
+        authenticate(adminEmail);
+        when(administrateurRepository.findByEmail(adminEmail))
+                .thenReturn(Optional.of(admin(adminEmail, TypeAdministrateur.SITE, siteLyon)));
 
         Terrain terrainParis = Terrain.builder().site(siteParis).build();
 
@@ -121,9 +127,10 @@ class AdminAuthorizationServiceTest {
         );
     }
 
-    private Administrateur admin(TypeAdministrateur type, Site site) {
+    // Méthode admin modifiée pour accepter l'email
+    private Administrateur admin(String email, TypeAdministrateur type, Site site) {
         return Administrateur.builder()
-                .email("admin@padel.com")
+                .email(email) // Utilise l'email passé en paramètre
                 .typeAdministrateur(type)
                 .site(site)
                 .build();
