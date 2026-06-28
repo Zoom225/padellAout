@@ -1,15 +1,15 @@
 package com.padell.padell.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.padelPlay.config.JwtConfig;
-import com.padelPlay.config.SecurityConfig;
-import com.padelPlay.dto.response.PaiementResponse;
-import com.padelPlay.entity.Paiement;
-import com.padelPlay.mapper.PaiementMapper;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.repository.MembreRepository;
-import com.padelPlay.service.PaiementService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.config.JwtConfig;
+import com.padell.padell.config.SecurityConfig;
+import com.padell.padell.dto.response.PaiementResponse;
+import com.padell.padell.entity.Paiement;
+import com.padell.padell.mapper.PaiementMapper;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.service.PaiementService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

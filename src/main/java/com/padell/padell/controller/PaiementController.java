@@ -1,9 +1,9 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.response.PaiementResponse;
-import com.padelPlay.mapper.PaiementMapper;
-import com.padelPlay.service.PaiementService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.dto.response.PaiementResponse;
+import com.padell.padell.mapper.PaiementMapper;
+import com.padell.padell.service.PaiementService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

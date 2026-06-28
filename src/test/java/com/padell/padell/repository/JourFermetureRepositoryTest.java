@@ -1,7 +1,7 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.JourFermeture;
-import com.padelPlay.entity.Site;
+import com.padell.padell.entity.JourFermeture;
+import com.padell.padell.entity.Site;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.padell.padell.mapper;
 
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.match.dto.MatchDto;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.dto.response.MatchDto;
 import org.springframework.stereotype.Service;
 
 @Service

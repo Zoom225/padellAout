@@ -1,18 +1,18 @@
 package com.padell.padell.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.padelPlay.config.JwtConfig;
-import com.padelPlay.config.SecurityConfig;
-import com.padelPlay.dto.request.MembreRequest;
-import com.padelPlay.dto.response.MembreResponse;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.mapper.MembreMapper;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.repository.MembreRepository;
-import com.padelPlay.service.MembreService;
-import com.padelPlay.service.SiteService;
-import com.padelPlay.service.impl.AdminAuthorizationService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.config.JwtConfig;
+import com.padell.padell.config.SecurityConfig;
+import com.padell.padell.dto.request.MembreRequest;
+import com.padell.padell.dto.response.MembreResponse;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.mapper.MembreMapper;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.service.MembreService;
+import com.padell.padell.service.SiteService;
+import com.padell.padell.service.impl.AdminAuthorizationService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ class MembreControllerTest {
         membreRequest.setMatricule("L12345");
         membreRequest.setNom("Doe");
         membreRequest.setPrenom("John");
-        membreRequest.setTypeMembre(com.padelPlay.entity.enums.TypeMembre.GLOBAL);
+        membreRequest.setTypeMembre(com.padell.padell.entity.enums.TypeMembre.GLOBAL);
 
         membreResponse = new MembreResponse();
         membreResponse.setId(1L);

@@ -2,8 +2,8 @@ package com.padell.padell.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.TypeMatch;
 import jakarta.persistence.*;
 import lombok.*;
 

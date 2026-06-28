@@ -1,13 +1,13 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.*;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.MatchRepository;
-import com.padelPlay.repository.MembreRepository;
-import com.padelPlay.repository.PaiementRepository;
-import com.padelPlay.service.impl.PaiementServiceImpl;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.*;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.MatchRepository;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.repository.PaiementRepository;
+import com.padell.padell.service.impl.PaiementServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

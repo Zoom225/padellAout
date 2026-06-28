@@ -1,0 +1,341 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  --app-bg:
+    radial-gradient(circle at 8% -5%, rgba(14, 165, 233, 0.26) 0%, rgba(14, 165, 233, 0) 36%),
+    radial-gradient(circle at 92% 0%, rgba(99, 102, 241, 0.22) 0%, rgba(99, 102, 241, 0) 34%),
+    linear-gradient(180deg, #f9fdff 0%, #f1f8ff 45%, #eef4ff 100%);
+  --app-pattern:
+    repeating-linear-gradient(
+      125deg,
+      rgba(255, 255, 255, 0.28) 0,
+      rgba(255, 255, 255, 0.28) 2px,
+      transparent 2px,
+      transparent 24px
+    );
+  background-image: var(--app-bg);
+}
+
+body.ocean-theme {
+  color-scheme: light;
+  --app-bg:
+    radial-gradient(circle at 10% -8%, rgba(6, 182, 212, 0.32) 0%, rgba(6, 182, 212, 0) 38%),
+    radial-gradient(circle at 88% -4%, rgba(14, 165, 233, 0.28) 0%, rgba(14, 165, 233, 0) 34%),
+    radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.16) 0%, rgba(59, 130, 246, 0) 45%),
+    linear-gradient(180deg, #ecfeff 0%, #dff7ff 42%, #dbeafe 100%);
+  --app-pattern:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0,
+      rgba(255, 255, 255, 0.25) 2px,
+      transparent 2px,
+      transparent 22px
+    );
+  background-image: var(--app-bg);
+  color: #0f172a;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--app-pattern);
+  opacity: 0.55;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: auto -12% -28% auto;
+  width: 55vmin;
+  height: 55vmin;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(56, 189, 248, 0) 70%);
+  filter: blur(8px);
+  z-index: 0;
+}
+
+body.ocean-theme::after {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.24) 0%, rgba(14, 165, 233, 0) 70%);
+}
+
+#root,
+app-root {
+  display: block;
+  min-height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8 lg:py-10;
+  }
+
+  .app-main-shell {
+    @apply min-h-[calc(100vh-64px)] pb-10;
+  }
+
+  .toolbar-actions {
+    @apply flex flex-wrap items-center justify-end gap-3;
+  }
+
+  .toolbar-actions .mat-mdc-button-base {
+    @apply whitespace-nowrap;
+  }
+
+  .card-soft {
+    @apply rounded-2xl border border-slate-200/70 bg-white/90 shadow-sm backdrop-blur transition;
+    background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.88), rgba(248, 250, 252, 0.9));
+  }
+
+  .card-soft:hover {
+    @apply shadow-md;
+    transform: translateY(-1px);
+  }
+
+  .kpi-card {
+    @apply card-soft px-5 py-4;
+  }
+
+  .title-gradient {
+    @apply bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-600 bg-clip-text text-transparent;
+  }
+
+  .panel-gradient {
+    @apply rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50 via-sky-50 to-blue-50;
+  }
+
+  .status-success {
+    @apply rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700;
+  }
+
+  .status-error {
+    @apply rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700;
+  }
+
+  .toolbar-blur {
+    @apply border-b border-white/20 bg-gradient-to-r from-cyan-700 via-sky-700 to-blue-700 backdrop-blur-md;
+  }
+
+  .quick-action {
+    @apply rounded-xl px-3 font-semibold text-white shadow-sm;
+  }
+
+  .quick-action-public {
+    @apply bg-gradient-to-r from-emerald-600 to-green-600;
+  }
+
+  .quick-action-private {
+    @apply bg-gradient-to-r from-violet-600 to-purple-700;
+  }
+
+  .responsive-grid-2 {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .ds-section-title {
+    @apply text-2xl font-semibold text-slate-900;
+  }
+
+  .ds-subtitle {
+    @apply text-sm text-slate-600;
+  }
+
+  .ds-btn {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 font-semibold transition;
+  }
+
+  .ds-btn-primary {
+    @apply ds-btn bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-sm hover:shadow;
+  }
+
+  .ds-btn-secondary {
+    @apply ds-btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+
+  .ds-btn-danger {
+    @apply ds-btn border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100;
+  }
+
+  .ds-badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  .ds-badge-info {
+    @apply ds-badge bg-sky-100 text-sky-700;
+  }
+
+  .ds-badge-success {
+    @apply ds-badge bg-emerald-100 text-emerald-700;
+  }
+
+  .ds-badge-warning {
+    @apply ds-badge bg-amber-100 text-amber-800;
+  }
+
+  .ds-badge-danger {
+    @apply ds-badge bg-rose-100 text-rose-700;
+  }
+
+  .ds-badge-neutral {
+    @apply ds-badge bg-slate-100 text-slate-700;
+  }
+
+  .ds-data-list {
+    @apply grid gap-2;
+  }
+
+  .ds-data-row {
+    @apply flex items-start justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2;
+  }
+
+  .ds-data-key {
+    @apply text-sm font-medium text-slate-600;
+  }
+
+  .ds-data-value {
+    @apply text-sm font-semibold text-slate-800 text-right;
+  }
+}
+
+.mat-mdc-card {
+  border-radius: 1rem !important;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+body.ocean-theme .mat-mdc-card {
+  border: 1px solid rgba(14, 165, 233, 0.24);
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f172a;
+}
+
+body.ocean-theme .mat-mdc-card-subtitle,
+body.ocean-theme .text-slate-600,
+body.ocean-theme .text-slate-500 {
+  color: #0f766e !important;
+}
+
+body.ocean-theme .text-slate-900,
+body.ocean-theme .text-slate-800 {
+  color: #0f172a !important;
+}
+
+body.ocean-theme .card-soft {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(14, 165, 233, 0.26);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(224, 242, 254, 0.9));
+}
+
+body.ocean-theme .panel-gradient {
+  background: linear-gradient(135deg, rgba(236, 254, 255, 0.92), rgba(224, 242, 254, 0.92), rgba(219, 234, 254, 0.9));
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+body.ocean-theme .status-success {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(236, 253, 245, 0.95);
+  color: #065f46;
+}
+
+body.ocean-theme .status-error {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(254, 242, 242, 0.95);
+  color: #991b1b;
+}
+
+.mat-mdc-card:hover {
+  box-shadow: 0 14px 32px rgba(30, 41, 59, 0.14) !important;
+  transform: translateY(-1px);
+}
+
+.mat-mdc-button-base {
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+
+.mat-mdc-button-base:hover {
+  transform: translateY(-1px);
+}
+
+.mat-mdc-unelevated-button.mat-primary {
+  background: linear-gradient(90deg, #0891b2, #2563eb) !important;
+  color: #fff !important;
+}
+
+.mat-mdc-unelevated-button.mat-accent {
+  background: linear-gradient(90deg, #0ea5e9, #22c55e) !important;
+  color: #fff !important;
+}
+
+.mat-mdc-outlined-button {
+  border-color: rgba(79, 70, 229, 0.35) !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-card-header {
+  align-items: flex-start;
+}
+
+.mat-mdc-card-actions {
+  flex-wrap: wrap;
+  gap: 0.75rem !important;
+  padding: 0.75rem 1rem 1rem !important;
+}
+
+.mat-mdc-card-content {
+  padding-bottom: 0.5rem !important;
+}
+
+.mat-mdc-card-header {
+  padding-bottom: 0.25rem !important;
+}
+/* You can add global styles to this file, and also import other style files */

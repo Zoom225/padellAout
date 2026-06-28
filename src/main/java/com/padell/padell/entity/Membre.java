@@ -1,6 +1,6 @@
 package com.padell.padell.entity;
 
-import com.padelPlay.entity.enums.TypeMembre;
+import com.padell.padell.entity.enums.TypeMembre;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.padell.padell.dto.response;
 
-import com.padelPlay.entity.enums.StatutReservation;
+import com.padell.padell.entity.enums.StatutReservation;
 import lombok.*;
 
 import java.time.LocalDateTime;

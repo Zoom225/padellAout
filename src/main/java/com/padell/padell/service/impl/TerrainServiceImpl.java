@@ -1,11 +1,11 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.TerrainRepository;
-import com.padelPlay.service.SiteService;
-import com.padelPlay.service.TerrainService;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.TerrainRepository;
+import com.padell.padell.service.SiteService;
+import com.padell.padell.service.TerrainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

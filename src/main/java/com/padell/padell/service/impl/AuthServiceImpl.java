@@ -1,12 +1,12 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.config.JwtConfig;
-import com.padelPlay.dto.request.LoginRequest;
-import com.padelPlay.dto.response.LoginResponse;
-import com.padelPlay.entity.Administrateur;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.service.AuthService;
+import com.padell.padell.config.JwtConfig;
+import com.padell.padell.dto.request.LoginRequest;
+import com.padell.padell.dto.response.LoginResponse;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

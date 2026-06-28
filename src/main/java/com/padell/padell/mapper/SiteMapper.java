@@ -1,8 +1,8 @@
 package com.padell.padell.mapper;
 
-import com.padelPlay.dto.request.SiteRequest;
-import com.padelPlay.dto.response.SiteResponse;
-import com.padelPlay.entity.Site;
+import com.padell.padell.dto.request.SiteRequest;
+import com.padell.padell.dto.response.SiteResponse;
+import com.padell.padell.entity.Site;
 import org.springframework.stereotype.Component;
 
 @Component

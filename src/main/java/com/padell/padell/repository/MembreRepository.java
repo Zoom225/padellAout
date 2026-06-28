@@ -1,6 +1,6 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.Membre;
+import com.padell.padell.entity.Membre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,18 +1,18 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Paiement;
-import com.padelPlay.entity.Reservation;
-import com.padelPlay.entity.enums.StatutPaiement;
-import com.padelPlay.entity.enums.StatutReservation;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.MatchRepository;
-import com.padelPlay.repository.MembreRepository;
-import com.padelPlay.repository.PaiementRepository;
-import com.padelPlay.service.PaiementService;
-import com.padelPlay.service.ReservationService;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Paiement;
+import com.padell.padell.entity.Reservation;
+import com.padell.padell.entity.enums.StatutPaiement;
+import com.padell.padell.entity.enums.StatutReservation;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.MatchRepository;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.repository.PaiementRepository;
+import com.padell.padell.service.PaiementService;
+import com.padell.padell.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class PaiementServiceImpl implements PaiementService {
         }
 
         // règle : impossible de payer une réservation annulée
-        if (reservation.getStatut() == com.padelPlay.entity.enums.StatutReservation.ANNULEE) {
+        if (reservation.getStatut() == com.padell.padell.entity.enums.StatutReservation.ANNULEE) {
             throw new BusinessException("Impossible de payer une réservation annulée.");
         }
 

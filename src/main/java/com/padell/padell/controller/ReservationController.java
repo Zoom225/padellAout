@@ -1,12 +1,12 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.request.ReservationRequest;
-import com.padelPlay.dto.response.ReservationResponse;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Reservation;
-import com.padelPlay.mapper.ReservationMapper;
-import com.padelPlay.service.ReservationService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.dto.request.ReservationRequest;
+import com.padell.padell.dto.response.ReservationResponse;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Reservation;
+import com.padell.padell.mapper.ReservationMapper;
+import com.padell.padell.service.ReservationService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

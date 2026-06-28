@@ -1,6 +1,6 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.Site;
+import com.padell.padell.entity.Site;
 
 import java.util.List;
 

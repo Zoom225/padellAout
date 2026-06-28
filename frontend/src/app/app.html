@@ -1,0 +1,23 @@
+<mat-toolbar class="app-toolbar" color="primary">
+  <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-2">
+    <a routerLink="/" class="font-semibold text-white no-underline">PadelPlay</a>
+
+    <nav class="flex items-center gap-2">
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Accueil
+      </a>
+      <a mat-button routerLink="/member" routerLinkActive="active-link">Membre</a>
+      <a mat-button routerLink="/admin" routerLinkActive="active-link">Admin</a>
+    </nav>
+  </div>
+</mat-toolbar>
+
+<main class="min-h-[calc(100vh-64px)] bg-slate-50">
+  <router-outlet></router-outlet>
+</main>
+

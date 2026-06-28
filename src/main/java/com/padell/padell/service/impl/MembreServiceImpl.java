@@ -1,13 +1,13 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Penalite;
-import com.padelPlay.entity.enums.TypeMembre;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.MembreRepository;
-import com.padelPlay.repository.PenaliteRepository;
-import com.padelPlay.service.MembreService;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Penalite;
+import com.padell.padell.entity.enums.TypeMembre;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.repository.PenaliteRepository;
+import com.padell.padell.service.MembreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
