@@ -1,6 +1,6 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.JourFermeture;
+import com.padell.padell.entity.JourFermeture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

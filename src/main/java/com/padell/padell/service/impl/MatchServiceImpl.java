@@ -1,17 +1,17 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.dto.request.MatchRequest;
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.*;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.mapper.MatchMapper;
-import com.padelPlay.match.dto.CreateMatchRequest;
-import com.padelPlay.match.dto.MatchDto;
-import com.padelPlay.repository.*;
-import com.padelPlay.service.MatchService;
-import com.padelPlay.service.MembreService;
-import com.padelPlay.service.TerrainService;
+import com.padell.padell.dto.request.MatchRequest;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.*;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.mapper.MatchMapper;
+import com.padell.padell.dto.request.CreateMatchRequest;
+import com.padell.padell.dto.response.MatchDto;
+import com.padell.padell.repository.*;
+import com.padell.padell.service.MatchService;
+import com.padell.padell.service.MembreService;
+import com.padell.padell.service.TerrainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -119,20 +119,20 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match getById(Long id) {
+    public Match getMatchEntityById(Long id) { // RENOMMÉ ICI
         return matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Match non trouvé avec l'ID : " + id));
     }
 
     @Override
     public MatchDto getMatchDtoById(Long id) {
-        return matchMapper.toMatchDto(getById(id));
+        return matchMapper.toMatchDto(getMatchEntityById(id)); // UTILISE LA NOUVELLE MÉTHODE
     }
 
     @Override
     @Transactional
     public MatchDto updateMatch(Long matchId, MatchRequest request) {
-        Match match = getById(matchId);
+        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
 
         if (match.getStatut() == StatutMatch.ANNULE) {
             throw new BusinessException("Impossible de modifier un match annulé.");
@@ -163,7 +163,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void cancelMatch(Long matchId, Long requesterId) {
-        Match match = getById(matchId);
+        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
 
         if (match.getStatut() == StatutMatch.ANNULE) {
             throw new BusinessException("Ce match est déjà annulé.");
@@ -199,7 +199,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void convertToPublic(Long matchId) {
-        Match match = getById(matchId);
+        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
         if (match.getTypeMatch() == TypeMatch.PUBLIC) {
             throw new BusinessException("Le match est déjà public.");
         }
@@ -213,7 +213,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void incrementPlayers(Long matchId) {
-        Match match = getById(matchId);
+        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
         if (match.getNbJoueursActuels() >= MAX_PLAYERS) {
             throw new BusinessException("Le match est déjà complet.");
         }
@@ -227,7 +227,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void decrementPlayers(Long matchId) {
-        Match match = getById(matchId);
+        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
         if (match.getNbJoueursActuels() <= 0) {
             throw new BusinessException("Le match n'a aucun joueur.");
         }

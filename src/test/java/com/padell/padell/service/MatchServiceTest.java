@@ -1,16 +1,16 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.TypeMatch;
-import com.padelPlay.entity.enums.TypeMembre;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.mapper.MatchMapper;
-import com.padelPlay.match.dto.CreateMatchRequest;
-import com.padelPlay.match.dto.MatchDto;
-import com.padelPlay.repository.*;
-import com.padelPlay.service.impl.MatchServiceImpl;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.TypeMembre;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.mapper.MatchMapper;
+import com.padell.padell.dto.request.CreateMatchRequest;
+import com.padell.padell.dto.response.MatchDto;
+import com.padell.padell.repository.*;
+import com.padell.padell.service.impl.MatchServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +27,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 

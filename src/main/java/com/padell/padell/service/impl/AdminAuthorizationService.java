@@ -1,13 +1,14 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Administrateur;
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.entity.enums.TypeAdministrateur;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.match.dto.MatchDto;
-import com.padelPlay.repository.AdministrateurRepository;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.entity.enums.TypeAdministrateur;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.dto.response.MatchDto;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.MatchRepository; // Import ajouté
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import java.util.List;
 public class AdminAuthorizationService {
 
     private final AdministrateurRepository administrateurRepository;
+    private final MatchRepository matchRepository; // Injection ajoutée
 
     public Administrateur currentAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,7 +53,10 @@ public class AdminAuthorizationService {
         checkSiteAccess(terrain.getSite().getId());
     }
 
-    public void checkMatchAccess(Match match) {
+    // Méthode modifiée pour accepter un Long id
+    public void checkMatchAccess(Long matchId) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new BusinessException("Match introuvable avec l'ID : " + matchId));
         checkSiteAccess(match.getTerrain().getSite().getId());
     }
 

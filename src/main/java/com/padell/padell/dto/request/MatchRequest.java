@@ -1,6 +1,6 @@
 package com.padell.padell.dto.request;
 
-import com.padelPlay.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.TypeMatch;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

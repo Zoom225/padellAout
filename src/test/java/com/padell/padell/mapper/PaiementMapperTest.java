@@ -1,8 +1,8 @@
 package com.padell.padell.mapper;
 
-import com.padelPlay.dto.response.PaiementResponse;
-import com.padelPlay.entity.Paiement;
-import com.padelPlay.entity.enums.StatutPaiement;
+import com.padell.padell.dto.response.PaiementResponse;
+import com.padell.padell.entity.Paiement;
+import com.padell.padell.entity.enums.StatutPaiement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

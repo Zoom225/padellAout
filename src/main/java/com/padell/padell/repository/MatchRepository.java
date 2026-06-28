@@ -1,8 +1,8 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.TypeMatch;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.TypeMatch;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

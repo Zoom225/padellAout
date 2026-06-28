@@ -1,16 +1,16 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.config.JwtConfig;
-import com.padelPlay.dto.request.MembreRequest;
-import com.padelPlay.dto.response.MembreResponse;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.enums.TypeAdministrateur;
-import com.padelPlay.mapper.MembreMapper;
-import com.padelPlay.service.MembreService;
-import com.padelPlay.service.SiteService;
-import com.padelPlay.service.impl.AdminAuthorizationService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.config.JwtConfig;
+import com.padell.padell.dto.request.MembreRequest;
+import com.padell.padell.dto.response.MembreResponse;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.enums.TypeAdministrateur;
+import com.padell.padell.mapper.MembreMapper;
+import com.padell.padell.service.MembreService;
+import com.padell.padell.service.SiteService;
+import com.padell.padell.service.impl.AdminAuthorizationService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -151,7 +151,7 @@ public class MembreController {
         try {
             checkCurrentAccess(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasActivePenalty(id));
-        } catch (com.padelPlay.exception.ResourceNotFoundException ex) {
+        } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
@@ -177,7 +177,7 @@ public class MembreController {
         try {
             checkCurrentAccess(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasOutstandingBalance(id));
-        } catch (com.padelPlay.exception.ResourceNotFoundException ex) {
+        } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }

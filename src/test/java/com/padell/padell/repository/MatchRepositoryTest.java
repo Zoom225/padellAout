@@ -1,12 +1,12 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.TypeMatch;
-import com.padelPlay.entity.enums.TypeMembre;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.TypeMembre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

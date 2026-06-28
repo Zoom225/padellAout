@@ -1,15 +1,15 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.request.JourFermetureRequest;
-import com.padelPlay.dto.response.JourFermetureResponse;
-import com.padelPlay.entity.Administrateur;
-import com.padelPlay.entity.JourFermeture;
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.enums.TypeAdministrateur;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.repository.JourFermetureRepository;
-import com.padelPlay.service.SiteService;
+import com.padell.padell.dto.request.JourFermetureRequest;
+import com.padell.padell.dto.response.JourFermetureResponse;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.entity.JourFermeture;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.enums.TypeAdministrateur;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.JourFermetureRepository;
+import com.padell.padell.service.SiteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

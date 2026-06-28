@@ -1,6 +1,6 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.Terrain;
+import com.padell.padell.entity.Terrain;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,0 +1,11 @@
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.active-link {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+

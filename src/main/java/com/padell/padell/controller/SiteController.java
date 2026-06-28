@@ -1,11 +1,11 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.request.SiteRequest;
-import com.padelPlay.dto.response.SiteResponse;
-import com.padelPlay.entity.Site;
-import com.padelPlay.mapper.SiteMapper;
-import com.padelPlay.service.SiteService;
-import com.padelPlay.service.impl.AdminAuthorizationService;
+import com.padell.padell.dto.request.SiteRequest;
+import com.padell.padell.dto.response.SiteResponse;
+import com.padell.padell.entity.Site;
+import com.padell.padell.mapper.SiteMapper;
+import com.padell.padell.service.SiteService;
+import com.padell.padell.service.impl.AdminAuthorizationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

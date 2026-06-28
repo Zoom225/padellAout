@@ -1,9 +1,9 @@
 package com.padell.padell.config;
 
-import com.padelPlay.entity.Administrateur;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.repository.MembreRepository;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.MembreRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

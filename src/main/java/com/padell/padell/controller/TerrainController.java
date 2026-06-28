@@ -1,11 +1,11 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.request.TerrainRequest;
-import com.padelPlay.dto.response.TerrainResponse;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.mapper.TerrainMapper;
-import com.padelPlay.service.TerrainService;
-import com.padelPlay.service.impl.AdminAuthorizationService;
+import com.padell.padell.dto.request.TerrainRequest;
+import com.padell.padell.dto.response.TerrainResponse;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.mapper.TerrainMapper;
+import com.padell.padell.service.TerrainService;
+import com.padell.padell.service.impl.AdminAuthorizationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

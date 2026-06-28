@@ -1,9 +1,9 @@
 package com.padell.padell.service;
 
-import com.padelPlay.dto.request.MatchRequest;
-import com.padelPlay.entity.Match;
-import com.padelPlay.match.dto.CreateMatchRequest;
-import com.padelPlay.match.dto.MatchDto;
+import com.padell.padell.dto.request.MatchRequest;
+import com.padell.padell.entity.Match;
+import com.padell.padell.dto.request.CreateMatchRequest;
+import com.padell.padell.dto.response.MatchDto;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface MatchService {
 
     List<MatchDto> findBySite(Long siteId);
 
-    Match getById(Long id);
+    Match getMatchEntityById(Long id); // Nouvelle méthode ajoutée
 
     MatchDto getMatchDtoById(Long id);
 

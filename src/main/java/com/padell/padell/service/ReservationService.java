@@ -1,6 +1,6 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.Reservation;
+import com.padell.padell.entity.Reservation;
 
 import java.util.List;
 

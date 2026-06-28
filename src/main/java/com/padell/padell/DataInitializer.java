@@ -1,8 +1,8 @@
 package com.padell.padell;
 
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.*;
-import com.padelPlay.repository.*;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.*;
+import com.padell.padell.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;

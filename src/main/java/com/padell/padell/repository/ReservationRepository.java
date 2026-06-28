@@ -1,6 +1,6 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.Reservation;
+import com.padell.padell.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

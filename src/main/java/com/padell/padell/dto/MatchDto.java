@@ -1,7 +1,7 @@
 package com.padell.padell.dto;
 
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.TypeMatch;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

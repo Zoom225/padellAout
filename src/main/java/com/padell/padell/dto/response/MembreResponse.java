@@ -1,6 +1,6 @@
 package com.padell.padell.dto.response;
 
-import com.padelPlay.entity.enums.TypeMembre;
+import com.padell.padell.entity.enums.TypeMembre;
 import lombok.*;
 
 @Getter

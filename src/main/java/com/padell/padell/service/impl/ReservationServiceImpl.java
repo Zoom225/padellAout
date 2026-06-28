@@ -1,17 +1,17 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Match;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Paiement;
-import com.padelPlay.entity.Reservation;
-import com.padelPlay.entity.enums.*;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.PaiementRepository;
-import com.padelPlay.repository.ReservationRepository;
-import com.padelPlay.service.MatchService;
-import com.padelPlay.service.MembreService;
-import com.padelPlay.service.ReservationService;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Paiement;
+import com.padell.padell.entity.Reservation;
+import com.padell.padell.entity.enums.*;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.PaiementRepository;
+import com.padell.padell.repository.ReservationRepository;
+import com.padell.padell.service.MatchService;
+import com.padell.padell.service.MembreService;
+import com.padell.padell.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public Reservation create(Long matchId, Long membreId, Long requesterId) {
-        Match match = matchService.getById(matchId);
+        Match match = matchService.getMatchEntityById(matchId); // MODIFIÉ ICI
         Membre membre = membreService.getById(membreId);
 
         // règle : match doit être PLANIFIE

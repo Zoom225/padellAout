@@ -1,13 +1,14 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.Administrateur;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.entity.Site;
-import com.padelPlay.entity.Terrain;
-import com.padelPlay.entity.enums.TypeAdministrateur;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.repository.AdministrateurRepository;
-import com.padelPlay.service.impl.AdminAuthorizationService;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.entity.enums.TypeAdministrateur;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.MatchRepository; // Ajout de l'import
+import com.padell.padell.service.impl.AdminAuthorizationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,8 @@ class AdminAuthorizationServiceTest {
 
     @Mock
     private AdministrateurRepository administrateurRepository;
+    @Mock
+    private MatchRepository matchRepository; // Ajout du mock
 
     private AdminAuthorizationService adminAuthorizationService;
     private Site siteLyon;
@@ -36,7 +39,8 @@ class AdminAuthorizationServiceTest {
 
     @BeforeEach
     void setUp() {
-        adminAuthorizationService = new AdminAuthorizationService(administrateurRepository);
+        // Modification du constructeur pour inclure matchRepository
+        adminAuthorizationService = new AdminAuthorizationService(administrateurRepository, matchRepository);
         siteLyon = Site.builder().nom("Padel Club Lyon").build();
         siteLyon.setId(1L);
         siteParis = Site.builder().nom("Padel Club Paris").build();
@@ -87,7 +91,7 @@ class AdminAuthorizationServiceTest {
     @DisplayName("Un admin SITE ne peut gérer que les membres de son site")
     void siteAdminCanManageOnlyOwnMembers() {
         authenticate("admin.lyon@padel.com");
-        when(administrateurRepository.findByEmail("admin.lyon@padel.com"))
+        when(administrateurRepository.findByEmail("admin@padel.com"))
                 .thenReturn(Optional.of(admin(TypeAdministrateur.SITE, siteLyon)));
 
         Membre membreParis = Membre.builder().site(siteParis).build();

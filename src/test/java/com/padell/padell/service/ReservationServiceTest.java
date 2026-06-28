@@ -1,12 +1,12 @@
 package com.padell.padell.service;
 
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.*;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.exception.ResourceNotFoundException;
-import com.padelPlay.repository.PaiementRepository;
-import com.padelPlay.repository.ReservationRepository;
-import com.padelPlay.service.impl.ReservationServiceImpl;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.*;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.exception.ResourceNotFoundException;
+import com.padell.padell.repository.PaiementRepository;
+import com.padell.padell.repository.ReservationRepository;
+import com.padell.padell.service.impl.ReservationServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,6 +21,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
@@ -153,7 +154,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("✅ should create reservation for PUBLIC match with valid member")
         void shouldCreateReservationForPublicMatch() {
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(membreService.hasActivePenalty(2L)).thenReturn(false);
             when(membreService.hasOutstandingBalance(2L)).thenReturn(false);
@@ -178,7 +179,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("✅ should create reservation for PRIVE match when organizer adds a player")
         void shouldCreateReservationForPriveMatchByOrganizer() {
-            when(matchService.getById(10L)).thenReturn(matchPrive);
+            when(matchService.getMatchEntityById(10L)).thenReturn(matchPrive); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(membreService.hasActivePenalty(2L)).thenReturn(false);
             when(membreService.hasOutstandingBalance(2L)).thenReturn(false);
@@ -196,7 +197,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("❌ should throw BusinessException when match is COMPLET")
         void shouldThrowWhenMatchIsFull() {
-            when(matchService.getById(12L)).thenReturn(matchComplet);
+            when(matchService.getMatchEntityById(12L)).thenReturn(matchComplet); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
 
             assertThatThrownBy(() -> reservationService.create(12L, 2L, 1L))
@@ -210,7 +211,7 @@ class ReservationServiceTest {
         @DisplayName("❌ should throw BusinessException when match is ANNULE")
         void shouldThrowWhenMatchIsCancelled() {
             matchPublic.setStatut(StatutMatch.ANNULE);
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
 
             assertThatThrownBy(() -> reservationService.create(11L, 2L, 1L))
@@ -223,7 +224,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("❌ should throw BusinessException when member already registered in match")
         void shouldThrowWhenMemberAlreadyRegistered() {
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(reservationRepository.existsByMatchIdAndMembreId(11L, 2L)).thenReturn(true);
 
@@ -237,7 +238,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("❌ should throw BusinessException when member has active penalty")
         void shouldThrowWhenMemberHasActivePenalty() {
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(reservationRepository.existsByMatchIdAndMembreId(11L, 2L)).thenReturn(false);
             when(membreService.hasActivePenalty(2L)).thenReturn(true);
@@ -252,7 +253,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("❌ should throw BusinessException when member has outstanding balance")
         void shouldThrowWhenMemberHasOutstandingBalance() {
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(reservationRepository.existsByMatchIdAndMembreId(11L, 2L)).thenReturn(false);
             when(membreService.hasActivePenalty(2L)).thenReturn(false);
@@ -270,7 +271,7 @@ class ReservationServiceTest {
         void shouldThrowWhenNonOrganizerJoinsPriveMatch() {
             // joueur (id=2) essaie de rejoindre directement un match privé
             // sans passer par l'organisateur (id=1)
-            when(matchService.getById(10L)).thenReturn(matchPrive);
+            when(matchService.getMatchEntityById(10L)).thenReturn(matchPrive); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(reservationRepository.existsByMatchIdAndMembreId(10L, 2L)).thenReturn(false);
             when(membreService.hasActivePenalty(2L)).thenReturn(false);
@@ -287,7 +288,7 @@ class ReservationServiceTest {
         @DisplayName("❌ should throw BusinessException when SITE member books on wrong site")
         void shouldThrowWhenSiteMemberBooksOnWrongSite() {
             // joueurSiteB est rattaché à Paris → ne peut pas réserver sur Lyon
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(3L)).thenReturn(joueurSiteB);
             when(reservationRepository.existsByMatchIdAndMembreId(11L, 3L)).thenReturn(false);
             when(membreService.hasActivePenalty(3L)).thenReturn(false);
@@ -303,7 +304,7 @@ class ReservationServiceTest {
         @Test
         @DisplayName("✅ paiement created with correct amount = prixParJoueur of match")
         void shouldCreatePaiementWithCorrectAmount() {
-            when(matchService.getById(11L)).thenReturn(matchPublic);
+            when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
             when(reservationRepository.existsByMatchIdAndMembreId(11L, 2L)).thenReturn(false);
             when(membreService.hasActivePenalty(2L)).thenReturn(false);

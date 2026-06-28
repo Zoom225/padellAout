@@ -1,8 +1,8 @@
 package com.padell.padell.service.impl;
 
-import com.padelPlay.entity.Membre;
-import com.padelPlay.exception.BusinessException;
-import com.padelPlay.repository.MembreRepository;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.exception.BusinessException;
+import com.padell.padell.repository.MembreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

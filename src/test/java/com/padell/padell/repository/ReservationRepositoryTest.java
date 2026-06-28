@@ -1,10 +1,10 @@
 package com.padell.padell.repository;
 
-import com.padelPlay.entity.*;
-import com.padelPlay.entity.enums.StatutMatch;
-import com.padelPlay.entity.enums.StatutReservation;
-import com.padelPlay.entity.enums.TypeMatch;
-import com.padelPlay.entity.enums.TypeMembre;
+import com.padell.padell.entity.*;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.StatutReservation;
+import com.padell.padell.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.TypeMembre;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,12 +1,12 @@
 package com.padell.padell.controller;
 
-import com.padelPlay.dto.request.MatchRequest;
-import com.padelPlay.entity.Membre;
-import com.padelPlay.match.dto.CreateMatchRequest;
-import com.padelPlay.match.dto.MatchDto;
-import com.padelPlay.service.MatchService;
-import com.padelPlay.service.impl.AdminAuthorizationService;
-import com.padelPlay.service.impl.CurrentMemberService;
+import com.padell.padell.dto.request.MatchRequest;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.dto.request.CreateMatchRequest;
+import com.padell.padell.dto.response.MatchDto;
+import com.padell.padell.service.MatchService;
+import com.padell.padell.service.impl.AdminAuthorizationService;
+import com.padell.padell.service.impl.CurrentMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -155,7 +155,7 @@ public class MatchController {
     public ResponseEntity<Void> convertToPublic(
             @Parameter(description = "ID du match", required = true)
             @PathVariable Long id) {
-        adminAuthorizationService.checkMatchAccess(matchService.getById(id));
+        adminAuthorizationService.checkMatchAccess(id); // Ligne modifiée
         matchService.convertToPublic(id);
         return ResponseEntity.noContent().build();
     }
