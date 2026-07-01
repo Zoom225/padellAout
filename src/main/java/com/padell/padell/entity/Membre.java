@@ -38,17 +38,14 @@ public class Membre extends BaseEntity {
     @JoinColumn(name = "site_id")
     private Site site;
 
-    // Correction : Remplacer List par Set et forcer LAZY
     @OneToMany(mappedBy = "organisateur", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Match> matchesOrganises = new HashSet<>();
 
-    // Correction : Remplacer List par Set et forcer LAZY
     @OneToMany(mappedBy = "membre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Reservation> reservations = new HashSet<>();
 
-    // Correction : Remplacer List par Set et forcer LAZY
     @OneToMany(mappedBy = "membre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private Set<Penalite> penalites = new HashSet<>();

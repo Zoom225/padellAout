@@ -19,7 +19,7 @@ public interface MatchService {
 
     List<MatchDto> findBySite(Long siteId);
 
-    Match getMatchEntityById(Long id); // Nouvelle méthode ajoutée
+    Match getMatchEntityById(Long id);
 
     MatchDto getMatchDtoById(Long id);
 

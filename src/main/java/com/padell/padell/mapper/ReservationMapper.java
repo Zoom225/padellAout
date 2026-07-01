@@ -27,7 +27,6 @@ public class ReservationMapper {
         return ReservationResponse.builder()
                 .id(reservation.getId())
                 .matchId(reservation.getMatch().getId())
-                // Correction : Utiliser directement le champ dateDebut
                 .matchDateTime(reservation.getMatch().getDateDebut())
                 .membreId(reservation.getMembre().getId())
                 .membreNom(reservation.getMembre().getPrenom() + " " + reservation.getMembre().getNom())

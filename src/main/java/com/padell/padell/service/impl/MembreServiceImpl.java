@@ -23,36 +23,33 @@ public class MembreServiceImpl implements MembreService {
 
     @Override
     public Membre create(Membre membre) {
-        // Règle métier: Valider le format du matricule en fonction du type de membre.
         validateMatricule(membre.getMatricule(), membre.getTypeMembre());
 
-        // Règle métier: Le matricule doit être unique.
+        // Regle metier : le matricule doit etre unique.
         if (membreRepository.existsByMatricule(membre.getMatricule())) {
             throw new BusinessException("Le matricule existe déjà : " + membre.getMatricule());
         }
-        // Règle métier: L'email doit être unique s'il est fourni.
+        // Regle metier : l'email doit etre unique lorsqu'il est renseigne.
         if (membre.getEmail() != null && membreRepository.existsByEmail(membre.getEmail())) {
             throw new BusinessException("L'email existe déjà : " + membre.getEmail());
         }
-        // Règle métier: Un membre de type SITE doit être lié à un site.
+        // Regle metier : un membre SITE doit etre rattache a un site.
         if (membre.getTypeMembre() == TypeMembre.SITE && membre.getSite() == null) {
             throw new BusinessException("Un membre SITE doit être lié à un site.");
         }
 
-        membre.setSolde(0.0); // Règle métier: Le solde initial d'un nouveau membre est 0.0.
+        membre.setSolde(0.0);
         return membreRepository.save(membre);
     }
 
     @Override
     public Membre getById(Long id) {
-        // Règle métier: Le membre doit exister pour être récupéré par ID.
         return membreRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membre introuvable avec l'ID : " + id));
     }
 
     @Override
     public Membre getByMatricule(String matricule) {
-        // Règle métier: Le membre doit exister pour être récupéré par matricule.
         return membreRepository.findByMatricule(matricule)
                 .orElseThrow(() -> new ResourceNotFoundException("Membre introuvable avec le matricule : " + matricule));
     }
@@ -64,7 +61,6 @@ public class MembreServiceImpl implements MembreService {
 
     @Override
     public Membre update(Long id, Membre membre) {
-        // Règle métier: Le membre à mettre à jour doit exister.
         Membre existing = getById(id);
         existing.setNom(membre.getNom());
         existing.setPrenom(membre.getPrenom());
@@ -74,29 +70,24 @@ public class MembreServiceImpl implements MembreService {
 
     @Override
     public void delete(Long id) {
-        // Règle métier: Le membre à supprimer doit exister.
         Membre existing = getById(id);
         membreRepository.delete(existing);
     }
 
     @Override
     public boolean hasActivePenalty(Long membreId) {
-        // Règle métier: Vérifie si le membre a une pénalité active (date de fin après aujourd'hui).
         return penaliteRepository.existsByMembreIdAndDateFinAfter(membreId, LocalDate.now());
     }
 
     @Override
     public boolean hasOutstandingBalance(Long membreId) {
-        // Règle métier: Vérifie si le membre a un solde impayé (solde > 0).
-        Membre membre = getById(membreId); // Règle métier: Le membre doit exister pour vérifier son solde.
+        Membre membre = getById(membreId);
         return membre.getSolde() > 0.0;
     }
 
     @Override
     public void addPenalty(Long membreId) {
-        // Règle métier: Le membre doit exister pour lui ajouter une pénalité.
         Membre membre = getById(membreId);
-        // Règle métier: Une pénalité dure une semaine à partir d'aujourd'hui.
         Penalite penalite = Penalite.builder()
                 .membre(membre)
                 .dateFin(LocalDate.now().plusWeeks(1))
@@ -106,12 +97,12 @@ public class MembreServiceImpl implements MembreService {
     }
 
     private void validateMatricule(String matricule, TypeMembre type) {
-        // Règle métier: Le format du matricule doit correspondre au type de membre (Gxxxx, Sxxxxx, Lxxxxx).
         boolean valid = switch (type) {
             case GLOBAL -> matricule.matches("^G\\d{4}$");
             case SITE   -> matricule.matches("^S\\d{5}$");
             case LIBRE  -> matricule.matches("^L\\d{5}$");
         };
+        // Regle metier : un matricule doit respecter le format du type de membre.
         if (!valid) {
             throw new BusinessException("Format de matricule invalide pour le type " + type + " : " + matricule);
         }
