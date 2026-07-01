@@ -88,7 +88,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation = reservationRepository.save(reservation);
 
-        // Regle metier : chaque reservation cree automatiquement un paiement en attente.
+        // Regle metier : 15 euro chaque reservation cree automatiquement un paiement en attente .
         Paiement paiement = Paiement.builder()
                 .reservation(reservation)
                 .montant(match.getPrixParJoueur())

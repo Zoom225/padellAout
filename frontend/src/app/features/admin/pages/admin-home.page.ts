@@ -22,154 +22,338 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
   standalone: true,
   imports: [CommonModule, RouterLink, MatCardModule, MatButtonModule, MatProgressSpinnerModule],
   template: `
-    <!-- En-tête dashboard -->
-    <div class="adm-dash-header">
-      <div class="adm-dash-header-inner">
-        <div class="adm-dash-title-block">
-          <span class="adm-dash-icon">🏆</span>
-          <div>
-            <h1 class="adm-dash-title">Dashboard administrateur</h1>
-            <p class="adm-dash-sub">Vue {{ adminSession.isGlobalAdmin() ? 'globale' : 'site' }} des indicateurs principaux</p>
-          </div>
+    <section class="admin-shell">
+      <div class="admin-hero">
+        <div>
+          <p class="eyebrow">Tableau de bord</p>
+          <h1>Administration PadelPlay</h1>
+          <p class="hero-subtitle">
+            Vue {{ adminSession.isGlobalAdmin() ? 'globale' : 'site' }} des matchs,
+            reservations, membres et ressources du club.
+          </p>
         </div>
-        <div class="adm-dash-nav">
-          <a routerLink="/admin/members" class="adm-nav-btn adm-nav-members">👥 Membres</a>
-          <a routerLink="/admin/matches" class="adm-nav-btn adm-nav-matches">🎾 Matchs</a>
-          <a routerLink="/admin/sites" class="adm-nav-btn adm-nav-sites">🏟️ Sites</a>
-          <a routerLink="/admin/terrains" class="adm-nav-btn adm-nav-terrains">📍 Terrains</a>
-          <a routerLink="/admin/fermetures" class="adm-nav-btn adm-nav-fermetures">🔒 Fermetures</a>
+
+        <div class="admin-actions">
+          <a routerLink="/admin/members">Membres</a>
+          <a routerLink="/admin/matches">Matchs</a>
+          <a routerLink="/admin/sites">Sites</a>
+          <a routerLink="/admin/terrains">Terrains</a>
+          <a routerLink="/admin/fermetures">Fermetures</a>
         </div>
       </div>
-    </div>
 
-    <section class="page-shell">
       @if (loading()) {
-        <mat-spinner diameter="32"></mat-spinner>
+        <div class="loading-panel">
+          <mat-spinner diameter="32"></mat-spinner>
+          <span>Chargement du tableau de bord...</span>
+        </div>
       }
       @if (errorMessage()) {
         <p class="status-error">{{ errorMessage() }}</p>
       }
 
-      <!-- KPI Cards -->
-      <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <div class="adm-kpi adm-kpi-blue">
-          <span class="adm-kpi-icon">🎾</span>
-          <div>
-            <p class="adm-kpi-label">Matchs</p>
-            <p class="adm-kpi-value">{{ matches().length }}</p>
-          </div>
+      <div class="kpi-grid">
+        <div class="admin-kpi green">
+          <p>Matchs</p>
+          <strong>{{ matches().length }}</strong>
+          <span>tous statuts</span>
         </div>
-        <div class="adm-kpi adm-kpi-violet">
-          <span class="adm-kpi-icon">📋</span>
-          <div>
-            <p class="adm-kpi-label">Réservations</p>
-            <p class="adm-kpi-value">{{ reservations().length }}</p>
-          </div>
+        <div class="admin-kpi blue">
+          <p>Reservations</p>
+          <strong>{{ reservations().length }}</strong>
+          <span>{{ pendingReservationsCount() }} en attente</span>
         </div>
-        <div class="adm-kpi adm-kpi-green">
-          <span class="adm-kpi-icon">👥</span>
-          <div>
-            <p class="adm-kpi-label">Membres</p>
-            <p class="adm-kpi-value">{{ members().length }}</p>
-          </div>
+        <div class="admin-kpi slate">
+          <p>Membres</p>
+          <strong>{{ members().length }}</strong>
+          <span>visibles</span>
         </div>
-        <div class="adm-kpi adm-kpi-amber">
-          <span class="adm-kpi-icon">💶</span>
-          <div>
-            <p class="adm-kpi-label">Chiffre d'affaires</p>
-            <p class="adm-kpi-value">{{ revenue() }} €</p>
-          </div>
+        <div class="admin-kpi amber">
+          <p>Chiffre d'affaires</p>
+          <strong>{{ revenue() }} EUR</strong>
+          <span>paiements valides</span>
         </div>
       </div>
 
-      <div class="grid gap-5 lg:grid-cols-2">
-        <mat-card class="card-soft">
+      <div class="dashboard-grid">
+        <mat-card class="card-soft admin-panel">
           <mat-card-header>
-            <mat-card-title>📊 Occupation par site</mat-card-title>
+            <mat-card-title>Occupation par site</mat-card-title>
+            <mat-card-subtitle>Nombre de matchs rattaches a chaque site visible</mat-card-subtitle>
           </mat-card-header>
-          <mat-card-content class="space-y-3 pt-2">
-            @for (item of occupancyBySite(); track item.site) {
-              <div class="flex items-center justify-between rounded-xl border border-sky-100 bg-sky-50 px-4 py-3">
-                <span class="font-medium text-sky-900">{{ item.site }}</span>
-                <span class="rounded-full bg-sky-600 px-3 py-0.5 text-sm font-bold text-white">{{ item.count }} match(s)</span>
-              </div>
-            } @empty {
-              <p class="text-slate-500">Aucune donnée.</p>
-            }
+          <mat-card-content>
+            <div class="data-list">
+              @for (item of occupancyBySite(); track item.site) {
+                <div class="data-row">
+                  <span>{{ item.site }}</span>
+                  <strong>{{ item.count }} match(s)</strong>
+                </div>
+              } @empty {
+                <p class="empty-state">Aucune donnee.</p>
+              }
+            </div>
           </mat-card-content>
         </mat-card>
 
-        <mat-card class="card-soft">
+        <mat-card class="card-soft admin-panel">
           <mat-card-header>
-            <mat-card-title>📦 Ressources</mat-card-title>
+            <mat-card-title>Ressources</mat-card-title>
+            <mat-card-subtitle>Controle rapide des elements geres par l'administration</mat-card-subtitle>
           </mat-card-header>
-          <mat-card-content class="space-y-3 pt-2">
-            <div class="flex items-center justify-between rounded-xl bg-indigo-50 px-4 py-3">
-              <span class="text-indigo-800 font-medium">Sites visibles</span>
-              <span class="font-bold text-indigo-900">{{ sites().length }}</span>
-            </div>
-            <div class="flex items-center justify-between rounded-xl bg-teal-50 px-4 py-3">
-              <span class="text-teal-800 font-medium">Terrains visibles</span>
-              <span class="font-bold text-teal-900">{{ terrains().length }}</span>
-            </div>
-            <div class="flex items-center justify-between rounded-xl bg-orange-50 px-4 py-3">
-              <span class="text-orange-800 font-medium">Matchs complets</span>
-              <span class="font-bold text-orange-900">{{ completeMatchesCount() }}</span>
-            </div>
-            <div class="flex items-center justify-between rounded-xl bg-rose-50 px-4 py-3">
-              <span class="text-rose-800 font-medium">Réservations en attente</span>
-              <span class="font-bold text-rose-900">{{ pendingReservationsCount() }}</span>
+          <mat-card-content>
+            <div class="resource-grid">
+              <div>
+                <span>Sites visibles</span>
+                <strong>{{ sites().length }}</strong>
+              </div>
+              <div>
+                <span>Terrains visibles</span>
+                <strong>{{ terrains().length }}</strong>
+              </div>
+              <div>
+                <span>Matchs complets</span>
+                <strong>{{ completeMatchesCount() }}</strong>
+              </div>
+              <div>
+                <span>Reservations en attente</span>
+                <strong>{{ pendingReservationsCount() }}</strong>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
       </div>
     </section>
+  `,
+  styles: [`
+    .admin-shell {
+      width: min(1220px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 4rem;
+    }
 
-    <style>
-      .adm-dash-header {
-        background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 45%, #0284c7 100%);
-        padding: 1.5rem 2rem;
-        box-shadow: 0 4px 16px rgba(3,105,161,0.25);
-      }
-      .adm-dash-header-inner {
-        display: flex; flex-wrap: wrap; align-items: center;
-        justify-content: space-between; gap: 1.25rem;
-        max-width: 1200px; margin: 0 auto;
-      }
-      .adm-dash-title-block { display: flex; align-items: center; gap: 1rem; }
-      .adm-dash-icon { font-size: 2.5rem; }
-      .adm-dash-title { font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0; }
-      .adm-dash-sub { color: rgba(255,255,255,0.75); font-size: 0.85rem; margin: 0; }
+    .admin-hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 118, 110, 0.9)),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+      background-size: auto, 44px 44px;
+      color: #ffffff;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
 
-      .adm-dash-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-      .adm-nav-btn {
-        display: inline-block; padding: 0.5rem 1.1rem; border-radius: 9999px;
-        font-weight: 700; font-size: 0.82rem; text-decoration: none;
-        transition: transform 0.15s, box-shadow 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-      }
-      .adm-nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.2); }
-      .adm-nav-members  { background: #dcfce7; color: #14532d; }
-      .adm-nav-matches  { background: #fff7ed; color: #9a3412; }
-      .adm-nav-sites    { background: #ede9fe; color: #4c1d95; }
-      .adm-nav-terrains { background: #ecfeff; color: #164e63; }
-      .adm-nav-fermetures { background: #fef3c7; color: #78350f; }
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      color: #99f6e4;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
 
-      .adm-kpi {
-        display: flex; align-items: center; gap: 1rem;
-        border-radius: 1.25rem; padding: 1.25rem 1.5rem;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-        transition: transform 0.15s, box-shadow 0.15s;
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .hero-subtitle {
+      max-width: 620px;
+      margin: 1rem 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.65rem;
+    }
+
+    .admin-actions a {
+      padding: 0.55rem 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-size: 0.86rem;
+      font-weight: 800;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .admin-actions a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .loading-panel {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 1.25rem;
+      color: #475569;
+      font-weight: 800;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .admin-kpi {
+      min-height: 148px;
+      padding: 1.2rem;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.07);
+    }
+
+    .admin-kpi p,
+    .admin-kpi span {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.86rem;
+      font-weight: 750;
+    }
+
+    .admin-kpi strong {
+      display: block;
+      margin: 0.75rem 0 0.5rem;
+      color: #0f172a;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .admin-kpi.green {
+      border-top: 4px solid #10b981;
+    }
+
+    .admin-kpi.blue {
+      border-top: 4px solid #2563eb;
+    }
+
+    .admin-kpi.slate {
+      border-top: 4px solid #475569;
+    }
+
+    .admin-kpi.amber {
+      border-top: 4px solid #f59e0b;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .admin-panel {
+      border-radius: 8px !important;
+    }
+
+    .data-list {
+      display: grid;
+      gap: 0.7rem;
+      padding-top: 0.75rem;
+    }
+
+    .data-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(15, 118, 110, 0.12);
+      border-radius: 8px;
+      background: #f0fdfa;
+      color: #134e4a;
+    }
+
+    .data-row span {
+      font-weight: 800;
+    }
+
+    .data-row strong {
+      color: #0f766e;
+      white-space: nowrap;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+      padding-top: 0.75rem;
+    }
+
+    .resource-grid div {
+      min-height: 110px;
+      padding: 1rem;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .resource-grid span {
+      display: block;
+      color: #64748b;
+      font-size: 0.86rem;
+      font-weight: 750;
+    }
+
+    .resource-grid strong {
+      display: block;
+      margin-top: 0.65rem;
+      color: #0f172a;
+      font-size: 1.9rem;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .empty-state {
+      margin: 0;
+      color: #64748b;
+    }
+
+    @media (max-width: 940px) {
+      .admin-hero,
+      .dashboard-grid {
+        grid-template-columns: 1fr;
       }
-      .adm-kpi:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.12); }
-      .adm-kpi-icon { font-size: 2.25rem; }
-      .adm-kpi-label { font-size: 0.8rem; font-weight: 600; margin: 0 0 0.15rem; opacity: 0.8; }
-      .adm-kpi-value { font-size: 2rem; font-weight: 800; margin: 0; line-height: 1; }
-      .adm-kpi-blue   { background: linear-gradient(135deg,#dbeafe,#eff6ff); color: #1d4ed8; }
-      .adm-kpi-violet { background: linear-gradient(135deg,#ede9fe,#f5f3ff); color: #6d28d9; }
-      .adm-kpi-green  { background: linear-gradient(135deg,#dcfce7,#f0fdf4); color: #15803d; }
-      .adm-kpi-amber  { background: linear-gradient(135deg,#fef3c7,#fffbeb); color: #b45309; }
-    </style>
-  `
+
+      .admin-hero {
+        display: grid;
+        align-items: start;
+      }
+
+      .admin-actions {
+        justify-content: flex-start;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .kpi-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  `]
 })
 export class AdminHomePage {
   private readonly matchesApi = inject(MatchesApiService);
@@ -240,7 +424,7 @@ export class AdminHomePage {
           },
           error: (error) => {
             this.loading.set(false);
-            this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les réservations administrateur.'));
+            this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les reservations administrateur.'));
           }
         });
       },
