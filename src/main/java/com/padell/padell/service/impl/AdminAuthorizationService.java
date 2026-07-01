@@ -8,7 +8,7 @@ import com.padell.padell.entity.enums.TypeAdministrateur;
 import com.padell.padell.exception.BusinessException;
 import com.padell.padell.dto.response.MatchDto;
 import com.padell.padell.repository.AdministrateurRepository;
-import com.padell.padell.repository.MatchRepository; // Import ajouté
+import com.padell.padell.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,10 +21,11 @@ import java.util.List;
 public class AdminAuthorizationService {
 
     private final AdministrateurRepository administrateurRepository;
-    private final MatchRepository matchRepository; // Injection ajoutée
+    private final MatchRepository matchRepository;
 
     public Administrateur currentAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Regle metier : une action admin exige une authentification administrateur.
         if (authentication == null || authentication.getName() == null || "anonymousUser".equals(authentication.getName())) {
             throw new BusinessException("Authentification administrateur requise.");
         }
@@ -34,6 +35,7 @@ public class AdminAuthorizationService {
     }
 
     public void requireGlobalAdmin() {
+        // Regle metier : certaines actions sont reservees a l'admin GLOBAL.
         if (currentAdmin().getTypeAdministrateur() != TypeAdministrateur.GLOBAL) {
             throw new BusinessException("Action réservée à un admin GLOBAL.");
         }
@@ -44,6 +46,7 @@ public class AdminAuthorizationService {
         if (admin.getTypeAdministrateur() == TypeAdministrateur.GLOBAL) {
             return;
         }
+        // Regle metier : un admin SITE ne peut agir que sur son propre site.
         if (admin.getSite() == null || !admin.getSite().getId().equals(siteId)) {
             throw new BusinessException("Un admin SITE ne peut agir que sur son propre site.");
         }
@@ -51,10 +54,7 @@ public class AdminAuthorizationService {
 
     public void checkTerrainAccess(Terrain terrain) {
         checkSiteAccess(terrain.getSite().getId());
-    }
-
-    // Méthode modifiée pour accepter un Long id
-    public void checkMatchAccess(Long matchId) {
+    }    public void checkMatchAccess(Long matchId) {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new BusinessException("Match introuvable avec l'ID : " + matchId));
         checkSiteAccess(match.getTerrain().getSite().getId());
@@ -65,6 +65,7 @@ public class AdminAuthorizationService {
         if (admin.getTypeAdministrateur() == TypeAdministrateur.GLOBAL) {
             return;
         }
+        // Regle metier : un admin SITE ne peut gerer que les membres de son site.
         if (membre.getSite() == null || admin.getSite() == null || !membre.getSite().getId().equals(admin.getSite().getId())) {
             throw new BusinessException("Un admin SITE ne peut gérer que les membres de son site.");
         }

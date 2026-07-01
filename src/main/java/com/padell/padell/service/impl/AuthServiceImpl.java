@@ -23,17 +23,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        // Règle métier: L'administrateur doit exister dans le système.
         Administrateur admin = administrateurRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow(() -> new BusinessException("Identifiants invalides."));
 
-        // Règle métier: Le mot de passe fourni doit correspondre au mot de passe enregistré.
+        // Regle metier : un administrateur doit fournir un mot de passe valide.
         if (!passwordEncoder.matches(request.getPassword(), admin.getPasswordHash())) {
             throw new BusinessException("Identifiants invalides.");
         }
 
-        // générer le token JWT
         String token = jwtConfig.generateToken(
                 admin.getEmail(),
                 admin.getTypeAdministrateur().name()

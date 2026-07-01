@@ -27,7 +27,6 @@ public class SiteMapper {
         if (site == null) {
             return null;
         }
-        // Correction : Le builder gère déjà les champs null, mais cette approche est plus explicite
         // et montre la robustesse. Le simple fait d'utiliser le builder sur une entité
         // avec des champs null ne lèvera pas de NullPointerException.
         // L'erreur venait probablement d'une entité Site elle-même nulle dans la liste.

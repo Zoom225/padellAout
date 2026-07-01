@@ -22,7 +22,6 @@ public class TerrainServiceImpl implements TerrainService {
 
     @Override
     public Terrain create(Terrain terrain, Long siteId) {
-        // Règle métier: Le site auquel le terrain est rattaché doit exister.
         Site site = siteService.getById(siteId);
         terrain.setSite(site);
         log.info("Terrain créé pour le site {}", siteId);
@@ -31,7 +30,6 @@ public class TerrainServiceImpl implements TerrainService {
 
     @Override
     public Terrain getById(Long id) {
-        // Règle métier: Le terrain doit exister pour être récupéré par ID.
         return terrainRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Terrain introuvable avec l'ID : " + id));
     }
@@ -43,14 +41,12 @@ public class TerrainServiceImpl implements TerrainService {
 
     @Override
     public List<Terrain> getBySiteId(Long siteId) {
-        // Règle métier: Le site doit exister pour pouvoir récupérer ses terrains.
         siteService.getById(siteId);
         return terrainRepository.findBySiteId(siteId);
     }
 
     @Override
     public Terrain update(Long id, Terrain terrain) {
-        // Règle métier: Le terrain à mettre à jour doit exister.
         Terrain existing = getById(id);
         existing.setNom(terrain.getNom());
         return terrainRepository.save(existing);
@@ -58,7 +54,6 @@ public class TerrainServiceImpl implements TerrainService {
 
     @Override
     public void delete(Long id) {
-        // Règle métier: Le terrain à supprimer doit exister.
         Terrain existing = getById(id);
         terrainRepository.delete(existing);
     }

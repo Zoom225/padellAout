@@ -38,12 +38,12 @@ public class PaiementServiceImpl implements PaiementService {
         Reservation reservation = reservationService.getById(reservationId);
         Membre membre = reservation.getMembre();
 
-        // règle : seul le membre concerné peut payer
+        // Regle metier : seul le membre lie a la reservation peut payer.
         if (!membre.getId().equals(membreId)) {
             throw new BusinessException("Seul le membre associé à cette réservation peut payer.");
         }
 
-        // règle : impossible de payer une réservation annulée
+        // Regle metier : une reservation annulee ne peut pas etre payee.
         if (reservation.getStatut() == com.padell.padell.entity.enums.StatutReservation.ANNULEE) {
             throw new BusinessException("Impossible de payer une réservation annulée.");
         }
@@ -53,26 +53,31 @@ public class PaiementServiceImpl implements PaiementService {
             throw new ResourceNotFoundException("Aucun paiement trouvé pour la réservation : " + reservationId);
         }
 
+        // Regle metier : un paiement deja effectue ne peut pas etre refait.
         if (paiement.getStatut() == StatutPaiement.PAYE) {
             throw new BusinessException("Le paiement de cette réservation a déjà été effectué.");
         }
 
+        // Regle metier : un paiement annule ne peut pas etre relance.
         if (paiement.getStatut() == StatutPaiement.ANNULE) {
             throw new BusinessException("Le paiement de cette réservation a été annulé.");
         }
 
+        // Regle metier : le verrou evite deux paiements sur la derniere place disponible.
         Match match = matchRepository.findByIdForUpdate(reservation.getMatch().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Match introuvable avec l'ID : " + reservation.getMatch().getId()));
+        // Regle metier : seules les reservations en attente peuvent etre payees.
         if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
             throw new BusinessException("Seules les réservations en attente peuvent être payées.");
         }
+        // Regle metier : impossible de payer si le match est deja complet.
         if (match.getNbJoueursActuels() >= 4) {
             throw new BusinessException("Le match est déjà complet. La place n'est plus disponible.");
         }
 
-        // règle : si solde dû, on l'ajoute au montant
         double montantFinal = paiement.getMontant();
         if (membre.getSolde() > 0.0) {
+            // Regle metier : un solde impaye est recupere au paiement suivant.
             montantFinal += membre.getSolde();
             log.info("Solde impayé de {} ajouté au paiement du membre {}",
                     membre.getSolde(), membreId);
@@ -85,7 +90,6 @@ public class PaiementServiceImpl implements PaiementService {
         paiement.setDatePaiement(LocalDateTime.now());
         paiementRepository.save(paiement);
 
-        // confirmer la réservation après paiement
         reservationService.confirm(reservationId);
 
         log.info("Paiement effectué pour la réservation {} par le membre {}", reservationId, membreId);
@@ -113,6 +117,7 @@ public class PaiementServiceImpl implements PaiementService {
     @Override
     public void checkPaiementOwner(Long paiementId, Long membreId) {
         Paiement paiement = getById(paiementId);
+        // Regle metier : un membre ne peut consulter que ses propres paiements.
         if (!paiement.getReservation().getMembre().getId().equals(membreId)) {
             throw new BusinessException("Accès refusé : ce paiement appartient à un autre membre.");
         }
@@ -121,6 +126,7 @@ public class PaiementServiceImpl implements PaiementService {
     @Override
     public void checkReservationPaiementOwner(Long reservationId, Long membreId) {
         Paiement paiement = getByReservationId(reservationId);
+        // Regle metier : un membre ne peut agir que sur le paiement de sa reservation.
         if (!paiement.getReservation().getMembre().getId().equals(membreId)) {
             throw new BusinessException("Accès refusé : ce paiement appartient à un autre membre.");
         }
@@ -131,20 +137,17 @@ public class PaiementServiceImpl implements PaiementService {
     public void checkUnpaidBeforeMatch() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
 
-        // récupérer toutes les réservations EN_ATTENTE pour les matchs de demain
+        // Regle metier : a J-1, les reservations non payees sont annulees et imputees a l'organisateur.
         paiementRepository.findByStatut(StatutPaiement.EN_ATTENTE)
                 .stream()
-                // Correction : Utiliser getDateDebut().toLocalDate() au lieu de getDate()
                 .filter(p -> p.getReservation().getMatch()
                         .getDateDebut().toLocalDate().equals(tomorrow))
                 .forEach(p -> {
                     Reservation reservation = p.getReservation();
                     Match match = reservation.getMatch();
 
-                    // annuler la réservation non payée
                     reservationService.cancel(reservation.getId());
 
-                    // ajouter le solde dû à l'organisateur si match public non complet
                     double partManquante = match.getPrixParJoueur();
                     Membre organisateur = match.getOrganisateur();
                     organisateur.setSolde(organisateur.getSolde() + partManquante);

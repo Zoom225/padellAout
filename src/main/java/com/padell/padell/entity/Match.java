@@ -57,7 +57,6 @@ public class Match extends BaseEntity {
     @JsonManagedReference("match-reservations")
     private List<Reservation> reservations;
 
-    // Correction : Suppression de tous les champs et méthodes logiques redondants.
     // L'entité est maintenant un simple POJO qui représente la table de la base de données.
     // Toute la logique de manipulation des dates a été déplacée dans la couche service.
 }
