@@ -12,13 +12,11 @@ import { MemberSessionService } from './core/auth/member-session.service';
   template: `
     <header class="app-header">
       <div class="app-header-inner">
-        <!-- Logo -->
         <a routerLink="/" class="app-logo">
-          <span class="app-logo-badge">🎾</span>
+          <span class="app-logo-badge">P</span>
           <span class="app-logo-text">PadelPlay</span>
         </a>
 
-        <!-- Nav principale -->
         <nav class="app-nav">
           <a routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Accueil</a>
 
@@ -34,14 +32,14 @@ import { MemberSessionService } from './core/auth/member-session.service';
             <div class="nav-divider"></div>
             <a routerLink="/member/profile" routerLinkActive="nav-active" class="nav-link">Profil</a>
             <a routerLink="/member/matches" routerLinkActive="nav-active" class="nav-link">Matchs</a>
-            <a routerLink="/member/reservations" routerLinkActive="nav-active" class="nav-link">Réservations</a>
+            <a routerLink="/member/reservations" routerLinkActive="nav-active" class="nav-link">Reservations</a>
             <a routerLink="/member/payments" routerLinkActive="nav-active" class="nav-link">Paiements</a>
             <div class="nav-divider"></div>
-            <a routerLink="/member/matches/new" class="nav-btn-create">➕ Créer un match</a>
-            <a routerLink="/member/matches/new" [queryParams]="{type:'PUBLIC'}" class="nav-btn-green">🎾 Match PUBLIC</a>
-            <a routerLink="/member/matches/new" [queryParams]="{type:'PRIVE'}" class="nav-btn-purple">🔒 Match PRIVÉ</a>
+            <a routerLink="/member/matches/new" class="nav-btn-create">Creer</a>
+            <a routerLink="/member/matches/new" [queryParams]="{type:'PUBLIC'}" class="nav-btn-green">Public</a>
+            <a routerLink="/member/matches/new" [queryParams]="{type:'PRIVE'}" class="nav-btn-purple">Prive</a>
             <div class="nav-divider"></div>
-            <button class="nav-btn-logout" type="button" (click)="logoutMember()">Déconnexion</button>
+            <button class="nav-btn-logout" type="button" (click)="logoutMember()">Deconnexion</button>
           }
 
           @if (adminSession.isAuthenticated()) {
@@ -53,7 +51,7 @@ import { MemberSessionService } from './core/auth/member-session.service';
             <a routerLink="/admin/terrains" routerLinkActive="nav-active" class="nav-link">Terrains</a>
             <a routerLink="/admin/fermetures" routerLinkActive="nav-active" class="nav-link">Fermetures</a>
             <div class="nav-divider"></div>
-            <button class="nav-btn-logout" type="button" (click)="logoutAdmin()">Déconnexion</button>
+            <button class="nav-btn-logout" type="button" (click)="logoutAdmin()">Deconnexion</button>
           }
         </nav>
       </div>
@@ -68,14 +66,16 @@ import { MemberSessionService } from './core/auth/member-session.service';
       position: sticky;
       top: 0;
       z-index: 30;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0369a1 100%);
-      box-shadow: 0 2px 16px rgba(3,105,161,0.25);
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(18px);
     }
 
     .app-header-inner {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0.6rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       display: flex;
       align-items: center;
       flex-wrap: wrap;
@@ -87,24 +87,29 @@ import { MemberSessionService } from './core/auth/member-session.service';
       align-items: center;
       gap: 0.5rem;
       text-decoration: none;
-      margin-right: 0.5rem;
+      margin-right: 0.75rem;
       flex-shrink: 0;
     }
+
     .app-logo-badge {
-      font-size: 1.5rem;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 900;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 2rem;
       height: 2rem;
-      background: rgba(255,255,255,0.15);
+      background: linear-gradient(135deg, #0f766e, #16a34a);
       border-radius: 8px;
+      box-shadow: 0 10px 22px rgba(15, 118, 110, 0.24);
     }
+
     .app-logo-text {
       font-size: 1.1rem;
       font-weight: 800;
-      color: #fff;
-      letter-spacing: 0.02em;
+      color: #0f172a;
+      letter-spacing: 0;
     }
 
     .app-nav {
@@ -116,101 +121,116 @@ import { MemberSessionService } from './core/auth/member-session.service';
     }
 
     .nav-link {
-      color: rgba(255,255,255,0.85);
+      color: #475569;
       font-size: 0.875rem;
-      font-weight: 500;
+      font-weight: 650;
       text-decoration: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: background 0.15s, color 0.15s;
+      padding: 0.48rem 0.82rem;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
       white-space: nowrap;
     }
-    .nav-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
-    .nav-active { background: rgba(255,255,255,0.2) !important; color: #fff !important; font-weight: 700; }
+
+    .nav-link:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      transform: translateY(-1px);
+    }
+
+    .nav-active {
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      font-weight: 800;
+    }
 
     .nav-divider {
       width: 1px;
       height: 1.5rem;
-      background: rgba(255,255,255,0.25);
+      background: rgba(15, 23, 42, 0.12);
       margin: 0 0.25rem;
       flex-shrink: 0;
     }
 
-    .nav-btn-outline {
-      color: #fff;
-      border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 9999px;
-      padding: 0.35rem 1rem;
-      font-size: 0.85rem;
-      font-weight: 600;
+    .nav-btn-outline,
+    .nav-btn-green,
+    .nav-btn-create,
+    .nav-btn-purple,
+    .nav-btn-logout {
+      border-radius: 8px;
+      padding: 0.45rem 0.95rem;
+      font-size: 0.83rem;
+      font-weight: 800;
       text-decoration: none;
       white-space: nowrap;
-      transition: background 0.15s;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
     }
-    .nav-btn-outline:hover { background: rgba(255,255,255,0.15); }
+
+    .nav-btn-outline {
+      color: #0f766e;
+      border: 1px solid rgba(15, 118, 110, 0.26);
+      background: #ffffff;
+    }
+
+    .nav-btn-outline:hover {
+      background: #ecfdf5;
+      transform: translateY(-1px);
+    }
 
     .nav-btn-green {
-      background: linear-gradient(135deg, #15803d, #16a34a);
-      color: #fff;
+      background: #047857;
+      color: #ffffff;
       border: none;
-      border-radius: 9999px;
-      padding: 0.4rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(21,128,61,0.35);
-      transition: transform 0.15s;
+      box-shadow: 0 8px 18px rgba(4, 120, 87, 0.22);
     }
-    .nav-btn-green:hover { transform: translateY(-1px); }
 
     .nav-btn-create {
-      background: linear-gradient(135deg, #ea580c, #f97316);
-      color: #fff;
+      background: #0f172a;
+      color: #ffffff;
       border: none;
-      border-radius: 9999px;
-      padding: 0.4rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(234,88,12,0.35);
-      transition: transform 0.15s;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
     }
-    .nav-btn-create:hover { transform: translateY(-1px); }
 
     .nav-btn-purple {
-      background: linear-gradient(135deg, #6d28d9, #7c3aed);
-      color: #fff;
+      background: #2563eb;
+      color: #ffffff;
       border: none;
-      border-radius: 9999px;
-      padding: 0.4rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
-      white-space: nowrap;
-      box-shadow: 0 2px 8px rgba(109,40,217,0.35);
-      transition: transform 0.15s;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.2);
     }
-    .nav-btn-purple:hover { transform: translateY(-1px); }
+
+    .nav-btn-green:hover,
+    .nav-btn-create:hover,
+    .nav-btn-purple:hover {
+      transform: translateY(-1px);
+    }
 
     .nav-btn-logout {
-      background: rgba(239,68,68,0.15);
-      color: #fca5a5;
-      border: 1.5px solid rgba(239,68,68,0.35);
-      border-radius: 9999px;
-      padding: 0.35rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 600;
+      background: #fff1f2;
+      color: #be123c;
+      border: 1px solid rgba(225, 29, 72, 0.2);
       cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s;
     }
-    .nav-btn-logout:hover { background: rgba(239,68,68,0.25); }
+
+    .nav-btn-logout:hover {
+      background: #ffe4e6;
+    }
 
     .app-main-shell {
       min-height: calc(100vh - 58px);
-      background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);
+      background: transparent;
+    }
+
+    @media (max-width: 760px) {
+      .app-header-inner {
+        padding: 0.7rem 1rem;
+      }
+
+      .app-nav {
+        width: 100%;
+      }
+
+      .nav-divider {
+        display: none;
+      }
     }
   `]
 })
