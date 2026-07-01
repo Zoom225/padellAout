@@ -23,12 +23,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        // chercher l'admin par email
+        // Règle métier: L'administrateur doit exister dans le système.
         Administrateur admin = administrateurRepository
                 .findByEmail(request.getEmail())
                 .orElseThrow(() -> new BusinessException("Identifiants invalides."));
 
-        // vérifier le password
+        // Règle métier: Le mot de passe fourni doit correspondre au mot de passe enregistré.
         if (!passwordEncoder.matches(request.getPassword(), admin.getPasswordHash())) {
             throw new BusinessException("Identifiants invalides.");
         }

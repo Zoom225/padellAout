@@ -44,27 +44,36 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public MatchDto createMatch(CreateMatchRequest request, String username) {
+        // Règle métier: Vérifie si l'organisateur existe dans le système.
         Membre organisateur = membreRepository.findByMatricule(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé pour l'utilisateur: " + username));
 
+        // Règle métier: Vérifie si le terrain existe.
         Terrain terrain = terrainService.getById(request.terrainId());
 
+        // Règle métier: Vérifie si l'organisateur a un solde impayé.
         if (membreService.hasOutstandingBalance(organisateur.getId())) {
             throw new BusinessException("Vous avez un solde impayé et ne pouvez pas créer de match.");
         }
+        // Règle métier: Vérifie si l'organisateur a une pénalité active.
         if (membreService.hasActivePenalty(organisateur.getId())) {
             throw new BusinessException("Vous avez une pénalité active et ne pouvez pas créer de match.");
         }
 
+        // Règle métier: Valide le délai de réservation en fonction du type de membre.
         validateBookingDelay(organisateur, request.matchDate().toLocalDate());
+        // Règle métier: Valide l'accès au site pour l'organisateur (pour les membres SITE).
         validateSiteAccessForOrganizer(organisateur, terrain);
 
         LocalDateTime dateDebut = request.matchDate();
         LocalDateTime dateFin = dateDebut.plusMinutes(terrain.getSite().getDureeMatchMinutes());
 
+        // Règle métier: Vérifie si le site n'est pas fermé à la date du match.
         validateSiteNotClosed(terrain, dateDebut.toLocalDate());
+        // Règle métier: Vérifie si le match est dans les heures d'ouverture du site.
         validateSiteOpeningHours(terrain, dateDebut.toLocalTime(), dateFin.toLocalTime());
 
+        // Règle métier: Vérifie si le créneau horaire sur le terrain est disponible.
         if (!isSlotAvailable(terrain, dateDebut, dateFin)) {
             throw new BusinessException("Ce créneau est déjà réservé sur le terrain : " + terrain.getId());
         }
@@ -81,6 +90,7 @@ public class MatchServiceImpl implements MatchService {
         match.setPrixParJoueur(MATCH_PRICE / MAX_PLAYERS);
 
         Match savedMatch = matchRepository.save(match);
+        // Règle métier: Crée une réservation en attente pour l'organisateur lors de la création du match.
         createPendingReservationForOrganizer(savedMatch, organisateur);
         log.info("Match créé avec succès (ID: {}) par l'utilisateur {}", savedMatch.getId(), username);
 
@@ -96,6 +106,7 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<MatchDto> getPublicAvailableMatches() {
+        // Règle métier: Récupère uniquement les matchs publics et planifiés.
         return matchRepository.findByTypeMatchAndStatut(TypeMatch.PUBLIC, StatutMatch.PLANIFIE)
                 .stream()
                 .map(matchMapper::toMatchDto)
@@ -119,35 +130,43 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match getMatchEntityById(Long id) { // RENOMMÉ ICI
+    public Match getMatchEntityById(Long id) {
+        // Règle métier: Vérifie si le match existe pour être récupéré en tant qu'entité.
         return matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Match non trouvé avec l'ID : " + id));
     }
 
     @Override
     public MatchDto getMatchDtoById(Long id) {
-        return matchMapper.toMatchDto(getMatchEntityById(id)); // UTILISE LA NOUVELLE MÉTHODE
+        return matchMapper.toMatchDto(getMatchEntityById(id));
     }
 
     @Override
     @Transactional
     public MatchDto updateMatch(Long matchId, MatchRequest request) {
-        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
+        // Règle métier: Vérifie si le match à mettre à jour existe.
+        Match match = getMatchEntityById(matchId);
 
+        // Règle métier: Vérifie si le match n'est pas annulé avant modification.
         if (match.getStatut() == StatutMatch.ANNULE) {
             throw new BusinessException("Impossible de modifier un match annulé.");
         }
+        // Règle métier: Vérifie si l'utilisateur est l'organisateur du match pour le modifier.
         if (!match.getOrganisateur().getId().equals(request.getOrganisateurId())) {
             throw new BusinessException("Seul l'organisateur peut modifier ce match.");
         }
 
+        // Règle métier: Vérifie si le terrain existe.
         Terrain terrain = terrainService.getById(request.getTerrainId());
         LocalDateTime dateDebut = request.getDate().atTime(request.getHeureDebut());
         LocalDateTime dateFin = dateDebut.plusMinutes(terrain.getSite().getDureeMatchMinutes());
 
+        // Règle métier: Vérifie si le site n'est pas fermé à la date du match.
         validateSiteNotClosed(terrain, dateDebut.toLocalDate());
+        // Règle métier: Vérifie si le match est dans les heures d'ouverture du site.
         validateSiteOpeningHours(terrain, dateDebut.toLocalTime(), dateFin.toLocalTime());
 
+        // Règle métier: Vérifie si le créneau horaire sur le terrain doit être disponible, en excluant le match actuel.
         if (!isSlotAvailableExcluding(terrain, dateDebut, dateFin, matchId)) {
             throw new BusinessException("Ce créneau est déjà réservé sur le terrain : " + terrain.getId());
         }
@@ -163,11 +182,14 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void cancelMatch(Long matchId, Long requesterId) {
-        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
+        // Règle métier: Vérifie si le match à annuler existe.
+        Match match = getMatchEntityById(matchId);
 
+        // Règle métier: Vérifie si le match n'est pas déjà annulé.
         if (match.getStatut() == StatutMatch.ANNULE) {
             throw new BusinessException("Ce match est déjà annulé.");
         }
+        // Règle métier: Vérifie si l'utilisateur est l'organisateur du match pour l'annuler.
         if (!match.getOrganisateur().getId().equals(requesterId)) {
             throw new BusinessException("Seul l'organisateur peut annuler ce match.");
         }
@@ -184,6 +206,8 @@ public class MatchServiceImpl implements MatchService {
         LocalDateTime startOfDay = tomorrow.atStartOfDay();
         LocalDateTime endOfDay = tomorrow.atTime(LocalTime.MAX);
 
+        // Règle métier: Identifie les matchs privés planifiés qui n'ont pas atteint le nombre maximum de joueurs
+        // et dont la date de début est demain.
         List<Match> expiredMatches = matchRepository
                 .findByDateDebutBetweenAndStatut(startOfDay, endOfDay, StatutMatch.PLANIFIE)
                 .stream()
@@ -199,13 +223,16 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void convertToPublic(Long matchId) {
-        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
+        // Règle métier: Vérifie si le match existe.
+        Match match = getMatchEntityById(matchId);
+        // Règle métier: Vérifie si le match n'est pas déjà public.
         if (match.getTypeMatch() == TypeMatch.PUBLIC) {
             throw new BusinessException("Le match est déjà public.");
         }
         match.setTypeMatch(TypeMatch.PUBLIC);
         match.setDateConversionPublic(LocalDateTime.now());
         matchRepository.save(match);
+        // Règle métier: Applique une pénalité à l'organisateur lors de la conversion d'un match privé en public.
         membreService.addPenalty(match.getOrganisateur().getId());
         log.info("Match {} converti en public, pénalité appliquée à l'organisateur {}", matchId, match.getOrganisateur().getId());
     }
@@ -213,11 +240,14 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void incrementPlayers(Long matchId) {
-        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
+        // Règle métier: Vérifie si le match existe.
+        Match match = getMatchEntityById(matchId);
+        // Règle métier: Vérifie si le match n'est pas déjà complet.
         if (match.getNbJoueursActuels() >= MAX_PLAYERS) {
             throw new BusinessException("Le match est déjà complet.");
         }
         match.setNbJoueursActuels(match.getNbJoueursActuels() + 1);
+        // Règle métier: Si le nombre de joueurs atteint le maximum, le statut du match passe à COMPLET.
         if (match.getNbJoueursActuels() == MAX_PLAYERS) {
             match.setStatut(StatutMatch.COMPLET);
         }
@@ -227,11 +257,14 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public void decrementPlayers(Long matchId) {
-        Match match = getMatchEntityById(matchId); // UTILISE LA NOUVELLE MÉTHODE
+        // Règle métier: Vérifie si le match existe.
+        Match match = getMatchEntityById(matchId);
+        // Règle métier: Vérifie si le match a au moins un joueur pour pouvoir en décrémenter.
         if (match.getNbJoueursActuels() <= 0) {
             throw new BusinessException("Le match n'a aucun joueur.");
         }
         match.setNbJoueursActuels(match.getNbJoueursActuels() - 1);
+        // Règle métier: Si le match était complet et qu'un joueur est retiré, son statut redevient PLANIFIE.
         if (match.getStatut() == StatutMatch.COMPLET) {
             match.setStatut(StatutMatch.PLANIFIE);
         }
