@@ -22,6 +22,7 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public Site getById(Long id) {
+        // Règle métier: Le site doit exister pour être récupéré.
         return siteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Site introuvable avec l'ID : " + id));
     }
@@ -36,6 +37,7 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public Site update(Long id, Site site) {
+        // Règle métier: Le site à mettre à jour doit exister.
         Site existing = getById(id);
         existing.setNom(site.getNom());
         existing.setAdresse(site.getAdresse());
@@ -49,6 +51,7 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public void delete(Long id) {
+        // Règle métier: Le site à supprimer doit exister.
         Site existing = getById(id);
         siteRepository.delete(existing);
     }

@@ -32,44 +32,46 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public Reservation create(Long matchId, Long membreId, Long requesterId) {
-        Match match = matchService.getMatchEntityById(matchId); // MODIFIÉ ICI
+        Match match = matchService.getMatchEntityById(matchId);
         Membre membre = membreService.getById(membreId);
 
-        // règle : match doit être PLANIFIE
+        // Règle métier: Le match ne doit pas être complet.
         if (match.getStatut() == StatutMatch.COMPLET) {
             throw new BusinessException("Le match est déjà complet.");
         }
+        // Règle métier: Le match ne doit pas être annulé.
         if (match.getStatut() == StatutMatch.ANNULE) {
             throw new BusinessException("Le match est annulé.");
         }
 
-        // règle : le membre ne peut pas déjà être inscrit
+        // Règle métier: Le membre ne doit pas déjà être inscrit à ce match.
         if (reservationRepository.existsByMatchIdAndMembreId(matchId, membreId)) {
             throw new BusinessException("Ce membre est déjà inscrit à ce match.");
         }
 
-        // règle : pénalité active bloque la réservation
+        // Règle métier: Le membre ne doit pas avoir de pénalité active.
         if (membreService.hasActivePenalty(membreId)) {
             throw new BusinessException("Vous avez une pénalité active et ne pouvez pas réserver ce match.");
         }
 
-        // règle : solde dû bloque la réservation
+        // Règle métier: Le membre ne doit pas avoir de solde impayé.
         if (membreService.hasOutstandingBalance(membreId)) {
             throw new BusinessException("Vous avez un solde impayé et ne pouvez pas réserver ce match.");
         }
 
-        // règle : match privé → seul l'organisateur peut ajouter des joueurs
-        // requesterId = celui qui fait la requête (doit être l'organisateur)
+        // Règle métier: Pour un match privé, seul l'organisateur peut ajouter des joueurs.
+        // Le requesterId est l'ID de la personne qui initie la demande de réservation.
         if (match.getTypeMatch() == TypeMatch.PRIVE
                 && !match.getOrganisateur().getId().equals(requesterId)) {
             throw new BusinessException("Pour un match privé, seul l'organisateur peut ajouter des joueurs.");
         }
 
+        // Règle métier: Un membre ne peut réserver un match public que pour lui-même.
         if (match.getTypeMatch() == TypeMatch.PUBLIC && !membreId.equals(requesterId)) {
             throw new BusinessException("Un membre ne peut réserver un match public que pour lui-même.");
         }
 
-        // règle : membre SITE ne peut réserver que sur son site
+        // Règle métier: Un membre de type SITE ne peut réserver que sur son propre site.
         if (membre.getTypeMembre() == TypeMembre.SITE) {
             Long membreSiteId = membre.getSite().getId();
             Long matchSiteId = match.getTerrain().getSite().getId();
@@ -120,6 +122,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void checkReservationOwner(Long reservationId, Long membreId) {
         Reservation reservation = getById(reservationId);
+        // Règle métier: Le membre doit être le propriétaire de la réservation pour y accéder.
         if (!reservation.getMembre().getId().equals(membreId)) {
             throw new BusinessException("Accès refusé : cette réservation appartient à un autre membre.");
         }
@@ -131,6 +134,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = getById(reservationId);
         boolean wasConfirmed = reservation.getStatut() == StatutReservation.CONFIRMEE;
 
+        // Règle métier: La réservation ne doit pas déjà être annulée.
         if (reservation.getStatut() == StatutReservation.ANNULEE) {
             throw new BusinessException("La réservation est déjà annulée.");
         }
@@ -161,6 +165,7 @@ public class ReservationServiceImpl implements ReservationService {
     public void confirm(Long reservationId) {
         Reservation reservation = getById(reservationId);
 
+        // Règle métier: La réservation ne doit pas déjà être confirmée.
         if (reservation.getStatut() == StatutReservation.CONFIRMEE) {
             throw new BusinessException("La réservation est déjà confirmée.");
         }
