@@ -62,7 +62,7 @@ public class PaiementServiceImpl implements PaiementService {
         if (paiement.getStatut() == StatutPaiement.ANNULE) {
             throw new BusinessException("Le paiement de cette réservation a été annulé.");
         }
-
+        //regle metier: premier payé=premier servi
         // Regle metier : le verrou evite deux paiements sur la derniere place disponible.
         Match match = matchRepository.findByIdForUpdate(reservation.getMatch().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Match introuvable avec l'ID : " + reservation.getMatch().getId()));
@@ -84,7 +84,7 @@ public class PaiementServiceImpl implements PaiementService {
             membre.setSolde(0.0);
             membreRepository.save(membre);
         }
-
+       //règle premier payé = premier servi
         paiement.setMontant(montantFinal);
         paiement.setStatut(StatutPaiement.PAYE);
         paiement.setDatePaiement(LocalDateTime.now());

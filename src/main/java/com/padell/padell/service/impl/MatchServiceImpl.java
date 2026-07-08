@@ -60,7 +60,7 @@ public class MatchServiceImpl implements MatchService {
 
         validateBookingDelay(organisateur, request.matchDate().toLocalDate());
         validateSiteAccessForOrganizer(organisateur, terrain);
-
+        //Service metier debut et fin match
         LocalDateTime dateDebut = request.matchDate();
         LocalDateTime dateFin = dateDebut.plusMinutes(terrain.getSite().getDureeMatchMinutes());
 
@@ -199,12 +199,13 @@ public class MatchServiceImpl implements MatchService {
                 .stream()
                 .filter(m -> m.getTypeMatch() == TypeMatch.PRIVE && m.getNbJoueursActuels() < MAX_PLAYERS)
                 .toList();
-
+        //sheduler active converti en public la veille
         if (!expiredMatches.isEmpty()) {
             expiredMatches.forEach(m -> convertToPublic(m.getId()));
             log.info("Scheduler : {} match(s) privé(s) ont été converti(s) en public", expiredMatches.size());
         }
     }
+
 
     @Override
     @Transactional
@@ -250,7 +251,7 @@ public class MatchServiceImpl implements MatchService {
         }
         matchRepository.save(match);
     }
-
+    //la règle des 15 minutes entre deux matchs
     private boolean isSlotAvailable(Terrain terrain, LocalDateTime start, LocalDateTime end) {
         int breakMinutes = terrain.getSite().getDureeEntreMatchMinutes();
         List<Match> existingMatches = matchRepository.findOverlappingMatches(
@@ -291,16 +292,16 @@ public class MatchServiceImpl implements MatchService {
                     + " ne peut pas réserver plus de " + maxDaysAhead + " jours à l'avance.");
         }
     }
-
+    //methode fermeture globaux de site
     private void validateSiteNotClosed(Terrain terrain, LocalDate date) {
         boolean closedGlobally = jourFermetureRepository.existsByDateAndGlobalTrue(date);
         boolean closedForSite = jourFermetureRepository.existsByDateAndSiteId(date, terrain.getSite().getId());
-        // Regle metier : aucun match ne peut etre cree sur un site ferme.
+        // Regle metier : aucun match ne peut etre cree sur un site ferme .jour fermeture globaux.
         if (closedGlobally || closedForSite) {
             throw new BusinessException("Le site est fermé à la date : " + date);
         }
     }
-
+        //methode les horaires d'ouverture propre pour un site
     private void validateSiteOpeningHours(Terrain terrain, LocalTime heureDebut, LocalTime heureFin) {
         LocalTime openingTime = terrain.getSite().getHeureOuverture();
         LocalTime closingTime = terrain.getSite().getHeureFermeture();
