@@ -34,15 +34,15 @@ public class DataInitializer implements CommandLineRunner {
         // seeding uniquement si la BDD est vide
         if (siteRepository.count() > 0) {
             if (matchRepository.count() == 0) {
-                log.info("DataInitializer : database already seeded, adding sample matches...");
+                log.info("DataInitializer : base de donnees deja initialisee, ajout des matchs d'exemple...");
                 seedMatchesFromExistingData();
             }
             ensurePenalizedDemoMember();
-            log.info("DataInitializer : database already seeded, skipping...");
+            log.info("DataInitializer : base de donnees deja initialisee, initialisation ignoree...");
             return;
         }
 
-        log.info("DataInitializer : seeding database...");
+        log.info("DataInitializer : initialisation de la base de donnees...");
 
         // ----------------------------------------------------------------
         // Sites
@@ -67,7 +67,7 @@ public class DataInitializer implements CommandLineRunner {
                 .anneeCivile(2025)
                 .build());
 
-        log.info("DataInitializer : {} sites created", siteRepository.count());
+        log.info("DataInitializer : {} sites crees", siteRepository.count());
 
         // ----------------------------------------------------------------
         // Terrains
@@ -79,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
         Terrain court1 = terrainRepository.save(Terrain.builder().nom("Court 1").site(siteParis).prix(60.0).build());
         terrainRepository.save(Terrain.builder().nom("Court 2").site(siteParis).prix(60.0).build());
 
-        log.info("DataInitializer : {} courts created", terrainRepository.count());
+        log.info("DataInitializer : {} terrains crees", terrainRepository.count());
 
         // ----------------------------------------------------------------
         // Jours de fermeture
@@ -88,14 +88,14 @@ public class DataInitializer implements CommandLineRunner {
         // fermeture globale (tous les sites)
         jourFermetureRepository.save(JourFermeture.builder()
                 .date(LocalDate.of(2025, 12, 25))
-                .raison("Christmas Day")
+                .raison("Jour de Noel")
                 .global(true)
                 .site(null)
                 .build());
 
         jourFermetureRepository.save(JourFermeture.builder()
                 .date(LocalDate.of(2025, 1, 1))
-                .raison("New Year's Day")
+                .raison("Jour de l'An")
                 .global(true)
                 .site(null)
                 .build());
@@ -103,12 +103,12 @@ public class DataInitializer implements CommandLineRunner {
         // fermeture spécifique au site Lyon
         jourFermetureRepository.save(JourFermeture.builder()
                 .date(LocalDate.of(2025, 7, 14))
-                .raison("Bastille Day — Lyon site maintenance")
+                .raison("Fete nationale - maintenance du site de Lyon")
                 .global(false)
                 .site(siteLyon)
                 .build());
 
-        log.info("DataInitializer : closing days created");
+        log.info("DataInitializer : jours de fermeture crees");
 
         // ----------------------------------------------------------------
         // Membres
@@ -173,7 +173,7 @@ public class DataInitializer implements CommandLineRunner {
                 .site(null)
                 .build());
 
-        log.info("DataInitializer : {} members created", membreRepository.count());
+        log.info("DataInitializer : {} membres crees", membreRepository.count());
 
         seedActivePenalty(penalise);
         seedMatches(courtA, courtB, courtC, court1, lucas, emma, tom, sarah, alex);
@@ -211,8 +211,8 @@ public class DataInitializer implements CommandLineRunner {
                 .site(siteParis)
                 .build());
 
-        log.info("DataInitializer : {} admins created", administrateurRepository.count());
-        log.info("DataInitializer : seeding completed successfully !");
+        log.info("DataInitializer : {} administrateurs crees", administrateurRepository.count());
+        log.info("DataInitializer : initialisation terminee avec succes !");
     }
 
     private void seedMatchesFromExistingData() {
@@ -300,7 +300,7 @@ public class DataInitializer implements CommandLineRunner {
         createSeedReservation(completeLyon, tom, StatutReservation.CONFIRMEE, StatutPaiement.PAYE);
         createSeedReservation(completeLyon, alex, StatutReservation.CONFIRMEE, StatutPaiement.PAYE);
 
-        log.info("DataInitializer : {} matches created", matchRepository.count());
+        log.info("DataInitializer : {} matchs crees", matchRepository.count());
     }
 
     private Match createSeedMatch(
