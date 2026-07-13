@@ -1,7 +1,7 @@
 package com.padell.padell.service.impl;
 
-import com.padell.padell.entity.Match;
 import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Match;
 import com.padell.padell.entity.Paiement;
 import com.padell.padell.entity.Reservation;
 import com.padell.padell.entity.enums.StatutPaiement;
@@ -38,7 +38,7 @@ public class PaiementServiceImpl implements PaiementService {
         Reservation reservation = reservationService.getById(reservationId);
         Membre membre = reservation.getMembre();
 
-        // Regle metier : seul le membre lie a la reservation peut payer.
+        // Regle metier : seul le membre lié a la reservation peut payer.
         if (!membre.getId().equals(membreId)) {
             throw new BusinessException("Seul le membre associé à cette réservation peut payer.");
         }
@@ -62,19 +62,14 @@ public class PaiementServiceImpl implements PaiementService {
         if (paiement.getStatut() == StatutPaiement.ANNULE) {
             throw new BusinessException("Le paiement de cette réservation a été annulé.");
         }
-        //regle metier: premier payé=premier servi
-        // Regle metier : le verrou evite deux paiements sur la derniere place disponible.
-        Match match = matchRepository.findByIdForUpdate(reservation.getMatch().getId())
+        // Regle metier : la place est deja bloquee par la reservation en attente.
+        // Le verrou garde un paiement coherent avec l'etat courant du match.
+        matchRepository.findByIdForUpdate(reservation.getMatch().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Match introuvable avec l'ID : " + reservation.getMatch().getId()));
         // Regle metier : seules les reservations en attente peuvent etre payees.
         if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
             throw new BusinessException("Seules les réservations en attente peuvent être payées.");
         }
-        // Regle metier : impossible de payer si le match est deja complet.
-        if (match.getNbJoueursActuels() >= 4) {
-            throw new BusinessException("Le match est déjà complet. La place n'est plus disponible.");
-        }
-
         double montantFinal = paiement.getMontant();
         if (membre.getSolde() > 0.0) {
             // Regle metier : un solde impaye est recupere au paiement suivant.
@@ -84,7 +79,7 @@ public class PaiementServiceImpl implements PaiementService {
             membre.setSolde(0.0);
             membreRepository.save(membre);
         }
-       //règle premier payé = premier servi
+
         paiement.setMontant(montantFinal);
         paiement.setStatut(StatutPaiement.PAYE);
         paiement.setDatePaiement(LocalDateTime.now());
