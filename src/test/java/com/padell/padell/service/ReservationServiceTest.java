@@ -174,6 +174,7 @@ class ReservationServiceTest {
                     paiement.getMontant().equals(15.0) &&
                             paiement.getStatut() == StatutPaiement.EN_ATTENTE
             ));
+            verify(matchService).incrementPlayers(11L);
         }
 
         @Test
@@ -192,6 +193,7 @@ class ReservationServiceTest {
 
             assertThat(result).isNotNull();
             assertThat(result.getStatut()).isEqualTo(StatutReservation.EN_ATTENTE);
+            verify(matchService).incrementPlayers(10L);
         }
 
         @Test
@@ -319,6 +321,7 @@ class ReservationServiceTest {
                     p.getMontant().equals(15.0) &&
                             p.getStatut() == StatutPaiement.EN_ATTENTE
             ));
+            verify(matchService).incrementPlayers(11L);
         }
     }
 
@@ -330,7 +333,7 @@ class ReservationServiceTest {
     class CancelTests {
 
         @Test
-        @DisplayName("✅ should cancel pending reservation without decrementing players")
+        @DisplayName("✅ should cancel pending reservation and decrement players")
         void shouldCancelReservation() {
             Paiement paiement = Paiement.builder()
                     .montant(15.0)
@@ -351,7 +354,7 @@ class ReservationServiceTest {
             reservationService.cancel(1L);
 
             assertThat(reservation.getStatut()).isEqualTo(StatutReservation.ANNULEE);
-            verify(matchService, never()).decrementPlayers(matchPublic.getId());
+            verify(matchService).decrementPlayers(matchPublic.getId());
         }
 
         @Test
@@ -445,7 +448,7 @@ class ReservationServiceTest {
     class ConfirmTests {
 
         @Test
-        @DisplayName("✅ should confirm reservation and increment match players")
+        @DisplayName("✅ should confirm reservation without incrementing match players again")
         void shouldConfirmReservation() {
             Reservation reservation = Reservation.builder()
                     .match(matchPublic)
@@ -460,7 +463,7 @@ class ReservationServiceTest {
             reservationService.confirm(1L);
 
             assertThat(reservation.getStatut()).isEqualTo(StatutReservation.CONFIRMEE);
-            verify(matchService, times(1)).incrementPlayers(matchPublic.getId());
+            verify(matchService, never()).incrementPlayers(any());
         }
 
         @Test

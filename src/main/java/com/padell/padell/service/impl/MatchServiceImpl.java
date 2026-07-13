@@ -39,7 +39,6 @@ public class MatchServiceImpl implements MatchService {
     private final MatchMapper matchMapper;
 
     private static final double MATCH_PRICE = 60.0;
-    private static final int MAX_PLAYERS = 4;
 
     @Override
     @Transactional
@@ -67,7 +66,7 @@ public class MatchServiceImpl implements MatchService {
         validateSiteNotClosed(terrain, dateDebut.toLocalDate());
         validateSiteOpeningHours(terrain, dateDebut.toLocalTime(), dateFin.toLocalTime());
 
-        // Regle metier : un terrain ne peut pas avoir deux matchs sur le meme creneau.
+        // Regle metier : un terrain ne peut pas avoir deux matchs sur le meme creneau horaire.
         if (!isSlotAvailable(terrain, dateDebut, dateFin)) {
             throw new BusinessException("Ce créneau est déjà réservé sur le terrain : " + terrain.getId());
         }
@@ -81,7 +80,7 @@ public class MatchServiceImpl implements MatchService {
         match.setStatut(StatutMatch.PLANIFIE);
         match.setNbJoueursActuels(0);
         match.setPrixTotal(MATCH_PRICE);
-        match.setPrixParJoueur(MATCH_PRICE / MAX_PLAYERS);
+        match.setPrixParJoueur(MATCH_PRICE / REQUIRED_PLAYERS_PER_MATCH);
 
         Match savedMatch = matchRepository.save(match);
         // Regle metier : l'organisateur commence avec une reservation en attente et un paiement associe.
@@ -197,7 +196,7 @@ public class MatchServiceImpl implements MatchService {
         List<Match> expiredMatches = matchRepository
                 .findByDateDebutBetweenAndStatut(startOfDay, endOfDay, StatutMatch.PLANIFIE)
                 .stream()
-                .filter(m -> m.getTypeMatch() == TypeMatch.PRIVE && m.getNbJoueursActuels() < MAX_PLAYERS)
+                .filter(m -> m.getTypeMatch() == TypeMatch.PRIVE && m.getNbJoueursActuels() < REQUIRED_PLAYERS_PER_MATCH)
                 .toList();
         //sheduler active converti en public la veille
         if (!expiredMatches.isEmpty()) {
@@ -226,15 +225,22 @@ public class MatchServiceImpl implements MatchService {
     @Transactional
     public void incrementPlayers(Long matchId) {
         Match match = getMatchEntityById(matchId);
-        // Regle metier : impossible d'ajouter un joueur si le match est deja complet.
-        if (match.getNbJoueursActuels() >= MAX_PLAYERS) {
+        incrementPlayersForMatch(match, true);
+    }
+
+    private void incrementPlayersForMatch(Match match, boolean save) {
+        // Regle metier : un match de padel doit contenir exactement 4 joueurs.
+        // Des que les 4 places sont occupees, le match devient complet.
+        if (match.getNbJoueursActuels() >= REQUIRED_PLAYERS_PER_MATCH) {
             throw new BusinessException("Le match est déjà complet.");
         }
         match.setNbJoueursActuels(match.getNbJoueursActuels() + 1);
-        if (match.getNbJoueursActuels() == MAX_PLAYERS) {
+        if (match.getNbJoueursActuels() == REQUIRED_PLAYERS_PER_MATCH) {
             match.setStatut(StatutMatch.COMPLET);
         }
-        matchRepository.save(match);
+        if (save) {
+            matchRepository.save(match);
+        }
     }
 
     @Override
@@ -335,5 +341,8 @@ public class MatchServiceImpl implements MatchService {
                 .build();
         paiement = paiementRepository.save(paiement);
         reservation.setPaiement(paiement);
+
+        // Regle metier : la reservation en attente de l'organisateur bloque une place.
+        incrementPlayersForMatch(match, false);
     }
 }

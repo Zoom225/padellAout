@@ -84,7 +84,7 @@ public class MembreServiceImpl implements MembreService {
         Membre membre = getById(membreId);
         return membre.getSolde() > 0.0;
     }
-
+// règle metier: addition frais à organisateur du match privée
     @Override
     public void addPenalty(Long membreId) {
         Membre membre = getById(membreId);

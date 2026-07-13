@@ -97,6 +97,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         paiement = paiementRepository.save(paiement);
         reservation.setPaiement(paiement);
+        // Regle metier : une reservation en attente bloque temporairement une place.
+        matchService.incrementPlayers(matchId);
 
         log.info("Réservation créée pour le membre {} sur le match {}", membreId, matchId);
 
@@ -132,7 +134,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public void cancel(Long reservationId) {
         Reservation reservation = getById(reservationId);
-        boolean wasConfirmed = reservation.getStatut() == StatutReservation.CONFIRMEE;
+        boolean occupiedPlace = reservation.getStatut() != StatutReservation.ANNULEE;
 
         // Regle metier : impossible d'annuler deux fois la meme reservation.
         if (reservation.getStatut() == StatutReservation.ANNULEE) {
@@ -153,7 +155,10 @@ public class ReservationServiceImpl implements ReservationService {
             paiementRepository.save(paiement);
         }
 
-        if (wasConfirmed) {
+        // Regle metier : annuler une reservation .
+        if (occupiedPlace
+                && reservation.getMatch().getNbJoueursActuels() != null
+                && reservation.getMatch().getNbJoueursActuels() > 0) {
             matchService.decrementPlayers(reservation.getMatch().getId());
         }
 
@@ -164,7 +169,6 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public void confirm(Long reservationId) {
         Reservation reservation = getById(reservationId);
-
         // Regle metier : impossible de confirmer deux fois la meme reservation.
         if (reservation.getStatut() == StatutReservation.CONFIRMEE) {
             throw new BusinessException("La réservation est déjà confirmée.");
@@ -172,9 +176,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setStatut(StatutReservation.CONFIRMEE);
         reservationRepository.save(reservation);
-
-        // Regle metier : confirmer une reservation occupe une place dans le match.
-        matchService.incrementPlayers(reservation.getMatch().getId());
 
         log.info("Réservation {} confirmée", reservationId);
     }

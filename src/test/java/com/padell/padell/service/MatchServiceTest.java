@@ -102,7 +102,7 @@ class MatchServiceTest {
                 createMatchRequest.matchDate().plusMinutes(90).toLocalTime(),
                 TypeMatch.PUBLIC,
                 StatutMatch.PLANIFIE,
-                0,
+                1,
                 15.0,
                 null  // dateConversionPublic
         );
@@ -127,7 +127,7 @@ class MatchServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(0, result.nbJoueursActuels());
+        assertEquals(1, result.nbJoueursActuels());
         assertEquals(TypeMatch.PUBLIC, result.typeMatch());
         verify(matchRepository, times(1)).save(any(Match.class));
         verify(reservationRepository, times(1)).save(any(Reservation.class));

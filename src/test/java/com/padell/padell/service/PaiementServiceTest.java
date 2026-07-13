@@ -139,15 +139,17 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw when match is already full at payment time")
-        void shouldThrowWhenMatchIsFullAtPaymentTime() {
+        @DisplayName("✅ should allow payment when reserved place makes match full")
+        void shouldAllowPaymentWhenReservedPlaceMakesMatchFull() {
             match.setNbJoueursActuels(4);
             when(reservationService.getById(1L)).thenReturn(reservation);
             when(matchRepository.findByIdForUpdate(10L)).thenReturn(Optional.of(match));
+            when(paiementRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-            assertThatThrownBy(() -> paiementService.pay(1L, 2L))
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessageContaining("déjà complet");
+            Paiement result = paiementService.pay(1L, 2L);
+
+            assertThat(result.getStatut()).isEqualTo(StatutPaiement.PAYE);
+            verify(reservationService).confirm(1L);
         }
     }
 
