@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("AdminAuthorizationService tests")
+@DisplayName("Tests de AdminAuthorizationService")
 class AdminAuthorizationServiceTest {
 
     @Mock

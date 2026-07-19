@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("PaiementMapper Tests")
+@DisplayName("Tests de PaiementMapper")
 class PaiementMapperTest {
 
     private PaiementMapper paiementMapper;

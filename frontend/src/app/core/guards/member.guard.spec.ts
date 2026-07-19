@@ -17,7 +17,7 @@ describe('memberGuard', () => {
     });
   });
 
-  it('should redirect to /member when no member session exists', () => {
+  it('devrait rediriger vers /member quand aucune session membre n\'existe', () => {
     const router = TestBed.inject(Router);
 
     const result = TestBed.runInInjectionContext(() => memberGuard({} as never, {} as never));
@@ -25,7 +25,7 @@ describe('memberGuard', () => {
     expect(result).toEqual(router.parseUrl('/member'));
   });
 
-  it('should allow access when member session exists', () => {
+  it('devrait autoriser l\'accès quand la session membre existe', () => {
     localStorage.setItem(
       MEMBER_SESSION_KEY,
       JSON.stringify({

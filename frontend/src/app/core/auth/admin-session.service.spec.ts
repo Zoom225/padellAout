@@ -8,7 +8,7 @@ describe('AdminSessionService', () => {
     TestBed.resetTestingModule();
   });
 
-  it('should persist admin auth information', () => {
+  it('devrait persister les informations d\'authentification admin', () => {
     TestBed.configureTestingModule({});
     const service = TestBed.inject(AdminSessionService);
 
@@ -26,7 +26,7 @@ describe('AdminSessionService', () => {
     expect(service.isGlobalAdmin()).toBe(true);
   });
 
-  it('should restore admin auth information from localStorage', () => {
+  it('devrait restaurer les informations d\'authentification admin depuis localStorage', () => {
     localStorage.setItem(
       ADMIN_SESSION_KEY,
       JSON.stringify({
@@ -48,7 +48,7 @@ describe('AdminSessionService', () => {
     expect(service.siteId()).toBe(2);
   });
 
-  it('should clear invalid localStorage content', () => {
+  it('devrait effacer le contenu invalide de localStorage', () => {
     localStorage.setItem(ADMIN_SESSION_KEY, 'not-json');
 
     TestBed.configureTestingModule({});
@@ -58,7 +58,7 @@ describe('AdminSessionService', () => {
     expect(localStorage.getItem(ADMIN_SESSION_KEY)).toBeNull();
   });
 
-  it('should clear admin auth information', () => {
+  it('devrait effacer les informations d\'authentification admin', () => {
     TestBed.configureTestingModule({});
     const service = TestBed.inject(AdminSessionService);
 

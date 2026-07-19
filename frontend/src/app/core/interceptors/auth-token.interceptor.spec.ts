@@ -18,7 +18,7 @@ describe('authTokenInterceptor', () => {
     });
   });
 
-  it('should attach the bearer token on protected API calls', async () => {
+  it('devrait attacher le token bearer sur les appels API protégés', async () => {
     const session = TestBed.inject(AdminSessionService);
     session.setSession({
       token: 'jwt-token',
@@ -43,7 +43,7 @@ describe('authTokenInterceptor', () => {
     expect(receivedRequest?.headers.get('Authorization')).toBe('Bearer jwt-token');
   });
 
-  it('should not attach the token on login call', async () => {
+  it('ne devrait pas attacher le token sur l\'appel de connexion', async () => {
     const session = TestBed.inject(AdminSessionService);
     session.setSession({
       token: 'jwt-token',
@@ -68,7 +68,7 @@ describe('authTokenInterceptor', () => {
     expect(receivedRequest?.headers.has('Authorization')).toBe(false);
   });
 
-  it('should use the member token when only the member session exists', async () => {
+  it('devrait utiliser le token membre quand seule la session membre existe', async () => {
     const session = TestBed.inject(MemberSessionService);
     session.setMember({
       id: 1,

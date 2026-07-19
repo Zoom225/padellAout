@@ -17,7 +17,7 @@ describe('MemberSessionService', () => {
     });
   });
 
-  it('should persist and restore a member session', () => {
+  it('devrait persister et restaurer une session membre', () => {
     TestBed.configureTestingModule({});
     const service = TestBed.inject(MemberSessionService);
 
@@ -38,7 +38,7 @@ describe('MemberSessionService', () => {
     expect(service.matricule()).toBe('G1234');
   });
 
-  it('should restore a member session from localStorage', () => {
+  it('devrait restaurer une session membre depuis localStorage', () => {
     localStorage.setItem(
       MEMBER_SESSION_KEY,
       JSON.stringify({
@@ -65,7 +65,7 @@ describe('MemberSessionService', () => {
     expect(service.matricule()).toBe('S12345');
   });
 
-  it('should clear invalid member localStorage content', () => {
+  it('devrait nettoyer un contenu localStorage membre invalide', () => {
     localStorage.setItem(MEMBER_SESSION_KEY, '{broken');
 
     TestBed.configureTestingModule({});
@@ -75,7 +75,7 @@ describe('MemberSessionService', () => {
     expect(localStorage.getItem(MEMBER_SESSION_KEY)).toBeNull();
   });
 
-  it('should clear the member session', () => {
+  it('devrait effacer la session membre', () => {
     TestBed.configureTestingModule({});
     const service = TestBed.inject(MemberSessionService);
 

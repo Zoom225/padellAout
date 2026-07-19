@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ReservationMapper Tests")
+@DisplayName("Tests de ReservationMapper")
 class ReservationMapperTest {
 
     @Mock

@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = MembreController.class)
-@DisplayName("MembreController Tests")
+@DisplayName("Tests de MembreController")
 class MembreControllerTest {
 
     @Autowired

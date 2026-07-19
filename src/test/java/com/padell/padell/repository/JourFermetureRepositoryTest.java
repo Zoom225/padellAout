@@ -13,7 +13,7 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("JourFermetureRepository tests")
+@DisplayName("Tests de JourFermetureRepository")
 class JourFermetureRepositoryTest {
 
     @Autowired
