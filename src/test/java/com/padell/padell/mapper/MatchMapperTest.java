@@ -16,7 +16,7 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("MatchMapper Tests")
+@DisplayName("Tests de MatchMapper")
 class MatchMapperTest {
 
     private MatchMapper matchMapper;

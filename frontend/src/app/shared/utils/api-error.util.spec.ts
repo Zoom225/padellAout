@@ -4,7 +4,7 @@ import { extractApiErrorMessage } from './api-error.util';
 describe('extractApiErrorMessage', () => {
   // ── Cas nominaux ──────────────────────────────────────────────────────────
 
-  it('should return the first field validation message when present', () => {
+  it('devrait retourner le premier message de validation de champ quand présent', () => {
     const message = extractApiErrorMessage({
       error: {
         errors: {
@@ -17,7 +17,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Email invalide');
   });
 
-  it('should return the backend message when no field errors are present', () => {
+  it('devrait retourner le message backend quand aucune erreur de champ n\'est présente', () => {
     const message = extractApiErrorMessage({
       error: {
         message: 'Reservation impossible'
@@ -27,7 +27,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Reservation impossible');
   });
 
-  it('should fall back to the provided fallback message', () => {
+  it('devrait revenir au message de secours fourni', () => {
     const message = extractApiErrorMessage(undefined, 'Erreur par defaut');
 
     expect(message).toBe('Erreur par defaut');
@@ -35,19 +35,19 @@ describe('extractApiErrorMessage', () => {
 
   // ── Fallback par défaut ───────────────────────────────────────────────────
 
-  it('should return the default fallback when no argument is provided', () => {
+  it('devrait retourner le message de secours par défaut quand aucun argument n\'est fourni', () => {
     const message = extractApiErrorMessage(undefined);
 
     expect(message).toBe('Une erreur est survenue.');
   });
 
-  it('should return the default fallback when error object is null', () => {
+  it('devrait retourner le message de secours par défaut quand l\'objet erreur est null', () => {
     const message = extractApiErrorMessage(null);
 
     expect(message).toBe('Une erreur est survenue.');
   });
 
-  it('should return the default fallback when error object is empty', () => {
+  it('devrait retourner le message de secours par défaut quand l\'objet erreur est vide', () => {
     const message = extractApiErrorMessage({});
 
     expect(message).toBe('Une erreur est survenue.');
@@ -55,7 +55,7 @@ describe('extractApiErrorMessage', () => {
 
   // ── Champs de validation ──────────────────────────────────────────────────
 
-  it('should return the only field message when errors has a single entry', () => {
+  it('devrait retourner le seul message de champ quand errors a une seule entrée', () => {
     const message = extractApiErrorMessage({
       error: {
         errors: { phone: 'Numéro de téléphone invalide' }
@@ -65,7 +65,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Numéro de téléphone invalide');
   });
 
-  it('should ignore errors object when it is empty and use backend message instead', () => {
+  it('devrait ignorer l\'objet errors quand il est vide et utiliser le message backend à la place', () => {
     const message = extractApiErrorMessage({
       error: {
         errors: {},
@@ -78,7 +78,7 @@ describe('extractApiErrorMessage', () => {
 
   // ── Message de niveau racine ──────────────────────────────────────────────
 
-  it('should use root-level message when error.message is absent', () => {
+  it('devrait utiliser le message de niveau racine quand error.message est absent', () => {
     const message = extractApiErrorMessage({
       message: 'Timeout réseau'
     });
@@ -88,7 +88,7 @@ describe('extractApiErrorMessage', () => {
 
   // ── Priorité des sources ──────────────────────────────────────────────────
 
-  it('should prioritise field errors over backend message', () => {
+  it('devrait prioriser les erreurs de champ sur le message backend', () => {
     const message = extractApiErrorMessage({
       error: {
         errors: { name: 'Nom requis' },
@@ -99,7 +99,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Nom requis');
   });
 
-  it('should prioritise backend message over root-level message', () => {
+  it('devrait prioriser le message backend sur le message de niveau racine', () => {
     const message = extractApiErrorMessage({
       message: 'Erreur HTTP générique',
       error: {
@@ -112,7 +112,7 @@ describe('extractApiErrorMessage', () => {
 
   // ── Scénarios métier réels ────────────────────────────────────────────────
 
-  it('should handle a 400 Bad Request with multiple field errors (inscription)', () => {
+  it('devrait gérer une requête 400 Bad Request avec plusieurs erreurs de champs (inscription)', () => {
     const message = extractApiErrorMessage({
       error: {
         status: 400,
@@ -127,7 +127,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Email déjà utilisé');
   });
 
-  it('should handle a 409 Conflict from reservation overlap', () => {
+  it('devrait gérer un conflit 409 provenant d\'un chevauchement de réservation', () => {
     const message = extractApiErrorMessage({
       error: {
         status: 409,
@@ -138,7 +138,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Ce terrain est déjà réservé sur ce créneau.');
   });
 
-  it('should handle a 403 Forbidden with a custom fallback', () => {
+  it('devrait gérer un 403 Forbidden avec un message de secours personnalisé', () => {
     const message = extractApiErrorMessage(
       { error: { status: 403 } },
       'Accès refusé, veuillez contacter un administrateur.'
@@ -147,7 +147,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Accès refusé, veuillez contacter un administrateur.');
   });
 
-  it('should ignore a generic HTTP status label when no business message exists', () => {
+  it('devrait ignorer un libellé de statut HTTP générique quand aucun message métier n\'existe', () => {
     const message = extractApiErrorMessage(
       { error: { status: 400, error: 'Bad Request' } },
       'Action impossible.'
@@ -156,7 +156,7 @@ describe('extractApiErrorMessage', () => {
     expect(message).toBe('Action impossible.');
   });
 
-  it('should handle a payment failure message from the backend', () => {
+  it('devrait gérer un message d\'échec de paiement provenant du backend', () => {
     const message = extractApiErrorMessage({
       error: {
         message: 'Paiement refusé : solde insuffisant.'

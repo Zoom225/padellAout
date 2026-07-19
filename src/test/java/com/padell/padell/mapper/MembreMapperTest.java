@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("MembreMapper Tests")
+@DisplayName("Tests de MembreMapper")
 class MembreMapperTest {
 
     private MembreMapper membreMapper;

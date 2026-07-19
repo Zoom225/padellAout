@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = PaiementController.class)
-@DisplayName("PaiementController Tests")
+@DisplayName("Tests de PaiementController")
 class PaiementControllerTest {
 
     @Autowired

@@ -13,7 +13,7 @@ describe('adminGuard', () => {
     });
   });
 
-  it('should redirect to /admin/login when no session exists', () => {
+  it('devrait rediriger vers /admin/login quand aucune session n\'existe', () => {
     const router = TestBed.inject(Router);
 
     const result = TestBed.runInInjectionContext(() => adminGuard({ data: {} } as never, {} as never));
@@ -21,7 +21,7 @@ describe('adminGuard', () => {
     expect(result).toEqual(router.parseUrl('/admin/login'));
   });
 
-  it('should allow access when session exists and no role is required', () => {
+  it('devrait autoriser l\'accès quand la session existe et qu\'aucun rôle n\'est requis', () => {
     localStorage.setItem(
       ADMIN_SESSION_KEY,
       JSON.stringify({ token: 'x', email: 'a', nom: 'n', prenom: 'p', role: 'GLOBAL', siteId: null })
@@ -32,7 +32,7 @@ describe('adminGuard', () => {
     expect(result).toBe(true);
   });
 
-  it('should block access when role is not allowed', () => {
+  it('devrait bloquer l\'accès quand le rôle n\'est pas autorisé', () => {
     localStorage.setItem(
       ADMIN_SESSION_KEY,
       JSON.stringify({ token: 'x', email: 'a', nom: 'n', prenom: 'p', role: 'SITE', siteId: 2 })

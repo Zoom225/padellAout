@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = ReservationController.class)
-@DisplayName("ReservationController Tests")
+@DisplayName("Tests de ReservationController")
 class ReservationControllerTest {
 
     @Autowired

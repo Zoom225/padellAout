@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = JourFermetureController.class)
-@DisplayName("JourFermetureController tests")
+@DisplayName("Tests de JourFermetureController")
 class JourFermetureControllerTest {
 
     @Autowired

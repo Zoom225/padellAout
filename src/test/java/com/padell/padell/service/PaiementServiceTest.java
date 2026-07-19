@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("PaiementService tests")
+@DisplayName("Tests de PaiementService")
 class PaiementServiceTest {
 
     @Mock
@@ -99,7 +99,7 @@ class PaiementServiceTest {
     @DisplayName("pay()")
     class PayTests {
         @Test
-        @DisplayName("✅ should process payment and confirm reservation")
+        @DisplayName("✅ doit traiter le paiement et confirmer la réservation")
         void shouldProcessPayment() {
             when(reservationService.getById(1L)).thenReturn(reservation);
             when(matchRepository.findByIdForUpdate(10L)).thenReturn(Optional.of(match));
@@ -112,7 +112,7 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should add outstanding balance and clear it")
+        @DisplayName("✅ doit ajouter le solde impayé et l'effacer")
         void shouldAddOutstandingBalanceToPayment() {
             joueur.setSolde(15.0);
             when(reservationService.getById(1L)).thenReturn(reservation);
@@ -128,7 +128,7 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw when already paid")
+        @DisplayName("❌ doit lever une exception quand déjà payé")
         void shouldThrowWhenAlreadyPaid() {
             paiement.setStatut(StatutPaiement.PAYE);
             when(reservationService.getById(1L)).thenReturn(reservation);
@@ -139,7 +139,7 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should allow payment when reserved place makes match full")
+        @DisplayName("✅ doit autoriser le paiement quand la place réservée rend le match complet")
         void shouldAllowPaymentWhenReservedPlaceMakesMatchFull() {
             match.setNbJoueursActuels(4);
             when(reservationService.getById(1L)).thenReturn(reservation);
@@ -157,7 +157,7 @@ class PaiementServiceTest {
     @DisplayName("getById() and getByReservationId()")
     class GetTests {
         @Test
-        @DisplayName("✅ should return payment when id exists")
+        @DisplayName("✅ doit retourner le paiement quand l'id existe")
         void shouldReturnPaymentById() {
             when(paiementRepository.findById(1L)).thenReturn(Optional.of(paiement));
             Paiement result = paiementService.getById(1L);
@@ -165,7 +165,7 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw when payment id not found")
+        @DisplayName("❌ doit lever une exception quand l'id du paiement n'est pas trouvé")
         void shouldThrowWhenPaymentNotFound() {
             when(paiementRepository.findById(99L)).thenReturn(Optional.empty());
             assertThatThrownBy(() -> paiementService.getById(99L))
@@ -177,7 +177,7 @@ class PaiementServiceTest {
     @DisplayName("checkUnpaidBeforeMatch()")
     class SchedulerTests {
         @Test
-        @DisplayName("✅ should cancel unpaid reservation and add balance")
+        @DisplayName("✅ doit annuler la réservation impayée et ajouter le solde")
         void shouldCancelUnpaidReservationAndAddBalanceToOrganizer() {
             // Correction : Utiliser setDateDebut pour modifier la date du match
             LocalDateTime tomorrowStart = LocalDate.now().plusDays(1).atStartOfDay();
@@ -194,7 +194,7 @@ class PaiementServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should NOT cancel when match is not tomorrow")
+        @DisplayName("✅ NE doit PAS annuler quand le match n'est pas demain")
         void shouldNotCancelWhenMatchIsNotTomorrow() {
             // Correction : S'assurer que la date du match n'est pas demain
             match.setDateDebut(LocalDate.now().plusDays(5).atStartOfDay());

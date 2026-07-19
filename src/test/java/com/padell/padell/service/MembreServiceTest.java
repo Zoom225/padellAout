@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("MembreService tests")
+@DisplayName("Tests de MembreService")
 class MembreServiceTest {
 
     @Mock
@@ -87,7 +87,7 @@ class MembreServiceTest {
     class CreateTests {
 
         @Test
-        @DisplayName("✅ should create a GLOBAL member with valid matricule G1001")
+        @DisplayName("✅ doit créer un membre GLOBAL avec un matricule valide G1001")
         void shouldCreateGlobalMember() {
             when(membreRepository.existsByMatricule("G1001")).thenReturn(false);
             when(membreRepository.existsByEmail(anyString())).thenReturn(false);
@@ -103,7 +103,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should create a SITE member linked to a site")
+        @DisplayName("✅ doit créer un membre SITE lié à un site")
         void shouldCreateSiteMember() {
             when(membreRepository.existsByMatricule("S10001")).thenReturn(false);
             when(membreRepository.existsByEmail(anyString())).thenReturn(false);
@@ -117,7 +117,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should create a LIBRE member with valid matricule L10001")
+        @DisplayName("✅ doit créer un membre LIBRE avec un matricule valide L10001")
         void shouldCreateLibreMember() {
             when(membreRepository.existsByMatricule("L10001")).thenReturn(false);
             when(membreRepository.existsByEmail(anyString())).thenReturn(false);
@@ -129,7 +129,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when matricule already exists")
+        @DisplayName("❌ doit lever une BusinessException quand le matricule existe déjà")
         void shouldThrowWhenMatriculeExists() {
             when(membreRepository.existsByMatricule("G1001")).thenReturn(true);
 
@@ -141,7 +141,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when email already exists")
+        @DisplayName("❌ doit lever une BusinessException quand l'email existe déjà")
         void shouldThrowWhenEmailExists() {
             when(membreRepository.existsByMatricule("G1001")).thenReturn(false);
             when(membreRepository.existsByEmail("lucas@email.com")).thenReturn(true);
@@ -154,7 +154,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when SITE member has no site")
+        @DisplayName("❌ doit lever une BusinessException quand un membre SITE n'a pas de site")
         void shouldThrowWhenSiteMemberHasNoSite() {
             Membre membreSansSite = Membre.builder()
                     .matricule("S10002")
@@ -173,7 +173,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when GLOBAL matricule format is wrong")
+        @DisplayName("❌ doit lever une BusinessException quand le format du matricule GLOBAL est incorrect")
         void shouldThrowWhenGlobalMatriculeFormatIsWrong() {
             Membre badMembre = Membre.builder()
                     .matricule("G12") // ← trop court, doit être G + 4 chiffres
@@ -187,7 +187,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when SITE matricule format is wrong")
+        @DisplayName("❌ doit lever une BusinessException quand le format du matricule SITE est incorrect")
         void shouldThrowWhenSiteMatriculeFormatIsWrong() {
             Membre badMembre = Membre.builder()
                     .matricule("S123") // ← doit être S + 5 chiffres
@@ -202,7 +202,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when LIBRE matricule starts with wrong letter")
+        @DisplayName("❌ doit lever une BusinessException quand le matricule LIBRE commence par la mauvaise lettre")
         void shouldThrowWhenLibreMatriculeStartsWithWrongLetter() {
             Membre badMembre = Membre.builder()
                     .matricule("X10001") // ← doit commencer par L
@@ -216,7 +216,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should initialize solde to 0.0 on creation")
+        @DisplayName("✅ doit initialiser le solde à 0.0 lors de la création")
         void shouldInitializeSoldeToZero() {
             membreGlobal.setSolde(99.0); // on force un solde non nul
             when(membreRepository.existsByMatricule(any())).thenReturn(false);
@@ -237,7 +237,7 @@ class MembreServiceTest {
     class GetTests {
 
         @Test
-        @DisplayName("✅ should return member when id exists")
+        @DisplayName("✅ doit retourner le membre quand l'id existe")
         void shouldReturnMemberById() {
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
 
@@ -248,7 +248,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when id not found")
+        @DisplayName("❌ doit lever une ResourceNotFoundException quand l'id n'est pas trouvé")
         void shouldThrowWhenIdNotFound() {
             when(membreRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -258,7 +258,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should return member when matricule exists")
+        @DisplayName("✅ doit retourner le membre quand le matricule existe")
         void shouldReturnMemberByMatricule() {
             when(membreRepository.findByMatricule("G1001")).thenReturn(Optional.of(membreGlobal));
 
@@ -268,7 +268,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when matricule not found")
+        @DisplayName("❌ doit lever une ResourceNotFoundException quand le matricule n'est pas trouvé")
         void shouldThrowWhenMatriculeNotFound() {
             when(membreRepository.findByMatricule("G9999")).thenReturn(Optional.empty());
 
@@ -286,7 +286,7 @@ class MembreServiceTest {
     class PenaltyTests {
 
         @Test
-        @DisplayName("✅ should return true when member has active penalty")
+        @DisplayName("✅ doit retourner vrai quand le membre a une pénalité active")
         void shouldReturnTrueWhenActivePenalty() {
             when(penaliteRepository.existsByMembreIdAndDateFinAfter(eq(1L), any(LocalDate.class)))
                     .thenReturn(true);
@@ -297,7 +297,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should return false when member has no active penalty")
+        @DisplayName("✅ doit retourner faux quand le membre n'a pas de pénalité active")
         void shouldReturnFalseWhenNoPenalty() {
             when(penaliteRepository.existsByMembreIdAndDateFinAfter(eq(1L), any(LocalDate.class)))
                     .thenReturn(false);
@@ -308,7 +308,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should add penalty with dateFin = today + 7 days")
+        @DisplayName("✅ doit ajouter une pénalité avec dateFin = aujourd'hui + 7 jours")
         void shouldAddPenaltyWithCorrectDateFin() {
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
             when(penaliteRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -330,7 +330,7 @@ class MembreServiceTest {
     class BalanceTests {
 
         @Test
-        @DisplayName("✅ should return true when member has outstanding balance")
+        @DisplayName("✅ doit retourner vrai quand le membre a un solde impayé")
         void shouldReturnTrueWhenBalancePositive() {
             membreGlobal.setSolde(15.0);
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
@@ -341,7 +341,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should return false when member has no outstanding balance")
+        @DisplayName("✅ doit retourner faux quand le membre n'a pas de solde impayé")
         void shouldReturnFalseWhenBalanceZero() {
             membreGlobal.setSolde(0.0);
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
@@ -360,7 +360,7 @@ class MembreServiceTest {
     class UpdateTests {
 
         @Test
-        @DisplayName("✅ should update member name and email")
+        @DisplayName("✅ doit mettre à jour le nom et l'email du membre")
         void shouldUpdateMember() {
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
             when(membreRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
@@ -379,7 +379,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when updating non-existent member")
+        @DisplayName("❌ doit lever une ResourceNotFoundException lors de la mise à jour d'un membre inexistant")
         void shouldThrowWhenUpdatingNonExistentMember() {
             when(membreRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -396,7 +396,7 @@ class MembreServiceTest {
     class DeleteTests {
 
         @Test
-        @DisplayName("✅ should delete member when exists")
+        @DisplayName("✅ doit supprimer le membre quand il existe")
         void shouldDeleteMember() {
             when(membreRepository.findById(1L)).thenReturn(Optional.of(membreGlobal));
 
@@ -406,7 +406,7 @@ class MembreServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when deleting non-existent member")
+        @DisplayName("❌ doit lever une ResourceNotFoundException lors de la suppression d'un membre inexistant")
         void shouldThrowWhenDeletingNonExistentMember() {
             when(membreRepository.findById(99L)).thenReturn(Optional.empty());
 

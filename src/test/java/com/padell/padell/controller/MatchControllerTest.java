@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // Étape 2 : Cibler le contrôleur
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = MatchController.class)
-@DisplayName("MatchController Tests")
+@DisplayName("Tests de MatchController")
 class MatchControllerTest {
 
     @Autowired

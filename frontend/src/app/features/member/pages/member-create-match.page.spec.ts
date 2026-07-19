@@ -152,7 +152,7 @@ describe('MemberCreateMatchPage', () => {
     expect(terrainsApiMock.getBySite).toHaveBeenCalledWith(1);
   });
 
-  it('preselectionne le type PRIVE si le query param type=PRIVE est fourni', () => {
+  it('préselectionne le type PRIVE si le query param type=PRIVE est fourni', () => {
     activatedRouteMock.snapshot.queryParamMap.get.mockReturnValue('PRIVE');
     const fixture = TestBed.createComponent(MemberCreateMatchPage);
     const component = fixture.componentInstance;
@@ -160,7 +160,7 @@ describe('MemberCreateMatchPage', () => {
     expect(component.form.controls.typeMatch.value).toBe('PRIVE');
   });
 
-  it('bloque la soumission si la date est au dela de la derniere date autorisee', () => {
+  it('bloque la soumission si la date est au delà de la dernière date autorisée', () => {
     const fixture = TestBed.createComponent(MemberCreateMatchPage);
     const component = fixture.componentInstance;
     const tooLateDate = new Date(component.maxBookingDate());
@@ -211,7 +211,7 @@ describe('MemberCreateMatchPage', () => {
     vi.useRealTimers();
   });
 
-  it('traduit le message backend de delai en message frontend compréhensible', () => {
+  it('traduit le message backend de délai en message frontend compréhensible', () => {
     matchesApiMock.create.mockReturnValue(
       throwError(() => ({ error: { message: 'Le membre SITE ne peut pas réserver plus de 14 jours à l\'avance.' } }))
     );
@@ -230,7 +230,7 @@ describe('MemberCreateMatchPage', () => {
     expect(component.errorMessage()).toContain('Le profil SITE ne peut pas réserver plus de 14 jours');
     expect(component.errorMessage()).toContain(component.maxBookingDate());
   });
-  it('affiche une erreur metier sans code HTTP technique', () => {
+  it('affiche une erreur métier sans code HTTP technique', () => {
     matchesApiMock.create.mockReturnValue(
       throwError(() => ({
         status: 400,

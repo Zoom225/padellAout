@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ReservationService tests")
+@DisplayName("Tests de ReservationService")
 class ReservationServiceTest {
 
     @Mock
@@ -152,7 +152,7 @@ class ReservationServiceTest {
     class CreateTests {
 
         @Test
-        @DisplayName("✅ should create reservation for PUBLIC match with valid member")
+        @DisplayName("✅ doit créer une réservation pour un match PUBLIC avec un membre valide")
         void shouldCreateReservationForPublicMatch() {
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -178,7 +178,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should create reservation for PRIVE match when organizer adds a player")
+        @DisplayName("✅ doit créer une réservation pour un match PRIVE quand l'organisateur ajoute un joueur")
         void shouldCreateReservationForPriveMatchByOrganizer() {
             when(matchService.getMatchEntityById(10L)).thenReturn(matchPrive); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -197,7 +197,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when match is COMPLET")
+        @DisplayName("❌ doit lever une BusinessException quand le match est COMPLET")
         void shouldThrowWhenMatchIsFull() {
             when(matchService.getMatchEntityById(12L)).thenReturn(matchComplet); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -210,7 +210,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when match is ANNULE")
+        @DisplayName("❌ doit lever une BusinessException quand le match est ANNULE")
         void shouldThrowWhenMatchIsCancelled() {
             matchPublic.setStatut(StatutMatch.ANNULE);
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
@@ -224,7 +224,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when member already registered in match")
+        @DisplayName("❌ doit lever une BusinessException quand le membre est déjà inscrit au match")
         void shouldThrowWhenMemberAlreadyRegistered() {
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -238,7 +238,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when member has active penalty")
+        @DisplayName("❌ doit lever une BusinessException quand le membre a une pénalité active")
         void shouldThrowWhenMemberHasActivePenalty() {
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -253,7 +253,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when member has outstanding balance")
+        @DisplayName("❌ doit lever une BusinessException quand le membre a un solde impayé")
         void shouldThrowWhenMemberHasOutstandingBalance() {
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -269,7 +269,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when non-organizer tries to join PRIVE match")
+        @DisplayName("❌ doit lever une BusinessException quand un non-organisateur tente de rejoindre un match PRIVE")
         void shouldThrowWhenNonOrganizerJoinsPriveMatch() {
             // joueur (id=2) essaie de rejoindre directement un match privé
             // sans passer par l'organisateur (id=1)
@@ -287,7 +287,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when SITE member books on wrong site")
+        @DisplayName("❌ doit lever une BusinessException quand un membre SITE réserve sur le mauvais site")
         void shouldThrowWhenSiteMemberBooksOnWrongSite() {
             // joueurSiteB est rattaché à Paris → ne peut pas réserver sur Lyon
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
@@ -304,7 +304,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("✅ paiement created with correct amount = prixParJoueur of match")
+        @DisplayName("✅ paiement créé avec le montant correct = prixParJoueur du match")
         void shouldCreatePaiementWithCorrectAmount() {
             when(matchService.getMatchEntityById(11L)).thenReturn(matchPublic); // MODIFIÉ
             when(membreService.getById(2L)).thenReturn(joueur);
@@ -333,7 +333,7 @@ class ReservationServiceTest {
     class CancelTests {
 
         @Test
-        @DisplayName("✅ should cancel pending reservation and decrement players")
+        @DisplayName("✅ doit annuler la réservation en attente et décrémenter le nombre de joueurs")
         void shouldCancelReservation() {
             Paiement paiement = Paiement.builder()
                     .montant(15.0)
@@ -358,7 +358,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should refund payment when reservation is cancelled after payment")
+        @DisplayName("✅ doit rembourser le paiement quand la réservation est annulée après paiement")
         void shouldRefundPaymentWhenCancelledAfterPayment() {
             Paiement paiement = Paiement.builder()
                     .montant(15.0)
@@ -385,7 +385,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("✅ should cancel payment when reservation cancelled before payment")
+        @DisplayName("✅ doit annuler le paiement quand la réservation est annulée avant paiement")
         void shouldCancelPaymentWhenNotYetPaid() {
             Paiement paiement = Paiement.builder()
                     .montant(15.0)
@@ -411,7 +411,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when reservation already cancelled")
+        @DisplayName("❌ doit lever une BusinessException quand la réservation est déjà annulée")
         void shouldThrowWhenAlreadyCancelled() {
             Reservation reservation = Reservation.builder()
                     .match(matchPublic)
@@ -430,7 +430,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when reservation not found")
+        @DisplayName("❌ doit lever une ResourceNotFoundException quand la réservation n'est pas trouvée")
         void shouldThrowWhenReservationNotFound() {
             when(reservationRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -448,7 +448,7 @@ class ReservationServiceTest {
     class ConfirmTests {
 
         @Test
-        @DisplayName("✅ should confirm reservation without incrementing match players again")
+        @DisplayName("✅ doit confirmer la réservation sans incrémenter à nouveau les joueurs du match")
         void shouldConfirmReservation() {
             Reservation reservation = Reservation.builder()
                     .match(matchPublic)
@@ -467,7 +467,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw BusinessException when reservation already confirmed")
+        @DisplayName("❌ doit lever une BusinessException quand la réservation est déjà confirmée")
         void shouldThrowWhenAlreadyConfirmed() {
             Reservation reservation = Reservation.builder()
                     .match(matchPublic)
@@ -494,7 +494,7 @@ class ReservationServiceTest {
     class GetTests {
 
         @Test
-        @DisplayName("✅ should return reservation when id exists")
+        @DisplayName("✅ doit retourner la réservation quand l'id existe")
         void shouldReturnReservationById() {
             Reservation reservation = Reservation.builder()
                     .match(matchPublic)
@@ -512,7 +512,7 @@ class ReservationServiceTest {
         }
 
         @Test
-        @DisplayName("❌ should throw ResourceNotFoundException when id not found")
+        @DisplayName("❌ doit lever une ResourceNotFoundException quand l'id n'est pas trouvé")
         void shouldThrowWhenReservationNotFound() {
             when(reservationRepository.findById(99L)).thenReturn(Optional.empty());
 

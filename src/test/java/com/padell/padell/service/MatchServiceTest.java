@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("MatchServiceImpl Tests")
+@DisplayName("Tests de MatchServiceImpl")
 class MatchServiceTest {
 
     @Mock
