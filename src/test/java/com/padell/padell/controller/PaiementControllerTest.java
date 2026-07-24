@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = PaiementController.class)
+@SuppressWarnings("deprecation")
 @DisplayName("Tests de PaiementController")
 class PaiementControllerTest {
 

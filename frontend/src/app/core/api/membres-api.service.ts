@@ -16,6 +16,10 @@ export class MembresApiService {
     return this.http.get<MembreResponse>(apiUrl(`/membres/${id}`));
   }
 
+  getCurrent(): Observable<MembreResponse> {
+    return this.http.get<MembreResponse>(apiUrl('/membres/me'));
+  }
+
   getByMatricule(matricule: string): Observable<MembreResponse> {
     return this.http.get<MembreResponse>(apiUrl(`/membres/matricule/${matricule}`));
   }

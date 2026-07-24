@@ -76,9 +76,10 @@ describe('MemberHomePage', () => {
     const component = fixture.componentInstance;
 
     component.form.controls.matricule.setValue('s10001');
+    component.form.controls.password.setValue('Membre1234!'); // Added
     component.submit();
 
-    expect(memberSessionMock.login).toHaveBeenCalledWith('S10001');
+    expect(memberSessionMock.login).toHaveBeenCalledWith('S10001', 'Membre1234!'); // Modified
     expect(component.foundMember()).toEqual(member);
 
     vi.advanceTimersByTime(600);
@@ -86,9 +87,9 @@ describe('MemberHomePage', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/member/profile');
   });
 
-  it('affiche un message utile quand le matricule est introuvable', () => {
+  it('affiche un message utile quand les identifiants sont invalides', () => { // Modified description
     memberSessionMock.login.mockReturnValue(
-      throwError(() => ({ error: { message: 'Membre introuvable' } })),
+      throwError(() => ({ error: { message: 'Identifiants invalides' } })),
     );
     const router = TestBed.inject(Router);
     const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
@@ -96,11 +97,11 @@ describe('MemberHomePage', () => {
     const component = fixture.componentInstance;
 
     component.form.controls.matricule.setValue('L99999');
+    component.form.controls.password.setValue('wrong-password'); // Added
     component.submit();
 
     expect(component.loading()).toBe(false);
-    expect(component.errorMessage()).toContain('Matricule introuvable');
-    expect(component.errorMessage()).toContain('G1001');
+    expect(component.errorMessage()).toContain('Identifiants invalides'); // Modified
     expect(memberSessionMock.setMember).not.toHaveBeenCalled();
     expect(navigateSpy).not.toHaveBeenCalledWith('/member/profile');
   });

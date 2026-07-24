@@ -6,6 +6,11 @@ export interface ReservationRequest {
   requesterId: number;
 }
 
+export interface ReservationInviteRequest {
+  matchId: number;
+  inviteeMatricules: string[];
+}
+
 export interface PaiementResponse {
   id: number;
   montant: number;

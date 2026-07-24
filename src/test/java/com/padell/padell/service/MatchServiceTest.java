@@ -112,7 +112,7 @@ class MatchServiceTest {
     @DisplayName("createMatch - Succès")
     void createMatch_ShouldSucceed_WhenAllRulesAreMet() {
         // Arrange
-        when(membreRepository.findByMatricule("user123")).thenReturn(Optional.of(organisateur));
+        when(membreRepository.findByMatriculeIgnoreCase("user123")).thenReturn(Optional.of(organisateur));
         when(terrainService.getById(terrain.getId())).thenReturn(terrain);
         when(membreService.hasOutstandingBalance(organisateur.getId())).thenReturn(false);
         when(membreService.hasActivePenalty(organisateur.getId())).thenReturn(false);
@@ -138,7 +138,7 @@ class MatchServiceTest {
     @DisplayName("createMatch - Échoue si le membre a un solde impayé")
     void createMatch_ShouldFail_WhenMemberHasOutstandingBalance() {
         // Arrange
-        when(membreRepository.findByMatricule("user123")).thenReturn(Optional.of(organisateur));
+        when(membreRepository.findByMatriculeIgnoreCase("user123")).thenReturn(Optional.of(organisateur));
         when(terrainService.getById(terrain.getId())).thenReturn(terrain);
         when(membreService.hasOutstandingBalance(organisateur.getId())).thenReturn(true);
 
@@ -154,7 +154,7 @@ class MatchServiceTest {
     @DisplayName("createMatch - Échoue si le membre a une pénalité active")
     void createMatch_ShouldFail_WhenMemberHasActivePenalty() {
         // Arrange
-        when(membreRepository.findByMatricule("user123")).thenReturn(Optional.of(organisateur));
+        when(membreRepository.findByMatriculeIgnoreCase("user123")).thenReturn(Optional.of(organisateur));
         when(terrainService.getById(terrain.getId())).thenReturn(terrain);
         when(membreService.hasOutstandingBalance(organisateur.getId())).thenReturn(false);
         when(membreService.hasActivePenalty(organisateur.getId())).thenReturn(true);
@@ -171,7 +171,7 @@ class MatchServiceTest {
     void createMatch_ShouldFail_WhenBookingDelayIsNotMet() {
         // Arrange
         CreateMatchRequest tooFarRequest = new CreateMatchRequest(terrain.getId(), LocalDateTime.now().plusDays(6), "PUBLIC");
-        when(membreRepository.findByMatricule("user123")).thenReturn(Optional.of(organisateur));
+        when(membreRepository.findByMatriculeIgnoreCase("user123")).thenReturn(Optional.of(organisateur));
         when(terrainService.getById(terrain.getId())).thenReturn(terrain);
 
         // Act & Assert
@@ -185,7 +185,7 @@ class MatchServiceTest {
     @DisplayName("createMatch - Échoue si le créneau est déjà pris")
     void createMatch_ShouldFail_WhenSlotIsAlreadyBooked() {
         // Arrange
-        when(membreRepository.findByMatricule("user123")).thenReturn(Optional.of(organisateur));
+        when(membreRepository.findByMatriculeIgnoreCase("user123")).thenReturn(Optional.of(organisateur));
         when(terrainService.getById(terrain.getId())).thenReturn(terrain);
         when(matchRepository.findOverlappingMatches(any(), any(), any(), any())).thenReturn(Collections.singletonList(new Match()));
 
@@ -200,7 +200,7 @@ class MatchServiceTest {
     @DisplayName("createMatch - Échoue si le membre n'est pas trouvé")
     void createMatch_ShouldFail_WhenMemberNotFound() {
         // Arrange
-        when(membreRepository.findByMatricule("unknownUser")).thenReturn(Optional.empty());
+        when(membreRepository.findByMatriculeIgnoreCase("unknownUser")).thenReturn(Optional.empty());
 
         // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {

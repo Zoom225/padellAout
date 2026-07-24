@@ -14,4 +14,5 @@ public interface MembreService {
     boolean hasActivePenalty(Long membreId);
     boolean hasOutstandingBalance(Long membreId);
     void addPenalty(Long membreId);
+    Membre authenticate(String matricule, String password);
 }

@@ -37,8 +37,8 @@ export class MemberSessionService {
   /**
    * Authentifie un membre et stocke le token + membre en session
    */
-  login(matricule: string): Observable<MembreResponse> {
-    const payload: LoginRequest = { matricule };
+  login(matricule: string, password: string): Observable<MembreResponse> { // Modified
+    const payload: LoginRequest = { matricule, password }; // Modified
     return this.authApi.loginMembre(payload).pipe(
       tap((response: MembreResponse) => {
         this.adminSession.clearSession();

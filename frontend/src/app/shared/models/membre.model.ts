@@ -2,6 +2,7 @@ import { TypeMembre } from './enums.model';
 
 export interface LoginRequest {
   matricule: string;
+  password: string; // Added password field
 }
 
 export interface MembreRequest {
@@ -11,6 +12,7 @@ export interface MembreRequest {
   email: string;
   typeMembre: TypeMembre;
   siteId?: number;
+  password?: string;
 }
 
 export interface MembreResponse {

@@ -197,6 +197,25 @@ class ReservationServiceTest {
         }
 
         @Test
+        @DisplayName("✅ doit créer des réservations à partir de matricules invités")
+        void shouldCreateReservationsForInvites() {
+            when(matchService.getMatchEntityById(10L)).thenReturn(matchPrive);
+            when(membreService.getByMatricule("g1002")).thenReturn(joueur);
+            when(membreService.getById(2L)).thenReturn(joueur);
+            when(membreService.hasActivePenalty(2L)).thenReturn(false);
+            when(membreService.hasOutstandingBalance(2L)).thenReturn(false);
+            when(reservationRepository.existsByMatchIdAndMembreId(10L, 2L)).thenReturn(false);
+            when(reservationRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+            when(paiementRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+            var result = reservationService.createForInvites(10L, 1L, java.util.List.of("g1002"));
+
+            assertThat(result.size()).isEqualTo(1);
+            verify(membreService).getByMatricule("g1002");
+            verify(matchService).incrementPlayers(10L);
+        }
+
+        @Test
         @DisplayName("❌ doit lever une BusinessException quand le match est COMPLET")
         void shouldThrowWhenMatchIsFull() {
             when(matchService.getMatchEntityById(12L)).thenReturn(matchComplet); // MODIFIÉ

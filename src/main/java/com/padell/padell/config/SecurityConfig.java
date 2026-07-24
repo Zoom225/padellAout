@@ -61,6 +61,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/paiements/**").hasRole("MEMBER")
 
                         .requestMatchers(HttpMethod.GET, "/api/membres").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/membres/me").hasRole("MEMBER")
                         .requestMatchers(HttpMethod.GET, "/api/membres/matricule/**").hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/membres/*/penalty").hasAnyRole("MEMBER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/membres/*/balance").hasAnyRole("MEMBER", "ADMIN")

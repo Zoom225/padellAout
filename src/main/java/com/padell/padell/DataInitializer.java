@@ -1,22 +1,47 @@
 package com.padell.padell;
 
-import com.padell.padell.entity.*;
-import com.padell.padell.entity.enums.*;
-import com.padell.padell.repository.*;
+import com.padell.padell.entity.Administrateur;
+import com.padell.padell.entity.JourFermeture;
+import com.padell.padell.entity.Match;
+import com.padell.padell.entity.Membre;
+import com.padell.padell.entity.Paiement;
+import com.padell.padell.entity.Penalite;
+import com.padell.padell.entity.Reservation;
+import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Terrain;
+import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.StatutPaiement;
+import com.padell.padell.entity.enums.StatutReservation;
+import com.padell.padell.entity.enums.TypeAdministrateur;
+import com.padell.padell.entity.enums.TypeMatch;
+import com.padell.padell.entity.enums.TypeMembre;
+import com.padell.padell.repository.AdministrateurRepository;
+import com.padell.padell.repository.JourFermetureRepository;
+import com.padell.padell.repository.MatchRepository;
+import com.padell.padell.repository.MembreRepository;
+import com.padell.padell.repository.PaiementRepository;
+import com.padell.padell.repository.PenaliteRepository;
+import com.padell.padell.repository.ReservationRepository;
+import com.padell.padell.repository.SiteRepository;
+import com.padell.padell.repository.TerrainRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
+    private static final String DEMO_MEMBER_PASSWORD = "Membre1234!";
     private final SiteRepository siteRepository;
     private final TerrainRepository terrainRepository;
     private final MembreRepository membreRepository;
@@ -30,26 +55,24 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        migrateLegacyMemberCredentials();
 
-        // seeding uniquement si la BDD est vide
         if (siteRepository.count() > 0) {
             if (matchRepository.count() == 0) {
                 log.info("DataInitializer : base de donnees deja initialisee, ajout des matchs d'exemple...");
                 seedMatchesFromExistingData();
             }
             ensurePenalizedDemoMember();
+            ensureDemoMembersCredentials();
             log.info("DataInitializer : base de donnees deja initialisee, initialisation ignoree...");
             return;
         }
 
         log.info("DataInitializer : initialisation de la base de donnees...");
 
-        // ----------------------------------------------------------------
-        // Sites
-        // ----------------------------------------------------------------
         Site siteLyon = siteRepository.save(Site.builder()
                 .nom("Padel Club Lyon")
-                .adresse("12 rue de la République, Lyon")
+                .adresse("12 rue de la Republique, Lyon")
                 .heureOuverture(LocalTime.of(8, 0))
                 .heureFermeture(LocalTime.of(22, 0))
                 .dureeMatchMinutes(90)
@@ -68,24 +91,15 @@ public class DataInitializer implements CommandLineRunner {
                 .build());
 
         log.info("DataInitializer : {} sites crees", siteRepository.count());
-
-        // ----------------------------------------------------------------
-        // Terrains
-        // ----------------------------------------------------------------
+////-------------------Terrains--------------------//
         Terrain courtA = terrainRepository.save(Terrain.builder().nom("Court A").site(siteLyon).prix(60.0).build());
         Terrain courtB = terrainRepository.save(Terrain.builder().nom("Court B").site(siteLyon).prix(60.0).build());
         Terrain courtC = terrainRepository.save(Terrain.builder().nom("Court C").site(siteLyon).prix(60.0).build());
-
         Terrain court1 = terrainRepository.save(Terrain.builder().nom("Court 1").site(siteParis).prix(60.0).build());
         terrainRepository.save(Terrain.builder().nom("Court 2").site(siteParis).prix(60.0).build());
 
         log.info("DataInitializer : {} terrains crees", terrainRepository.count());
-
-        // ----------------------------------------------------------------
-        // Jours de fermeture
-        // ----------------------------------------------------------------
-
-        // fermeture globale (tous les sites)
+//-----------------------Jours de fermeture--------------------//
         jourFermetureRepository.save(JourFermeture.builder()
                 .date(LocalDate.of(2025, 12, 25))
                 .raison("Jour de Noel")
@@ -100,7 +114,6 @@ public class DataInitializer implements CommandLineRunner {
                 .site(null)
                 .build());
 
-        // fermeture spécifique au site Lyon
         jourFermetureRepository.save(JourFermeture.builder()
                 .date(LocalDate.of(2025, 7, 14))
                 .raison("Fete nationale - maintenance du site de Lyon")
@@ -109,78 +122,80 @@ public class DataInitializer implements CommandLineRunner {
                 .build());
 
         log.info("DataInitializer : jours de fermeture crees");
+//-----------------------Membres--------------------//
+        String defaultMemberPasswordHash = passwordEncoder.encode(DEMO_MEMBER_PASSWORD);
 
-        // ----------------------------------------------------------------
-        // Membres
-        // ----------------------------------------------------------------
         Membre lucas = membreRepository.save(Membre.builder()
                 .matricule("G1001")
                 .nom("Martin")
                 .prenom("Lucas")
-                .email("lucas.martin@email.com")
+                .email("lucas.martin@gmail.com")
                 .typeMembre(TypeMembre.GLOBAL)
                 .solde(0.0)
                 .site(null)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         Membre emma = membreRepository.save(Membre.builder()
                 .matricule("G1002")
                 .nom("Dubois")
                 .prenom("Emma")
-                .email("emma.dubois@email.com")
+                .email("emma.dubois@gmail.com")
                 .typeMembre(TypeMembre.GLOBAL)
                 .solde(0.0)
                 .site(null)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         Membre tom = membreRepository.save(Membre.builder()
                 .matricule("S10001")
                 .nom("Bernard")
                 .prenom("Tom")
-                .email("tom.bernard@email.com")
+                .email("tom.bernard@gmail.com")
                 .typeMembre(TypeMembre.SITE)
                 .solde(0.0)
                 .site(siteLyon)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         Membre sarah = membreRepository.save(Membre.builder()
                 .matricule("S10002")
                 .nom("Leroy")
                 .prenom("Sarah")
-                .email("sarah.leroy@email.com")
+                .email("sarah.leroy@gmail.com")
                 .typeMembre(TypeMembre.SITE)
                 .solde(0.0)
                 .site(siteParis)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         Membre alex = membreRepository.save(Membre.builder()
                 .matricule("L10001")
                 .nom("Petit")
                 .prenom("Alex")
-                .email("alex.petit@email.com")
+                .email("alex.petit@gmail.com")
                 .typeMembre(TypeMembre.LIBRE)
                 .solde(0.0)
                 .site(null)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         Membre penalise = membreRepository.save(Membre.builder()
                 .matricule("L10002")
-                .nom("Pénalisé")
-                .prenom("Démo")
-                .email("demo.penalise@email.com")
+                .nom("Penalise")
+                .prenom("Demo")
+                .email("demo.penalise@gmail.com")
                 .typeMembre(TypeMembre.LIBRE)
                 .solde(0.0)
                 .site(null)
+                .passwordHash(defaultMemberPasswordHash)
                 .build());
 
         log.info("DataInitializer : {} membres crees", membreRepository.count());
 
         seedActivePenalty(penalise);
         seedMatches(courtA, courtB, courtC, court1, lucas, emma, tom, sarah, alex);
-
-        // ----------------------------------------------------------------
-        // Administrateurs
-        // ----------------------------------------------------------------
+//-----------------------Administrateurs--------------------//
         administrateurRepository.save(Administrateur.builder()
                 .matricule("ADMIN001")
                 .nom("Admin")
@@ -215,6 +230,21 @@ public class DataInitializer implements CommandLineRunner {
         log.info("DataInitializer : initialisation terminee avec succes !");
     }
 
+    private void migrateLegacyMemberCredentials() {
+        List<Membre> legacyMembers = membreRepository.findAll().stream()
+                .filter(member -> !StringUtils.hasText(member.getPasswordHash()))
+                .toList();
+
+        if (legacyMembers.isEmpty()) {
+            return;
+        }
+
+        legacyMembers.forEach(member -> member.setPasswordHash(passwordEncoder.encode(DEMO_MEMBER_PASSWORD)));
+        membreRepository.saveAll(legacyMembers);
+
+        log.warn("DataInitializer : {} compte(s) membre legacy ont recu le mot de passe par defaut", legacyMembers.size());
+    }
+
     private void seedMatchesFromExistingData() {
         Terrain courtA = requireSeedTerrain("Court A");
         Terrain courtB = requireSeedTerrain("Court B");
@@ -238,23 +268,41 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private Membre requireSeedMember(String matricule) {
-        return membreRepository.findByMatricule(matricule)
+        return membreRepository.findByMatriculeIgnoreCase(matricule)
                 .orElseThrow(() -> new IllegalStateException("Membre seed introuvable : " + matricule));
     }
 
     private void ensurePenalizedDemoMember() {
-        Membre membre = membreRepository.findByMatricule("L10002")
+        Membre membre = membreRepository.findByMatriculeIgnoreCase("L10002")
                 .orElseGet(() -> membreRepository.save(Membre.builder()
                         .matricule("L10002")
-                        .nom("Pénalisé")
-                        .prenom("Démo")
-                        .email("demo.penalise@email.com")
+                        .nom("Penalise")
+                        .prenom("Demo")
+                        .email("demo.penalise@gmail.com")
                         .typeMembre(TypeMembre.LIBRE)
                         .solde(0.0)
                         .site(null)
+                        .passwordHash(passwordEncoder.encode(DEMO_MEMBER_PASSWORD))
                         .build()));
 
         seedActivePenalty(membre);
+    }
+
+    private void ensureDemoMembersCredentials() {
+        updateDemoMemberCredentials("G1001", "lucas.martin@gmail.com");
+        updateDemoMemberCredentials("G1002", "emma.dubois@gmail.com");
+        updateDemoMemberCredentials("S10001", "tom.bernard@gmail.com");
+        updateDemoMemberCredentials("S10002", "sarah.leroy@gmail.com");
+        updateDemoMemberCredentials("L10001", "alex.petit@gmail.com");
+        updateDemoMemberCredentials("L10002", "demo.penalise@gmail.com");
+    }
+
+    private void updateDemoMemberCredentials(String matricule, String email) {
+        membreRepository.findByMatriculeIgnoreCase(matricule).ifPresent(membre -> {
+            membre.setEmail(email);
+            membre.setPasswordHash(passwordEncoder.encode(DEMO_MEMBER_PASSWORD));
+            membreRepository.save(membre);
+        });
     }
 
     private void seedActivePenalty(Membre membre) {
@@ -265,7 +313,7 @@ public class DataInitializer implements CommandLineRunner {
         penaliteRepository.save(Penalite.builder()
                 .membre(membre)
                 .dateFin(LocalDate.now().plusWeeks(1))
-                .motif("Membre de démonstration pénalisé")
+                .motif("Membre de demonstration penalise")
                 .build());
     }
 
@@ -306,7 +354,7 @@ public class DataInitializer implements CommandLineRunner {
     private Match createSeedMatch(
             Terrain terrain,
             Membre organisateur,
-            java.time.LocalDateTime dateDebut,
+            LocalDateTime dateDebut,
             TypeMatch typeMatch,
             StatutMatch statut,
             int nbJoueursActuels
@@ -340,7 +388,7 @@ public class DataInitializer implements CommandLineRunner {
                 .reservation(reservation)
                 .montant(match.getPrixParJoueur())
                 .statut(statutPaiement)
-                .datePaiement(statutPaiement == StatutPaiement.PAYE ? java.time.LocalDateTime.now() : null)
+                .datePaiement(statutPaiement == StatutPaiement.PAYE ? LocalDateTime.now() : null)
                 .build());
 
         reservation.setPaiement(paiement);

@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -59,7 +60,7 @@ public class ReservationServiceImpl implements ReservationService {
             throw new BusinessException("Vous avez un solde impayé et ne pouvez pas réserver ce match.");
         }
 
-        // Le requesterId est l'ID de la personne qui initie la demande de réservation.
+        // Le requesterId est l'ID de la personne qui initie la demande de reservation.
         // Regle metier : seul l'organisateur peut inviter des joueurs sur un match prive.
         if (match.getTypeMatch() == TypeMatch.PRIVE
                 && !match.getOrganisateur().getId().equals(requesterId)) {
@@ -88,7 +89,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation = reservationRepository.save(reservation);
 
-        // Regle metier : 15 euro chaque reservation cree automatiquement un paiement en attente .
+        // Regle metier : chaque reservation cree automatiquement un paiement en attente.
         Paiement paiement = Paiement.builder()
                 .reservation(reservation)
                 .montant(match.getPrixParJoueur())
@@ -103,6 +104,27 @@ public class ReservationServiceImpl implements ReservationService {
         log.info("Réservation créée pour le membre {} sur le match {}", membreId, matchId);
 
         return reservation;
+    }
+
+    @Override
+    @Transactional
+    public List<Reservation> createForInvites(Long matchId, Long requesterId, List<String> inviteeMatricules) {
+        if (inviteeMatricules == null || inviteeMatricules.isEmpty()) {
+            return List.of();
+        }
+
+        List<Reservation> createdReservations = new ArrayList<>();
+        for (String matricule : inviteeMatricules) {
+            String normalizedMatricule = matricule == null ? "" : matricule.trim();
+            if (normalizedMatricule.isEmpty()) {
+                continue;
+            }
+
+            Membre membre = membreService.getByMatricule(normalizedMatricule);
+            createdReservations.add(create(matchId, membre.getId(), requesterId));
+        }
+
+        return createdReservations;
     }
 
     @Override
@@ -155,7 +177,7 @@ public class ReservationServiceImpl implements ReservationService {
             paiementRepository.save(paiement);
         }
 
-        // Regle metier : annuler une reservation .
+        // Regle metier : annuler une reservation.
         if (occupiedPlace
                 && reservation.getMatch().getNbJoueursActuels() != null
                 && reservation.getMatch().getNbJoueursActuels() > 0) {

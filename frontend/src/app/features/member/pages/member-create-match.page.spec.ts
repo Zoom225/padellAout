@@ -5,7 +5,6 @@ import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
-import { MembresApiService } from '../../../core/api/membres-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { TerrainsApiService } from '../../../core/api/terrains-api.service';
@@ -72,8 +71,7 @@ describe('MemberCreateMatchPage', () => {
   let sitesApiMock: { getAll: ReturnType<typeof vi.fn> };
   let terrainsApiMock: { getBySite: ReturnType<typeof vi.fn> };
   let matchesApiMock: { create: ReturnType<typeof vi.fn> };
-  let membresApiMock: { getByMatricule: ReturnType<typeof vi.fn> };
-  let reservationsApiMock: { create: ReturnType<typeof vi.fn> };
+  let reservationsApiMock: { createPrivateInvites: ReturnType<typeof vi.fn> };
   let memberSessionMock: {
     isAuthenticated: ReturnType<typeof vi.fn>;
     member: ReturnType<typeof vi.fn>;
@@ -90,23 +88,8 @@ describe('MemberCreateMatchPage', () => {
     matchesApiMock = {
       create: vi.fn().mockReturnValue(of(createdMatch))
     };
-    membresApiMock = {
-      getByMatricule: vi.fn().mockImplementation((matricule: string) =>
-        of({
-          id: matricule === 'G1002' ? 2 : 3,
-          matricule,
-          nom: 'Invite',
-          prenom: matricule,
-          email: `${matricule.toLowerCase()}@email.com`,
-          typeMembre: matricule.startsWith('G') ? 'GLOBAL' : 'LIBRE',
-          siteId: null,
-          siteNom: null,
-          solde: 0
-        } satisfies MembreResponse)
-      )
-    };
     reservationsApiMock = {
-      create: vi.fn().mockReturnValue(of({ id: 1 }))
+      createPrivateInvites: vi.fn().mockReturnValue(of([]))
     };
     memberSessionMock = {
       isAuthenticated: vi.fn().mockReturnValue(true),
@@ -128,7 +111,6 @@ describe('MemberCreateMatchPage', () => {
         { provide: SitesApiService, useValue: sitesApiMock },
         { provide: TerrainsApiService, useValue: terrainsApiMock },
         { provide: MatchesApiService, useValue: matchesApiMock },
-        { provide: MembresApiService, useValue: membresApiMock },
         { provide: ReservationsApiService, useValue: reservationsApiMock },
         { provide: MemberSessionService, useValue: memberSessionMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock }
@@ -202,9 +184,10 @@ describe('MemberCreateMatchPage', () => {
       matchDate: `${component.todayDate()}T09:00:00`,
       matchType: 'PRIVE',
     });
-    expect(membresApiMock.getByMatricule).toHaveBeenCalledWith('G1002');
-    expect(membresApiMock.getByMatricule).toHaveBeenCalledWith('L10001');
-    expect(reservationsApiMock.create).toHaveBeenCalledTimes(2);
+    expect(reservationsApiMock.createPrivateInvites).toHaveBeenCalledWith({
+      matchId: 99,
+      inviteeMatricules: ['G1002', 'L10001']
+    });
     expect(component.message()).toContain('Les invitations sont en attente de paiement');
     vi.runAllTimers();
     expect(navigateSpy).toHaveBeenCalledWith('/member/reservations');

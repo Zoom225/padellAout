@@ -9,10 +9,13 @@ import com.padell.padell.repository.MembreRepository;
 import com.padell.padell.repository.PenaliteRepository;
 import com.padell.padell.service.MembreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +23,11 @@ public class MembreServiceImpl implements MembreService {
 
     private final MembreRepository membreRepository;
     private final PenaliteRepository penaliteRepository;
+    private final PasswordEncoder passwordEncoder; // Added PasswordEncoder
 
     @Override
     public Membre create(Membre membre) {
+        membre.setMatricule(normalizeMatricule(membre.getMatricule()));
         validateMatricule(membre.getMatricule(), membre.getTypeMembre());
 
         // Regle metier : le matricule doit etre unique.
@@ -50,8 +55,9 @@ public class MembreServiceImpl implements MembreService {
 
     @Override
     public Membre getByMatricule(String matricule) {
-        return membreRepository.findByMatricule(matricule)
-                .orElseThrow(() -> new ResourceNotFoundException("Membre introuvable avec le matricule : " + matricule));
+        String normalizedMatricule = normalizeMatricule(matricule);
+        return membreRepository.findByMatriculeIgnoreCase(normalizedMatricule)
+                .orElseThrow(() -> new ResourceNotFoundException("Membre introuvable avec le matricule : " + normalizedMatricule));
     }
 
     @Override
@@ -84,7 +90,7 @@ public class MembreServiceImpl implements MembreService {
         Membre membre = getById(membreId);
         return membre.getSolde() > 0.0;
     }
-// règle metier: addition frais à organisateur du match privée
+// règle metier addition penalité à organisateur du match privée
     @Override
     public void addPenalty(Long membreId) {
         Membre membre = getById(membreId);
@@ -94,6 +100,25 @@ public class MembreServiceImpl implements MembreService {
                 .motif("Match privé incomplet avant l'échéance")
                 .build();
         penaliteRepository.save(penalite);
+    }
+
+    @Override
+    public Membre authenticate(String matricule, String password) {
+        String normalizedMatricule = normalizeMatricule(matricule);
+        Membre membre = membreRepository.findByMatriculeIgnoreCase(normalizedMatricule)
+                .orElseThrow(() -> new BusinessException("Identifiants invalides."));
+
+        if (!StringUtils.hasText(password)
+                || !StringUtils.hasText(membre.getPasswordHash())
+                || !passwordEncoder.matches(password, membre.getPasswordHash())) {
+            throw new BusinessException("Identifiants invalides.");
+        }
+
+        return membre;
+    }
+
+    private String normalizeMatricule(String matricule) {
+        return matricule == null ? "" : matricule.trim().toUpperCase(Locale.ROOT);
     }
 
     private void validateMatricule(String matricule, TypeMembre type) {

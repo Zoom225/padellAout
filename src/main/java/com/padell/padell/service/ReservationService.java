@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ReservationService {
     Reservation create(Long matchId, Long membreId, Long requesterId);
+    List<Reservation> createForInvites(Long matchId, Long requesterId, List<String> inviteeMatricules);
     Reservation getById(Long id);
     List<Reservation> getByMatchId(Long matchId);
     List<Reservation> getByMembreId(Long membreId);

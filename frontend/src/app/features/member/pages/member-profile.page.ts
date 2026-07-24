@@ -157,7 +157,7 @@ export class MemberProfilePage {
     this.errorMessage.set('');
 
     forkJoin({
-      profile: this.membresApi.getById(memberId),
+      profile: this.membresApi.getCurrent(),
       hasPenalty: this.membresApi.hasPenalty(memberId),
       hasBalance: this.membresApi.hasBalance(memberId)
     }).subscribe({

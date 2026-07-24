@@ -8,16 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
-import { MembresApiService } from '../../../core/api/membres-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { TerrainsApiService } from '../../../core/api/terrains-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
 import { TypeMembre } from '../../../shared/models/enums.model';
 import { MatchResponse } from '../../../shared/models/match.model';
-import { MembreResponse } from '../../../shared/models/membre.model';
 import { SiteResponse, TerrainResponse } from '../../../shared/models/site-terrain.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -184,7 +181,6 @@ export class MemberCreateMatchPage {
   private readonly sitesApi = inject(SitesApiService);
   private readonly terrainsApi = inject(TerrainsApiService);
   private readonly matchesApi = inject(MatchesApiService);
-  private readonly membresApi = inject(MembresApiService);
   private readonly reservationsApi = inject(ReservationsApiService);
   private readonly memberSession = inject(MemberSessionService);
   private readonly route = inject(ActivatedRoute);
@@ -350,7 +346,7 @@ export class MemberCreateMatchPage {
 
     this.matchesApi.create(payload).subscribe({
       next: (createdMatch) => {
-        this.handleInvites(createdMatch, this.member()!);
+        this.handleInvites(createdMatch);
       },
       error: (error) => {
         this.loading.set(false);
@@ -413,7 +409,7 @@ export class MemberCreateMatchPage {
     return apiMessage;
   }
 
-  private handleInvites(createdMatch: MatchResponse, organiser: MembreResponse): void {
+  private handleInvites(createdMatch: MatchResponse): void {
     const invitees = [
       this.form.controls.player1.getRawValue(),
       this.form.controls.player2.getRawValue(),
@@ -429,27 +425,10 @@ export class MemberCreateMatchPage {
       return;
     }
 
-    forkJoin(invitees.map((matricule) => this.membresApi.getByMatricule(matricule))).subscribe({
-      next: (members) => this.createReservationsForInvites(createdMatch.id, organiser.id, members),
-      error: (error) => {
-        this.loading.set(false);
-        this.message.set('Match créé, mais au moins un joueur invité est introuvable.');
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible d\'ajouter tous les joueurs.'));
-        setTimeout(() => this.router.navigateByUrl('/member/reservations'), 2000);
-      }
-    });
-  }
-
-  private createReservationsForInvites(matchId: number, organiserId: number, members: MembreResponse[]): void {
-    forkJoin(
-      members.map((member) =>
-        this.reservationsApi.create({
-          matchId,
-          membreId: member.id,
-          requesterId: organiserId
-        })
-      )
-    ).subscribe({
+    this.reservationsApi.createPrivateInvites({
+      matchId: createdMatch.id,
+      inviteeMatricules: invitees
+    }).subscribe({
       next: () => {
         this.loading.set(false);
         this.message.set('Match privé créé. Les invitations sont en attente de paiement des joueurs.');

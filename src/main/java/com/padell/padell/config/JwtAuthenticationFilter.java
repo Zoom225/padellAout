@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.debug("Admin {} authenticated with role {}", subject, role);
             }
         } else {
-            Membre membre = membreRepository.findByMatricule(subject).orElse(null);
+            Membre membre = membreRepository.findByMatriculeIgnoreCase(subject).orElse(null);
             if (membre != null) {
                 authenticate(subject, role, false);
                 log.debug("Member {} authenticated with role {}", subject, role);
