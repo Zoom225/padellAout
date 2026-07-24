@@ -10,7 +10,7 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const token = adminSession.token() || memberSession.token();
 
   const isApiCall = req.url.startsWith('/api');
-  const isLoginCall = req.url.includes('/api/auth/login');
+  const isLoginCall = req.url.includes('/api/auth/login') || req.url.includes('/api/membres/login'); // Modified
 
   if (!token || !isApiCall || isLoginCall) {
     return next(req);

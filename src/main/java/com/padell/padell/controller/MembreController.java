@@ -1,6 +1,7 @@
 package com.padell.padell.controller;
 
 import com.padell.padell.config.JwtConfig;
+import com.padell.padell.dto.request.MembreLoginRequest; // Added import
 import com.padell.padell.dto.request.MembreRequest;
 import com.padell.padell.dto.response.MembreResponse;
 import com.padell.padell.entity.Membre;
@@ -25,7 +26,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,12 +39,15 @@ import java.util.List;
         "Les membres se connectent avec leur matricule via /api/membres/login.")
 public class MembreController {
 
+    private static final String DEFAULT_MEMBER_PASSWORD = "Membre1234!";
+
     private final MembreService membreService;
     private final SiteService siteService;
     private final MembreMapper membreMapper;
     private final JwtConfig jwtConfig;
     private final AdminAuthorizationService adminAuthorizationService;
     private final CurrentMemberService currentMemberService;
+    private final PasswordEncoder passwordEncoder;
 
     @Operation(
             summary = "Créer un membre",
@@ -66,6 +72,11 @@ public class MembreController {
             Site site = siteService.getById(request.getSiteId());
             membre.setSite(site);
         }
+
+        String rawPassword = StringUtils.hasText(request.getPassword())
+                ? request.getPassword()
+                : DEFAULT_MEMBER_PASSWORD;
+        membre.setPasswordHash(passwordEncoder.encode(rawPassword));
 
         adminAuthorizationService.checkMembreAccess(membre);
         Membre saved = membreService.create(membre);
@@ -128,6 +139,25 @@ public class MembreController {
             @Parameter(description = "Matricule unique du membre", required = true)
             @PathVariable String matricule) {
         Membre membre = membreService.getByMatricule(matricule);
+        checkCurrentAccess(membre);
+        return ResponseEntity.ok(membreMapper.toResponse(membre));
+    }
+
+    @Operation(
+            summary = "Consulter le membre connecté",
+            description = "Retourne les informations du membre authentifié. " +
+                    "Accessible uniquement à un membre connecté.",
+            security = @SecurityRequirement(name = "Bearer Auth")
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Membre connecté trouvé",
+                    content = @Content(schema = @Schema(implementation = MembreResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Membre connecté introuvable",
+                    content = @Content)
+    })
+    @GetMapping("/me")
+    public ResponseEntity<MembreResponse> me() {
+        Membre membre = currentMemberService.currentMember();
         return ResponseEntity.ok(membreMapper.toResponse(membre));
     }
 
@@ -242,8 +272,8 @@ public class MembreController {
                     content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<MembreResponse> login(@RequestBody MembreRequest request) {
-        Membre membre = membreService.getByMatricule(request.getMatricule());
+    public ResponseEntity<MembreResponse> login(@Valid @RequestBody MembreLoginRequest request) { // Modified
+        Membre membre = membreService.authenticate(request.getMatricule(), request.getPassword()); // Modified
         MembreResponse response = membreMapper.toResponse(membre);
         String token = jwtConfig.generateToken(membre.getMatricule(), membre.getTypeMembre().name());
         response.setToken(token);

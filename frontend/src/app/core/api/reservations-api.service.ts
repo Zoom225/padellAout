@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
+  ReservationInviteRequest,
   ReservationRequest,
   ReservationResponse
 } from '../../shared/models/reservation.model';
@@ -13,6 +14,10 @@ export class ReservationsApiService {
 
   create(payload: ReservationRequest): Observable<ReservationResponse> {
     return this.http.post<ReservationResponse>(apiUrl('/reservations'), payload);
+  }
+
+  createPrivateInvites(payload: ReservationInviteRequest): Observable<ReservationResponse[]> {
+    return this.http.post<ReservationResponse[]>(apiUrl('/reservations/private-invites'), payload);
   }
 
   getById(id: number): Observable<ReservationResponse> {

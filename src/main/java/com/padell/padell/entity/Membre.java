@@ -27,6 +27,9 @@ public class Membre extends BaseEntity {
 
     private String email;
 
+    @Column
+    private String passwordHash; // Added passwordHash field
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TypeMembre typeMembre;

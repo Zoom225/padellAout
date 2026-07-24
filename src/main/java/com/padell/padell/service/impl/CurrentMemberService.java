@@ -21,7 +21,7 @@ public class CurrentMemberService {
             throw new BusinessException("Authentification membre requise.");
         }
 
-        return membreRepository.findByMatricule(authentication.getName())
+        return membreRepository.findByMatriculeIgnoreCase(authentication.getName())
                 .orElseThrow(() -> new BusinessException("Membre connecté introuvable."));
     }
 

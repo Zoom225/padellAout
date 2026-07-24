@@ -40,7 +40,7 @@ import { MembreResponse } from '../../../shared/models/membre.model';
       <div class="padel-login-card">
         <div class="padel-login-icon">🏓</div>
         <h2 class="padel-login-title">Identification</h2>
-        <p class="padel-login-sub">Saisissez votre matricule pour rejoindre le court</p>
+        <p class="padel-login-sub">Saisissez votre matricule et mot de passe pour rejoindre le court</p>
 
         <form [formGroup]="form" class="padel-form" (ngSubmit)="submit()">
           <mat-form-field appearance="outline" class="w-full">
@@ -50,6 +50,17 @@ import { MembreResponse } from '../../../shared/models/membre.model';
               formControlName="matricule"
               placeholder="Ex: G1234, S12345, L12345"
               style="text-transform:uppercase; font-weight:600; letter-spacing:0.08em;"
+            />
+          </mat-form-field>
+
+          <!-- Added password field -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Mot de passe</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+              autocomplete="current-password"
             />
           </mat-form-field>
 
@@ -355,6 +366,10 @@ export class MemberHomePage {
       nonNullable: true,
       validators: [Validators.required, Validators.pattern(/^(G\d{4}|S\d{5}|L\d{5})$/i)],
     }),
+    password: new FormControl('', { // Added password FormControl
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   constructor() {
@@ -373,9 +388,10 @@ export class MemberHomePage {
     this.foundMember.set(null);
 
     const matricule = this.form.controls.matricule.getRawValue().trim().toUpperCase();
+    const password = this.form.controls.password.getRawValue(); // Get password value
 
     // ← Remplacer getByMatricule par login
-    this.memberSession.login(matricule).subscribe({
+    this.memberSession.login(matricule, password).subscribe({ // Modified to pass password
       next: (member) => {
         this.foundMember.set(member);
         this.loading.set(false);
@@ -384,7 +400,7 @@ export class MemberHomePage {
       error: () => {
         this.loading.set(false);
         this.errorMessage.set(
-          'Matricule introuvable. Vérifiez la valeur saisie (ex: G1001, S10001, L10001).',
+          'Identifiants invalides. Verifiez le matricule et le mot de passe.', // Modified error message
         );
       },
     });

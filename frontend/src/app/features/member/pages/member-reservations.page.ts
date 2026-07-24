@@ -10,7 +10,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
-import { MembresApiService } from '../../../core/api/membres-api.service';
 import { PaiementsApiService } from '../../../core/api/paiements-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
@@ -238,7 +237,6 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 })
 export class MemberReservationsPage {
   private readonly matchesApi = inject(MatchesApiService);
-  private readonly membresApi = inject(MembresApiService);
   private readonly reservationsApi = inject(ReservationsApiService);
   private readonly paiementsApi = inject(PaiementsApiService);
   private readonly memberSession = inject(MemberSessionService);
@@ -466,9 +464,8 @@ export class MemberReservationsPage {
   }
 
   addPlayer(): void {
-    const requesterId = this.memberId();
     const matchId = this.managedMatchId();
-    if (!requesterId || !matchId || !this.selectedManagedMatch() || this.inviteMatricule.invalid || this.actionId() !== null) {
+    if (!this.memberId() || !matchId || !this.selectedManagedMatch() || this.inviteMatricule.invalid || this.actionId() !== null) {
       return;
     }
 
@@ -477,31 +474,20 @@ export class MemberReservationsPage {
     this.message.set('');
     this.errorMessage.set('');
 
-    this.membresApi.getByMatricule(matricule).subscribe({
-      next: (member) => {
-        this.reservationsApi
-          .create({
-            matchId,
-            membreId: member.id,
-            requesterId
-          })
-          .subscribe({
-            next: () => {
-              this.actionId.set(null);
-              this.inviteMatricule.setValue('');
-              this.message.set('Joueur ajouté avec succès.');
-              this.onManagedMatchChange(matchId);
-              this.loadReservations();
-            },
-            error: (error) => {
-              this.actionId.set(null);
-              this.errorMessage.set(extractApiErrorMessage(error, 'Ajout du joueur impossible.'));
-            }
-          });
+    this.reservationsApi.createPrivateInvites({
+      matchId,
+      inviteeMatricules: [matricule]
+    }).subscribe({
+      next: () => {
+        this.actionId.set(null);
+        this.inviteMatricule.setValue('');
+        this.message.set('Joueur ajouté avec succès.');
+        this.onManagedMatchChange(matchId);
+        this.loadReservations();
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Matricule introuvable.'));
+        this.errorMessage.set(extractApiErrorMessage(error, 'Ajout du joueur impossible.'));
       }
     });
   }

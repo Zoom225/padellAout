@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = ReservationController.class)
+@SuppressWarnings("deprecation")
 @DisplayName("Tests de ReservationController")
 class ReservationControllerTest {
 

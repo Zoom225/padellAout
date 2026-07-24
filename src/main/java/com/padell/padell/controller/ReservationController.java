@@ -1,5 +1,6 @@
 package com.padell.padell.controller;
 
+import com.padell.padell.dto.request.ReservationInviteRequest;
 import com.padell.padell.dto.request.ReservationRequest;
 import com.padell.padell.dto.response.ReservationResponse;
 import com.padell.padell.entity.Membre;
@@ -62,6 +63,31 @@ public class ReservationController {
         );
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(reservationMapper.toResponse(reservation));
+    }
+
+    @Operation(
+            summary = "Ajouter des joueurs à un match privé",
+            description = "Crée plusieurs réservations à partir de matricules. " +
+                    "Le membre connecté doit être l'organisateur du match privé. " +
+                    "Aucune fiche complète d'un autre membre n'est exposée au front.",
+            security = @SecurityRequirement(name = "Bearer Auth")
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Réservations créées",
+                    content = @Content(schema = @Schema(implementation = ReservationResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Règle métier non respectée ou matricule introuvable",
+                    content = @Content)
+    })
+    @PostMapping("/private-invites")
+    public ResponseEntity<List<ReservationResponse>> createPrivateInvites(
+            @Valid @RequestBody ReservationInviteRequest request) {
+        Membre currentMember = currentMemberService.currentMember();
+        List<ReservationResponse> reservations = reservationService
+                .createForInvites(request.getMatchId(), currentMember.getId(), request.getInviteeMatricules())
+                .stream()
+                .map(reservationMapper::toResponse)
+                .toList();
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservations);
     }
 
     @Operation(

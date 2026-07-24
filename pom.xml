@@ -147,6 +147,7 @@
 				<version>3.2.5</version>
 				<configuration>
 					<argLine>
+						-javaagent:"${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"
 						--add-opens java.base/java.lang=ALL-UNNAMED
 						--add-opens java.base/java.util=ALL-UNNAMED
 						--add-opens java.base/java.lang.reflect=ALL-UNNAMED

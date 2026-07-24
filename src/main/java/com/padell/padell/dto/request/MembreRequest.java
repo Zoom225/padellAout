@@ -29,4 +29,6 @@ public class MembreRequest {
     private TypeMembre typeMembre;
 
     private Long siteId;
+
+    private String password;
 }

@@ -4,7 +4,6 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
-import { MembresApiService } from '../../../core/api/membres-api.service';
 import { PaiementsApiService } from '../../../core/api/paiements-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
@@ -56,6 +55,7 @@ describe('MemberReservationsPage', () => {
     getByMembre: ReturnType<typeof vi.fn>;
     getByMatch: ReturnType<typeof vi.fn>;
     create: ReturnType<typeof vi.fn>;
+    createPrivateInvites: ReturnType<typeof vi.fn>;
     cancel: ReturnType<typeof vi.fn>;
   };
 
@@ -72,6 +72,7 @@ describe('MemberReservationsPage', () => {
       getByMembre: vi.fn().mockReturnValue(of([])),
       getByMatch: vi.fn().mockReturnValue(of([])),
       create: vi.fn().mockReturnValue(of({ id: 1 })),
+      createPrivateInvites: vi.fn().mockReturnValue(of([])),
       cancel: vi.fn().mockReturnValue(of(void 0))
     };
 
@@ -82,7 +83,6 @@ describe('MemberReservationsPage', () => {
         provideNoopAnimations(),
         { provide: MatchesApiService, useValue: matchesApiMock },
         { provide: ReservationsApiService, useValue: reservationsApiMock },
-        { provide: MembresApiService, useValue: { getByMatricule: vi.fn() } },
         { provide: PaiementsApiService, useValue: { pay: vi.fn() } },
         { provide: MemberSessionService, useValue: { memberId: vi.fn().mockReturnValue(1) } }
       ]

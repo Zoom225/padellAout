@@ -43,7 +43,7 @@ public class MatchServiceImpl implements MatchService {
     @Override
     @Transactional
     public MatchDto createMatch(CreateMatchRequest request, String username) {
-        Membre organisateur = membreRepository.findByMatricule(username)
+        Membre organisateur = membreRepository.findByMatriculeIgnoreCase(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Membre non trouvé pour l'utilisateur: " + username));
 
         Terrain terrain = terrainService.getById(request.terrainId());

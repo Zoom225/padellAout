@@ -3,6 +3,7 @@ package com.padell.padell.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.padell.padell.config.JwtConfig;
 import com.padell.padell.config.SecurityConfig;
+import com.padell.padell.dto.request.MembreLoginRequest; // Added import
 import com.padell.padell.dto.request.MembreRequest;
 import com.padell.padell.dto.response.MembreResponse;
 import com.padell.padell.entity.Membre;
@@ -23,9 +24,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -35,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(controllers = MembreController.class)
+@SuppressWarnings("deprecation")
 @DisplayName("Tests de MembreController")
 class MembreControllerTest {
 
@@ -58,12 +62,15 @@ class MembreControllerTest {
     @MockBean
     private JwtConfig jwtConfig;
     @MockBean
+    private PasswordEncoder passwordEncoder;
+    @MockBean
     private AdministrateurRepository administrateurRepository;
     @MockBean
     private MembreRepository membreRepository;
 
     private MembreRequest membreRequest;
     private MembreResponse membreResponse;
+    private Membre membreEntity; // Added for authenticate mock
 
     @BeforeEach
     void setUp() {
@@ -76,6 +83,11 @@ class MembreControllerTest {
         membreResponse = new MembreResponse();
         membreResponse.setId(1L);
         membreResponse.setMatricule("L12345");
+
+        membreEntity = new Membre(); // Initialize membreEntity
+        membreEntity.setId(1L);
+        membreEntity.setMatricule("L12345");
+        membreEntity.setTypeMembre(com.padell.padell.entity.enums.TypeMembre.LIBRE);
     }
 
     @Test
@@ -106,6 +118,7 @@ class MembreControllerTest {
         when(membreService.create(any(Membre.class))).thenReturn(new Membre());
         when(membreMapper.toEntity(any(MembreRequest.class))).thenReturn(new Membre());
         when(membreMapper.toResponse(any(Membre.class))).thenReturn(membreResponse);
+        when(passwordEncoder.encode(anyString())).thenReturn("$2a$10$hashed");
 
         mockMvc.perform(post("/api/membres")
                         .with(csrf())
@@ -150,5 +163,22 @@ class MembreControllerTest {
         mockMvc.perform(delete("/api/membres/1")
                         .with(csrf()))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("POST /api/membres/login - Doit authentifier un membre et retourner un token")
+    void loginMembre_ShouldAuthenticateAndReturnToken() throws Exception {
+        MembreLoginRequest loginRequest = new MembreLoginRequest("L12345", "Membre1234!");
+        when(membreService.authenticate("L12345", "Membre1234!")).thenReturn(membreEntity);
+        when(membreMapper.toResponse(any(Membre.class))).thenReturn(membreResponse);
+        when(jwtConfig.generateToken(any(String.class), any(String.class))).thenReturn("mocked-jwt-token");
+
+        mockMvc.perform(post("/api/membres/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.matricule").value("L12345"))
+                .andExpect(jsonPath("$.token").value("mocked-jwt-token"));
     }
 }

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder; // Added import
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -34,6 +35,9 @@ class MembreServiceTest {
 
     @Mock
     private PenaliteRepository penaliteRepository;
+
+    @Mock // Added PasswordEncoder mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private MembreServiceImpl membreService;
@@ -57,6 +61,7 @@ class MembreServiceTest {
                 .email("lucas@email.com")
                 .typeMembre(TypeMembre.GLOBAL)
                 .solde(0.0)
+                .passwordHash("$2a$10$somehashedpassword") // Added a password hash for tests
                 .build();
 
         membreSite = Membre.builder()
@@ -67,6 +72,7 @@ class MembreServiceTest {
                 .typeMembre(TypeMembre.SITE)
                 .solde(0.0)
                 .site(site)
+                .passwordHash("$2a$10$somehashedpassword") // Added a password hash for tests
                 .build();
 
         membreLibre = Membre.builder()
@@ -76,6 +82,7 @@ class MembreServiceTest {
                 .email("alex@email.com")
                 .typeMembre(TypeMembre.LIBRE)
                 .solde(0.0)
+                .passwordHash("$2a$10$somehashedpassword") // Added a password hash for tests
                 .build();
     }
 
@@ -100,6 +107,30 @@ class MembreServiceTest {
             assertThat(result.getTypeMembre()).isEqualTo(TypeMembre.GLOBAL);
             assertThat(result.getSolde()).isEqualTo(0.0);
             verify(membreRepository, times(1)).save(membreGlobal);
+        }
+
+        @Test
+        @DisplayName("âœ… doit normaliser le matricule en majuscules lors de la création")
+        void shouldNormalizeMatriculeOnCreate() {
+            Membre membre = Membre.builder()
+                    .matricule("g1001")
+                    .nom("Martin")
+                    .prenom("Lucas")
+                    .email("lucas@email.com")
+                    .typeMembre(TypeMembre.GLOBAL)
+                    .solde(0.0)
+                    .passwordHash("$2a$10$somehashedpassword")
+                    .build();
+
+            when(membreRepository.existsByMatricule("G1001")).thenReturn(false);
+            when(membreRepository.existsByEmail(anyString())).thenReturn(false);
+            when(membreRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+            Membre result = membreService.create(membre);
+
+            assertThat(result.getMatricule()).isEqualTo("G1001");
+            verify(membreRepository).existsByMatricule("G1001");
+            verify(membreRepository).save(argThat(saved -> "G1001".equals(saved.getMatricule())));
         }
 
         @Test
@@ -260,7 +291,7 @@ class MembreServiceTest {
         @Test
         @DisplayName("✅ doit retourner le membre quand le matricule existe")
         void shouldReturnMemberByMatricule() {
-            when(membreRepository.findByMatricule("G1001")).thenReturn(Optional.of(membreGlobal));
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
 
             Membre result = membreService.getByMatricule("G1001");
 
@@ -268,13 +299,86 @@ class MembreServiceTest {
         }
 
         @Test
+        @DisplayName("âœ… doit normaliser le matricule avant la recherche")
+        void shouldNormalizeMatriculeBeforeLookup() {
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
+
+            Membre result = membreService.getByMatricule("g1001");
+
+            assertThat(result.getMatricule()).isEqualTo("G1001");
+            verify(membreRepository).findByMatriculeIgnoreCase("G1001");
+        }
+
+        @Test
         @DisplayName("❌ doit lever une ResourceNotFoundException quand le matricule n'est pas trouvé")
         void shouldThrowWhenMatriculeNotFound() {
-            when(membreRepository.findByMatricule("G9999")).thenReturn(Optional.empty());
+            when(membreRepository.findByMatriculeIgnoreCase("G9999")).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> membreService.getByMatricule("G9999"))
                     .isInstanceOf(ResourceNotFoundException.class)
                     .hasMessageContaining("G9999");
+        }
+    }
+
+    // ================================================================
+    // AUTHENTICATE
+    // ================================================================
+    @Nested
+    @DisplayName("authenticate()")
+    class AuthenticateTests {
+
+        @Test
+        @DisplayName("✅ doit retourner le membre quand les identifiants sont valides")
+        void shouldAuthenticateWithValidCredentials() {
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
+            when(passwordEncoder.matches("Membre1234!", membreGlobal.getPasswordHash())).thenReturn(true);
+
+            Membre result = membreService.authenticate("G1001", "Membre1234!");
+
+            assertThat(result).isEqualTo(membreGlobal);
+        }
+
+        @Test
+        @DisplayName("❌ doit refuser quand le mot de passe est invalide")
+        void shouldRejectInvalidPassword() {
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
+            when(passwordEncoder.matches("wrong-password", membreGlobal.getPasswordHash())).thenReturn(false);
+
+            assertThatThrownBy(() -> membreService.authenticate("G1001", "wrong-password"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("Identifiants invalides.");
+        }
+
+        @Test
+        @DisplayName("❌ doit refuser quand le matricule est introuvable")
+        void shouldRejectInvalidMatricule() {
+            when(membreRepository.findByMatriculeIgnoreCase("G9999")).thenReturn(Optional.empty());
+
+            assertThatThrownBy(() -> membreService.authenticate("G9999", "Membre1234!"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("Identifiants invalides.");
+        }
+
+        @Test
+        @DisplayName("❌ doit refuser quand le membre n'a pas de hash de mot de passe")
+        void shouldRejectMemberWithoutPasswordHash() {
+            membreGlobal.setPasswordHash(null); // Simulate old account without hash
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
+
+            assertThatThrownBy(() -> membreService.authenticate("G1001", "Membre1234!"))
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessageContaining("Identifiants invalides.");
+        }
+
+        @Test
+        @DisplayName("✅ doit normaliser le matricule en majuscules avant la recherche")
+        void shouldNormalizeMatriculeToUpperCase() {
+            when(membreRepository.findByMatriculeIgnoreCase("G1001")).thenReturn(Optional.of(membreGlobal));
+            when(passwordEncoder.matches("Membre1234!", membreGlobal.getPasswordHash())).thenReturn(true);
+
+            membreService.authenticate("g1001", "Membre1234!");
+
+            verify(membreRepository).findByMatriculeIgnoreCase("G1001");
         }
     }
 
