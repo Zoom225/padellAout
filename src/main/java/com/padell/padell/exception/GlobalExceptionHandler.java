@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("La validation a échoué")
+                .message("La validation a Ã©chouÃ©")
                 .errors(errors)
                 .timestamp(LocalDateTime.now())
                 .build();
@@ -55,12 +55,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        ex.printStackTrace(); // Affiche la stacktrace dans la console
-        // En DEV, on retourne le message réel de l'exception pour faciliter le debug
+        ex.printStackTrace();
         ErrorResponse error = ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message(ex.getMessage() != null ? ex.getMessage() : "Une erreur inattendue est survenue")
-                .errors(Map.of("exception", ex.getClass().getSimpleName()))
+                .message("Une erreur inattendue est survenue")
                 .timestamp(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
