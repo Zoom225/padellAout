@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
@@ -10,7 +12,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 @Component({
   selector: 'app-admin-login-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   template: `
     <div class="login-shell">
       <!-- Hero côté gauche -->
@@ -43,7 +45,21 @@ import { AuthService } from '../../../core/auth/auth.service';
 
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>🔑 Mot de passe</mat-label>
-              <input matInput type="password" formControlName="password" />
+              <input
+                matInput
+                [type]="showAdminPassword ? 'text' : 'password'"
+                formControlName="password"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                class="password-toggle-button"
+                [attr.aria-label]="showAdminPassword ? 'Masquer le mot de passe admin' : 'Afficher le mot de passe admin'"
+                (click)="toggleAdminPassword()"
+              >
+                <mat-icon>{{ showAdminPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
             </mat-form-field>
 
             @if (errorMessage()) {
@@ -127,6 +143,13 @@ import { AuthService } from '../../../core/auth/auth.service';
         background: #f8fafc; transition: background 0.15s; white-space: nowrap;
       }
       .login-btn-secondary:hover { background: #f1f5f9; }
+
+      .password-toggle-button {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        color: #64748b;
+      }
     </style>
   `
 })
@@ -136,6 +159,7 @@ export class AdminLoginPage {
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
+  showAdminPassword = false;
 
   readonly form = new FormGroup({
     email: new FormControl('', {
@@ -166,5 +190,9 @@ export class AdminLoginPage {
         this.errorMessage.set("Échec de connexion. Vérifiez l'e-mail et le mot de passe.");
       }
     });
+  }
+
+  toggleAdminPassword(): void {
+    this.showAdminPassword = !this.showAdminPassword;
   }
 }

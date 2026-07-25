@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
@@ -22,6 +23,7 @@ import { MembreResponse } from '../../../shared/models/membre.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
     MatProgressSpinnerModule,
     MatChipsModule,
   ],
@@ -58,10 +60,20 @@ import { MembreResponse } from '../../../shared/models/membre.model';
             <mat-label>Mot de passe</mat-label>
             <input
               matInput
-              type="password"
+              [type]="showMemberPassword ? 'text' : 'password'"
               formControlName="password"
               autocomplete="current-password"
             />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              class="password-toggle-button"
+              [attr.aria-label]="showMemberPassword ? 'Masquer le mot de passe membre' : 'Afficher le mot de passe membre'"
+              (click)="toggleMemberPassword()"
+            >
+              <mat-icon>{{ showMemberPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
           </mat-form-field>
 
           <!-- Légende des types -->
@@ -349,6 +361,13 @@ import { MembreResponse } from '../../../shared/models/membre.model';
         opacity: 0.5;
         cursor: not-allowed;
       }
+
+      .password-toggle-button {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        color: #64748b;
+      }
     </style>
   `,
 })
@@ -360,6 +379,7 @@ export class MemberHomePage {
   readonly loading = signal(false);
   readonly errorMessage = signal('');
   readonly foundMember = signal<MembreResponse | null>(null);
+  showMemberPassword = false;
 
   readonly form = new FormGroup({
     matricule: new FormControl('', {
@@ -404,5 +424,9 @@ export class MemberHomePage {
         );
       },
     });
+  }
+
+  toggleMemberPassword(): void {
+    this.showMemberPassword = !this.showMemberPassword;
   }
 }
