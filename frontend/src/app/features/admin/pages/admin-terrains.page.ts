@@ -12,6 +12,7 @@ import { forkJoin } from 'rxjs';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { TerrainsApiService } from '../../../core/api/terrains-api.service';
 import { AdminSessionService } from '../../../core/auth/admin-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { SiteResponse, TerrainRequest, TerrainResponse } from '../../../shared/models/site-terrain.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -36,11 +37,11 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         <div class="adm-ter-title-block">
           <span class="adm-ter-icon">📍</span>
           <div>
-            <h1 class="adm-ter-title">Gestion des terrains</h1>
-            <p class="adm-ter-sub">Création et gestion des terrains par site</p>
+            <h1 class="adm-ter-title">{{ language.t('admin.terrains.title') }}</h1>
+            <p class="adm-ter-sub">{{ language.t('admin.terrains.subtitle') }}</p>
           </div>
         </div>
-        <a routerLink="/admin" class="adm-ter-back-btn">← Tableau de bord</a>
+        <a routerLink="/admin" class="adm-ter-back-btn">{{ language.t('common.back') }}</a>
       </div>
     </div>
 
@@ -49,16 +50,16 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       <div class="adm-ter-form-card">
         <div class="adm-ter-form-header">
           <span>{{ editingId() ? '✏️' : '➕' }}</span>
-          <h2 class="adm-ter-form-title">{{ editingId() ? 'Modifier un terrain' : 'Nouveau terrain' }}</h2>
+          <h2 class="adm-ter-form-title">{{ editingId() ? language.t('common.edit') : language.t('common.create') }}</h2>
         </div>
         <form [formGroup]="form" class="grid gap-4 pt-4 md:grid-cols-2" (ngSubmit)="save()">
           <mat-form-field appearance="outline">
-            <mat-label>Nom du terrain</mat-label>
+            <mat-label>{{ language.t('admin.terrains.name') }}</mat-label>
             <input matInput formControlName="nom" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Site</mat-label>
+            <mat-label>{{ language.t('admin.terrains.site') }}</mat-label>
             <mat-select formControlName="siteId" [disabled]="adminSession.isSiteAdmin()">
               @for (site of sites(); track site.id) {
                 <mat-option [value]="site.id">🏟️ {{ site.nom }}</mat-option>
@@ -75,9 +76,9 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="flex flex-wrap items-center gap-3 md:col-span-2">
             <button class="adm-ter-btn-primary" type="submit" [disabled]="loading() || form.invalid">
-              {{ editingId() ? '💾 Enregistrer' : '➕ Créer le terrain' }}
+              {{ editingId() ? language.t('common.save') : language.t('common.create') }}
             </button>
-            <button class="adm-ter-btn-secondary" type="button" (click)="resetForm()">🔄 Réinitialiser</button>
+            <button class="adm-ter-btn-secondary" type="button" (click)="resetForm()">{{ language.t('common.reset') }}</button>
             @if (loading()) { <mat-spinner diameter="24"></mat-spinner> }
           </div>
         </form>
@@ -93,14 +94,14 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
               <div class="adm-ter-card-site">🏟️ {{ terrain.siteNom }}</div>
             </div>
             <div class="adm-ter-card-actions">
-              <button class="adm-ter-action-edit" type="button" (click)="edit(terrain)">✏️ Modifier</button>
-              <button class="adm-ter-action-delete" type="button" (click)="remove(terrain.id)">🗑️ Supprimer</button>
+              <button class="adm-ter-action-edit" type="button" (click)="edit(terrain)">✏️ {{ language.t('common.edit') }}</button>
+              <button class="adm-ter-action-delete" type="button" (click)="remove(terrain.id)">🗑️ {{ language.t('common.delete') }}</button>
             </div>
           </div>
         } @empty {
           <div class="adm-ter-empty md:col-span-2 lg:col-span-3">
             <span>📍</span>
-            <p>Aucun terrain configuré</p>
+            <p>{{ language.t('admin.terrains.empty') }}</p>
           </div>
         }
       </div>
@@ -196,6 +197,7 @@ export class AdminTerrainsPage {
   private readonly terrainsApi = inject(TerrainsApiService);
   private readonly sitesApi = inject(SitesApiService);
   readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -238,7 +240,7 @@ export class AdminTerrainsPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les terrains.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.loadError')));
       }
     });
   }
@@ -274,12 +276,12 @@ export class AdminTerrainsPage {
         const wasEditing = this.editingId() !== null;
         this.loading.set(false);
         this.resetForm();
-        this.message.set(wasEditing ? 'Terrain mis à jour.' : 'Terrain créé.');
+        this.message.set(wasEditing ? this.language.t('admin.terrains.updateSuccess') : this.language.t('admin.terrains.createSuccess'));
         this.loadData();
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Sauvegarde du terrain impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.saveError')));
       }
     });
   }
@@ -287,13 +289,18 @@ export class AdminTerrainsPage {
   remove(id: number): void {
     this.message.set('');
     this.errorMessage.set('');
+
+    if (!confirm(this.language.t('admin.terrains.deleteConfirm'))) {
+      return;
+    }
+
     this.terrainsApi.delete(id).subscribe({
       next: () => {
-        this.message.set('Terrain supprimé.');
+        this.message.set(this.language.t('admin.terrains.deleteSuccess'));
         this.loadData();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression du terrain impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.deleteError')));
       }
     });
   }

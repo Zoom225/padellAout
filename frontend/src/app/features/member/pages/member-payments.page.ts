@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { PaiementsApiService } from '../../../core/api/paiements-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { PaiementResponse } from '../../../shared/models/reservation.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -15,22 +16,20 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
   standalone: true,
   imports: [CommonModule, RouterLink, MatProgressSpinnerModule],
   template: `
-    <!-- Hero paiements -->
     <div class="pay-hero">
       <div class="pay-hero-inner">
         <div class="pay-hero-left">
           <span class="pay-hero-icon">💳</span>
           <div>
-            <h1 class="pay-hero-title">Mes paiements</h1>
-            <p class="pay-hero-sub">Historique des paiements et remboursements</p>
+            <h1 class="pay-hero-title">{{ language.t('member.payments.title') }}</h1>
+            <p class="pay-hero-sub">{{ language.t('member.payments.subtitle') }}</p>
           </div>
         </div>
-        <a routerLink="/member/reservations" class="pay-hero-link">📋 Mes réservations</a>
+        <a routerLink="/member/reservations" class="pay-hero-link">📋 {{ language.t('member.payments.reservations') }}</a>
       </div>
     </div>
 
     <section class="page-shell max-w-5xl">
-
       @if (loading()) {
         <div class="flex justify-center py-8"><mat-spinner diameter="32"></mat-spinner></div>
       }
@@ -38,23 +37,22 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         <p class="status-error">{{ errorMessage() }}</p>
       }
 
-      <!-- KPI -->
       <div class="pay-kpi-card">
         <div class="pay-kpi-grid">
           <div class="pay-kpi-item">
-            <p class="pay-kpi-label">Total paiements</p>
+            <p class="pay-kpi-label">{{ language.t('member.payments.total') }}</p>
             <p class="pay-kpi-value">{{ payments().length }}</p>
           </div>
           <div class="pay-kpi-item">
-            <p class="pay-kpi-label">Total payé</p>
+            <p class="pay-kpi-label">{{ language.t('member.payments.paid') }}</p>
             <p class="pay-kpi-value">{{ totalPaid() }} €</p>
           </div>
           <div class="pay-kpi-item">
-            <p class="pay-kpi-label">En attente</p>
+            <p class="pay-kpi-label">{{ language.t('member.payments.pending') }}</p>
             <p class="pay-kpi-value">{{ pendingCount() }}</p>
           </div>
           <div class="pay-kpi-item">
-            <p class="pay-kpi-label">Remboursés</p>
+            <p class="pay-kpi-label">{{ language.t('member.payments.refunded') }}</p>
             <p class="pay-kpi-value">{{ refundedCount() }}</p>
           </div>
         </div>
@@ -64,19 +62,19 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         @for (payment of payments(); track payment.id) {
           <div class="pay-card">
             <div class="pay-card-header">
-              <div class="pay-card-id">Paiement #{{ payment.id }}</div>
-              <div class="pay-card-date">{{ payment.datePaiement || 'Pas encore réglé' }}</div>
+              <div class="pay-card-id">{{ language.t('member.payments.payment') }} #{{ payment.id }}</div>
+              <div class="pay-card-date">{{ payment.datePaiement || language.t('member.payments.notSet') }}</div>
             </div>
             <div class="pay-card-body">
               <span class="pay-amount">{{ payment.montant }} €</span>
-              <span class="pay-badge" [class]="payBadgeClass(payment.statut)">{{ payment.statut }}</span>
+              <span class="pay-badge" [class]="payBadgeClass(payment.statut)">{{ paymentStatusLabel(payment.statut) }}</span>
             </div>
           </div>
         } @empty {
           @if (!loading()) {
             <div class="pay-empty md:col-span-2">
               <span>💳</span>
-              <p>Aucun paiement trouvé</p>
+              <p>{{ language.t('member.payments.none') }}</p>
             </div>
           }
         }
@@ -146,6 +144,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 export class MemberPaymentsPage {
   private readonly paiementsApi = inject(PaiementsApiService);
   private readonly memberSession = inject(MemberSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
@@ -166,7 +165,7 @@ export class MemberPaymentsPage {
   loadPayments(): void {
     const memberId = this.memberId();
     if (!memberId) {
-      this.errorMessage.set('Aucun membre connecté.');
+      this.errorMessage.set(this.language.t('member.payments.noMember'));
       return;
     }
 
@@ -178,7 +177,7 @@ export class MemberPaymentsPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les paiements.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.payments.error')));
       }
     });
   }
@@ -189,6 +188,21 @@ export class MemberPaymentsPage {
       case 'EN_ATTENTE': return 'pay-badge pay-badge-attente';
       case 'REMBOURSE': return 'pay-badge pay-badge-rembourse';
       default: return 'pay-badge pay-badge-default';
+    }
+  }
+
+  paymentStatusLabel(statut: string): string {
+    switch (statut) {
+      case 'PAYE':
+        return this.language.t('common.paymentPaid');
+      case 'EN_ATTENTE':
+        return this.language.t('common.paymentPending');
+      case 'REMBOURSE':
+        return this.language.t('common.paymentRefunded');
+      case 'ANNULE':
+        return this.language.t('common.paymentCanceled');
+      default:
+        return this.language.t('common.none');
     }
   }
 }

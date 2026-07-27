@@ -9,6 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { AdminSessionService } from '../../../core/auth/admin-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { SiteRequest, SiteResponse } from '../../../shared/models/site-terrain.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -32,11 +33,11 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         <div class="adm-site-title-block">
           <span class="adm-site-icon">🏟️</span>
           <div>
-            <h1 class="adm-site-title">Gestion des sites</h1>
-            <p class="adm-site-sub">Création, édition et suppression des sites</p>
+            <h1 class="adm-site-title">{{ language.t('admin.sites.title') }}</h1>
+            <p class="adm-site-sub">{{ language.t('admin.sites.subtitle') }}</p>
           </div>
         </div>
-        <a routerLink="/admin" class="adm-site-back-btn">← Tableau de bord</a>
+        <a routerLink="/admin" class="adm-site-back-btn">{{ language.t('common.back') }}</a>
       </div>
     </div>
 
@@ -45,16 +46,16 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       <div class="adm-site-form-card">
         <div class="adm-site-form-header">
           <span>{{ editingId() ? '✏️' : '➕' }}</span>
-          <h2 class="adm-site-form-title">{{ editingId() ? 'Modifier un site' : 'Nouveau site' }}</h2>
+          <h2 class="adm-site-form-title">{{ editingId() ? language.t('common.edit') : language.t('common.create') }}</h2>
         </div>
         <form [formGroup]="form" class="grid gap-4 pt-4 md:grid-cols-2" (ngSubmit)="save()">
-          <mat-form-field appearance="outline"><mat-label>Nom</mat-label><input matInput formControlName="nom" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Adresse</mat-label><input matInput formControlName="adresse" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Ouverture</mat-label><input matInput type="time" formControlName="heureOuverture" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Fermeture</mat-label><input matInput type="time" formControlName="heureFermeture" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Durée match (min)</mat-label><input matInput type="number" formControlName="dureeMatchMinutes" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Pause entre matchs (min)</mat-label><input matInput type="number" formControlName="dureeEntreMatchMinutes" /></mat-form-field>
-          <mat-form-field appearance="outline"><mat-label>Année civile</mat-label><input matInput type="number" formControlName="anneeCivile" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.name') }}</mat-label><input matInput formControlName="nom" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.address') }}</mat-label><input matInput formControlName="adresse" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.opening') }}</mat-label><input matInput type="time" formControlName="heureOuverture" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.closing') }}</mat-label><input matInput type="time" formControlName="heureFermeture" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.matchDuration') }}</mat-label><input matInput type="number" formControlName="dureeMatchMinutes" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.breakDuration') }}</mat-label><input matInput type="number" formControlName="dureeEntreMatchMinutes" /></mat-form-field>
+          <mat-form-field appearance="outline"><mat-label>{{ language.t('admin.sites.civilYear') }}</mat-label><input matInput type="number" formControlName="anneeCivile" /></mat-form-field>
 
           @if (message()) {
             <div class="status-success md:col-span-2">✅ {{ message() }}</div>
@@ -65,9 +66,9 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="flex flex-wrap items-center gap-3 md:col-span-2">
             <button class="adm-site-btn-primary" type="submit" [disabled]="loading() || form.invalid">
-              {{ editingId() ? '💾 Enregistrer' : '➕ Créer le site' }}
+              {{ editingId() ? language.t('common.save') : language.t('common.create') }}
             </button>
-            <button class="adm-site-btn-secondary" type="button" (click)="resetForm()">🔄 Réinitialiser</button>
+            <button class="adm-site-btn-secondary" type="button" (click)="resetForm()">{{ language.t('common.reset') }}</button>
             @if (loading()) { <mat-spinner diameter="24"></mat-spinner> }
           </div>
         </form>
@@ -85,31 +86,31 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
             </div>
             <div class="adm-site-info-grid">
               <div class="adm-site-info-item adm-site-info-teal">
-                <span class="adm-site-info-label">🕐 Horaires</span>
+                <span class="adm-site-info-label">{{ language.t('admin.sites.hours') }}</span>
                 <span class="adm-site-info-val">{{ site.heureOuverture }} – {{ site.heureFermeture }}</span>
               </div>
               <div class="adm-site-info-item adm-site-info-violet">
-                <span class="adm-site-info-label">⏱ Durée match</span>
+                <span class="adm-site-info-label">{{ language.t('admin.sites.duration') }}</span>
                 <span class="adm-site-info-val">{{ site.dureeMatchMinutes }} min</span>
               </div>
               <div class="adm-site-info-item adm-site-info-amber">
-                <span class="adm-site-info-label">⏸ Pause</span>
+                <span class="adm-site-info-label">{{ language.t('admin.sites.break') }}</span>
                 <span class="adm-site-info-val">{{ site.dureeEntreMatchMinutes }} min</span>
               </div>
               <div class="adm-site-info-item adm-site-info-blue">
-                <span class="adm-site-info-label">📅 Année</span>
+                <span class="adm-site-info-label">{{ language.t('admin.sites.year') }}</span>
                 <span class="adm-site-info-val">{{ site.anneeCivile }}</span>
               </div>
             </div>
             <div class="adm-site-card-actions">
-              <button class="adm-site-action-edit" type="button" (click)="edit(site)">✏️ Modifier</button>
-              <button class="adm-site-action-delete" type="button" (click)="remove(site.id)">🗑️ Supprimer</button>
+              <button class="adm-site-action-edit" type="button" (click)="edit(site)">✏️ {{ language.t('common.edit') }}</button>
+              <button class="adm-site-action-delete" type="button" (click)="remove(site.id)">🗑️ {{ language.t('common.delete') }}</button>
             </div>
           </div>
         } @empty {
           <div class="adm-site-empty md:col-span-2">
             <span>🏟️</span>
-            <p>Aucun site configuré</p>
+            <p>{{ language.t('admin.sites.empty') }}</p>
           </div>
         }
       </div>
@@ -209,6 +210,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 export class AdminSitesPage {
   private readonly sitesApi = inject(SitesApiService);
   private readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -236,7 +238,7 @@ export class AdminSitesPage {
         this.sites.set(this.adminSession.isGlobalAdmin() ? sites : sites.filter((site) => site.id === this.adminSession.siteId()));
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les sites.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.sites.loadError')));
       }
     });
   }
@@ -262,7 +264,7 @@ export class AdminSitesPage {
   save(): void {
     if (this.form.invalid || this.loading() || this.adminSession.isSiteAdmin()) {
       if (this.adminSession.isSiteAdmin()) {
-        this.errorMessage.set('Un admin SITE ne peut pas modifier les sites.');
+        this.errorMessage.set(this.language.t('admin.sites.siteAdminEditBlocked'));
       }
       return;
     }
@@ -275,29 +277,33 @@ export class AdminSitesPage {
         const wasEditing = this.editingId() !== null;
         this.loading.set(false);
         this.resetForm();
-        this.message.set(wasEditing ? 'Site mis à jour.' : 'Site créé.');
+        this.message.set(wasEditing ? this.language.t('admin.sites.updateSuccess') : this.language.t('admin.sites.createSuccess'));
         this.loadSites();
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Sauvegarde du site impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.sites.saveError')));
       }
     });
   }
 
   remove(id: number): void {
     if (this.adminSession.isSiteAdmin()) {
-      this.errorMessage.set('Un admin SITE ne peut pas supprimer de site.');
+      this.errorMessage.set(this.language.t('admin.sites.siteAdminDeleteBlocked'));
+      return;
+    }
+
+    if (!confirm(this.language.t('admin.sites.deleteConfirm'))) {
       return;
     }
 
     this.sitesApi.delete(id).subscribe({
       next: () => {
-        this.message.set('Site supprimé.');
+        this.message.set(this.language.t('admin.sites.deleteSuccess'));
         this.loadSites();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression du site impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.sites.deleteError')));
       }
     });
   }

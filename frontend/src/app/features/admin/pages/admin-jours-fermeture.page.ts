@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 import { JoursFermetureApiService } from '../../../core/api/jours-fermeture-api.service';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { AdminSessionService } from '../../../core/auth/admin-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { JourFermetureResponse, SiteResponse } from '../../../shared/models/site-terrain.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
@@ -38,11 +39,11 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         <div class="adm-fer-title-block">
           <span class="adm-fer-icon">🔒</span>
           <div>
-            <h1 class="adm-fer-title">Jours de fermeture</h1>
-            <p class="adm-fer-sub">Gestion des fermetures globales et par site</p>
+            <h1 class="adm-fer-title">{{ language.t('admin.closures.title') }}</h1>
+            <p class="adm-fer-sub">{{ language.t('admin.closures.subtitle') }}</p>
           </div>
         </div>
-        <a routerLink="/admin" class="adm-fer-back-btn">← Tableau de bord</a>
+        <a routerLink="/admin" class="adm-fer-back-btn">{{ language.t('common.back') }}</a>
       </div>
     </div>
 
@@ -51,23 +52,23 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       <div class="adm-fer-form-card">
         <div class="adm-fer-form-header">
           <span>➕</span>
-          <h2 class="adm-fer-form-title">Ajouter un jour de fermeture</h2>
+          <h2 class="adm-fer-form-title">{{ language.t('common.create') }}</h2>
         </div>
         <form [formGroup]="form" class="grid gap-4 pt-4 md:grid-cols-2" (ngSubmit)="save()">
           <mat-form-field appearance="outline">
-            <mat-label>📅 Date</mat-label>
+            <mat-label>{{ language.t('admin.closures.date') }}</mat-label>
             <input matInput type="date" formControlName="date" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>📝 Raison (optionnel)</mat-label>
+            <mat-label>{{ language.t('admin.closures.reason') }}</mat-label>
             <input matInput formControlName="raison" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>🏟️ Site concerné</mat-label>
+            <mat-label>{{ language.t('admin.closures.site') }}</mat-label>
             <mat-select formControlName="siteId" [disabled]="form.controls.global.value">
-              <mat-option [value]="null">🌐 Aucun (global)</mat-option>
+              <mat-option [value]="null">{{ language.t('admin.closures.noneGlobal') }}</mat-option>
               @for (site of sites(); track site.id) {
                 <mat-option [value]="site.id">{{ site.nom }}</mat-option>
               }
@@ -76,7 +77,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="flex items-center">
             <mat-checkbox formControlName="global" (change)="onGlobalChange($event.checked)">
-              🌐 Fermeture globale (tous les sites)
+              {{ language.t('admin.closures.global') }}
             </mat-checkbox>
           </div>
 
@@ -89,9 +90,9 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="flex flex-wrap items-center gap-3 md:col-span-2">
             <button class="adm-fer-btn-primary" type="submit" [disabled]="loading() || form.invalid">
-              ➕ Ajouter la fermeture
+              {{ language.t('admin.closures.add') }}
             </button>
-            <button class="adm-fer-btn-secondary" type="button" (click)="resetForm()">🔄 Réinitialiser</button>
+            <button class="adm-fer-btn-secondary" type="button" (click)="resetForm()">{{ language.t('admin.closures.reset') }}</button>
             @if (loading()) {
               <mat-spinner diameter="24"></mat-spinner>
             }
@@ -106,24 +107,24 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
             <div class="adm-fer-card-top">
               <div class="adm-fer-date">📅 {{ jour.date }}</div>
               <span class="adm-fer-badge" [class.adm-fer-badge-global]="jour.global" [class.adm-fer-badge-site]="!jour.global">
-                {{ jour.global ? '🌐 GLOBAL' : '🏟️ SITE' }}
+                {{ jour.global ? language.t('admin.closures.global') : language.t('admin.members.site') }}
               </span>
             </div>
             @if (!jour.global) {
               <div class="adm-fer-site">🏟️ {{ jour.siteNom }}</div>
             }
             <div class="adm-fer-raison">
-              📝 {{ jour.raison || 'Raison non précisée' }}
+              📝 {{ jour.raison || language.t('admin.closures.reasonEmpty') }}
             </div>
             <div class="adm-fer-card-actions">
-              <button class="adm-fer-action-delete" type="button" (click)="remove(jour.id)">🗑️ Supprimer</button>
+<button class="adm-fer-action-delete" type="button" (click)="remove(jour.id)">🗑️ {{ language.t('common.delete') }}</button>
             </div>
           </div>
         } @empty {
           @if (!loading()) {
             <div class="adm-fer-empty md:col-span-2 lg:col-span-3">
               <span>🔓</span>
-              <p>Aucun jour de fermeture configuré</p>
+              <p>{{ language.t('admin.closures.empty') }}</p>
             </div>
           }
         }
@@ -219,6 +220,7 @@ export class AdminJoursFermeturePage {
   private readonly joursFermetureApi = inject(JoursFermetureApiService);
   private readonly sitesApi = inject(SitesApiService);
   private readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -261,7 +263,7 @@ export class AdminJoursFermeturePage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les jours de fermeture.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.loadError')));
       }
     });
   }
@@ -302,12 +304,12 @@ export class AdminJoursFermeturePage {
       next: () => {
         this.loading.set(false);
         this.resetForm();
-        this.message.set('Jour de fermeture ajouté.');
+        this.message.set(this.language.t('admin.closures.addSuccess'));
         this.loadData();
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Ajout impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.addError')));
       }
     });
   }
@@ -318,11 +320,11 @@ export class AdminJoursFermeturePage {
 
     this.joursFermetureApi.delete(id).subscribe({
       next: () => {
-        this.message.set('Jour de fermeture supprimé.');
+        this.message.set(this.language.t('admin.closures.deleteSuccess'));
         this.loadData();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.deleteError')));
       }
     });
   }

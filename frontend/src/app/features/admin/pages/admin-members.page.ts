@@ -16,6 +16,7 @@ import { MembreRequest, MembreResponse } from '../../../shared/models/membre.mod
 import { TypeMembre } from '../../../shared/models/enums.model';
 import { SiteResponse } from '../../../shared/models/site-terrain.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
+import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
   selector: 'app-admin-members-page',
@@ -38,11 +39,11 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         <div class="adm-header-left">
           <span class="adm-icon">🎾</span>
           <div>
-            <h1 class="adm-title ds-section-title">Gestion des membres</h1>
-            <p class="adm-sub ds-subtitle">Création, modification et suppression des membres du club</p>
+            <h1 class="adm-title ds-section-title">{{ language.t('admin.members.title') }}</h1>
+            <p class="adm-sub ds-subtitle">{{ language.t('admin.members.subtitle') }}</p>
           </div>
         </div>
-        <a mat-stroked-button routerLink="/admin" class="adm-back-btn">← Tableau de bord</a>
+        <a mat-stroked-button routerLink="/admin" class="adm-back-btn">{{ language.t('common.back') }}</a>
       </div>
     </div>
 
@@ -50,50 +51,50 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
       <!-- Formulaire création/édition -->
       <div class="adm-form-card">
-        <div class="adm-form-header">
-          <span class="adm-form-icon">{{ editingId() ? '✏️' : '➕' }}</span>
-          <h2 class="adm-form-title">{{ editingId() ? 'Modifier un membre' : 'Nouveau membre' }}</h2>
+          <div class="adm-form-header">
+            <span class="adm-form-icon">{{ editingId() ? '✏️' : '➕' }}</span>
+          <h2 class="adm-form-title">{{ editingId() ? language.t('common.edit') : language.t('common.create') }}</h2>
         </div>
 
         <form [formGroup]="form" class="grid gap-4 pt-4 md:grid-cols-2" (ngSubmit)="save()">
           <mat-form-field appearance="outline">
-            <mat-label>Matricule</mat-label>
+            <mat-label>{{ language.t('admin.members.matricule') }}</mat-label>
             <input matInput formControlName="matricule" [readonly]="editingId() !== null"
-                   placeholder="G1234 / S12345 / L12345"
+                   [placeholder]="editingId() ? '' : 'G1234 / S12345 / L12345'"
                    class="uppercase font-semibold tracking-wider" />
             @if (!editingId()) {
-              <mat-hint>GLOBAL: G+4ch · SITE: S+5ch · LIBRE: L+5ch</mat-hint>
+              <mat-hint>{{ language.t('admin.members.matriculeHint') }}</mat-hint>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Type de membre</mat-label>
+            <mat-label>{{ language.t('admin.members.type') }}</mat-label>
             <mat-select formControlName="typeMembre" [disabled]="editingId() !== null">
-              <mat-option value="GLOBAL">🌍 GLOBAL — Tous les sites</mat-option>
-              <mat-option value="SITE">🏟️ SITE — Site dédié</mat-option>
-              <mat-option value="LIBRE">⚡ LIBRE — Accès libre</mat-option>
+              <mat-option value="GLOBAL">{{ language.t('admin.members.typeGlobal') }}</mat-option>
+              <mat-option value="SITE">{{ language.t('admin.members.typeSite') }}</mat-option>
+              <mat-option value="LIBRE">{{ language.t('admin.members.typeLibre') }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Nom</mat-label>
+            <mat-label>{{ language.t('admin.members.nom') }}</mat-label>
             <input matInput formControlName="nom" placeholder="Dupont" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Prénom</mat-label>
+            <mat-label>{{ language.t('admin.members.prenom') }}</mat-label>
             <input matInput formControlName="prenom" placeholder="Jean" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
+            <mat-label>{{ language.t('admin.members.email') }}</mat-label>
             <input matInput type="email" formControlName="email" placeholder="jean.dupont@email.com" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Site</mat-label>
+            <mat-label>{{ language.t('admin.members.site') }}</mat-label>
             <mat-select formControlName="siteId">
-              <mat-option [value]="null">🌐 Aucun site (GLOBAL / LIBRE)</mat-option>
+              <mat-option [value]="null">{{ language.t('admin.members.siteNone') }}</mat-option>
               @for (site of sites(); track site.id) {
                 <mat-option [value]="site.id">🏟️ {{ site.nom }}</mat-option>
               }
@@ -109,9 +110,9 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="flex items-center gap-3 md:col-span-2">
             <button class="adm-btn-primary" type="submit" [disabled]="loading() || form.invalid">
-              {{ editingId() ? '💾 Enregistrer' : '➕ Créer le membre' }}
+              {{ editingId() ? language.t('common.save') : language.t('common.create') }}
             </button>
-            <button class="adm-btn-secondary" type="button" (click)="resetForm()">🔄 Réinitialiser</button>
+            <button class="adm-btn-secondary" type="button" (click)="resetForm()">{{ language.t('common.reset') }}</button>
             @if (loading()) {
               <mat-spinner diameter="24"></mat-spinner>
             }
@@ -122,31 +123,31 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       <!-- Recherche par matricule -->
       <div class="adm-search-bar">
         <span class="adm-search-icon">🔍</span>
-        <input
+          <input
           class="adm-search-input"
           type="text"
-          placeholder="Rechercher par matricule, nom ou prénom..."
+          [placeholder]="language.t('admin.members.searchPlaceholder')"
           [value]="searchQuery()"
           (input)="searchQuery.set($any($event.target).value)" />
         @if (searchQuery()) {
           <button class="adm-search-clear" (click)="searchQuery.set('')">✕</button>
         }
-        <span class="adm-search-count">{{ displayedMembers().length }} membre(s)</span>
+        <span class="adm-search-count">{{ displayedMembers().length }} {{ language.t('admin.members.count') }}</span>
       </div>
 
       <!-- Filtres par type -->
       <div class="adm-type-filters">
         <button class="adm-filter-btn" [class.active]="typeFilter() === ''" (click)="typeFilter.set('')">
-          Tous ({{ filteredMembers().length }})
+          {{ language.t('admin.members.filterAll') }} ({{ filteredMembers().length }})
         </button>
         <button class="adm-filter-btn adm-filter-global" [class.active]="typeFilter() === 'GLOBAL'" (click)="typeFilter.set('GLOBAL')">
-          🌍 GLOBAL ({{ countByType('GLOBAL') }})
+          🌍 {{ language.t('admin.members.filterGlobal') }} ({{ countByType('GLOBAL') }})
         </button>
         <button class="adm-filter-btn adm-filter-site" [class.active]="typeFilter() === 'SITE'" (click)="typeFilter.set('SITE')">
-          🏟️ SITE ({{ countByType('SITE') }})
+          🏟️ {{ language.t('admin.members.filterSite') }} ({{ countByType('SITE') }})
         </button>
         <button class="adm-filter-btn adm-filter-libre" [class.active]="typeFilter() === 'LIBRE'" (click)="typeFilter.set('LIBRE')">
-          ⚡ LIBRE ({{ countByType('LIBRE') }})
+          ⚡ {{ language.t('admin.members.filterLibre') }} ({{ countByType('LIBRE') }})
         </button>
       </div>
 
@@ -154,8 +155,10 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       @if (displayedMembers().length === 0) {
         <div class="adm-empty">
           <span class="adm-empty-icon">🎾</span>
-          <p class="adm-empty-title">Aucun membre trouvé</p>
-          <p class="adm-empty-sub">{{ searchQuery() ? 'Aucun résultat pour "' + searchQuery() + '"' : 'Créez votre premier membre avec le formulaire ci-dessus.' }}</p>
+          <p class="adm-empty-title">{{ language.t('admin.members.empty') }}</p>
+          <p class="adm-empty-sub">
+            {{ searchQuery() ? language.t('admin.members.searchNoResult', { query: searchQuery() }) : language.t('admin.members.emptySub') }}
+          </p>
         </div>
       }
 
@@ -174,28 +177,28 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                 {{ member.typeMembre }}
               </span>
               @if (hasActivePenalty(member.id)) {
-                <span class="adm-penalty-badge">Pénalité active</span>
+                <span class="adm-penalty-badge">{{ language.t('admin.members.penalty') }}</span>
               }
             </div>
 
             <div class="adm-member-details ds-data-list">
               <div class="adm-detail-row ds-data-row">
-                <span class="ds-data-key">Email</span>
-                <span class="ds-data-value">{{ member.email || 'Non renseigné' }}</span>
+                <span class="ds-data-key">{{ language.t('admin.members.email') }}</span>
+                <span class="ds-data-value">{{ member.email || language.t('admin.members.emailMissing') }}</span>
               </div>
               <div class="adm-detail-row ds-data-row">
-                <span class="ds-data-key">Site</span>
-                <span class="ds-data-value">{{ member.siteNom || 'Tous les sites' }}</span>
+                <span class="ds-data-key">{{ language.t('admin.members.site') }}</span>
+                <span class="ds-data-value">{{ member.siteNom || language.t('admin.members.siteAll') }}</span>
               </div>
               <div class="adm-detail-row ds-data-row">
-                <span class="ds-data-key">Solde</span>
+                <span class="ds-data-key">{{ language.t('admin.members.balance') }}</span>
                 <span class="ds-data-value">{{ member.solde }} EUR</span>
               </div>
             </div>
 
             <div class="adm-member-actions">
-              <button class="adm-action-edit" (click)="edit(member)">✏️ Modifier</button>
-              <button class="adm-action-delete" (click)="remove(member.id)">🗑️ Supprimer</button>
+              <button class="adm-action-edit" (click)="edit(member)">✏️ {{ language.t('admin.members.edit') }}</button>
+              <button class="adm-action-delete" (click)="remove(member.id)">🗑️ {{ language.t('admin.members.delete') }}</button>
             </div>
           </div>
         }
@@ -331,6 +334,7 @@ export class AdminMembersPage {
   private readonly membresApi = inject(MembresApiService);
   private readonly sitesApi = inject(SitesApiService);
   private readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -414,7 +418,7 @@ export class AdminMembersPage {
       error: (error) => {
         this.loading.set(false);
         this.penalizedMemberIds.set(new Set());
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les membres.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.members.loadError')));
       }
     });
   }
@@ -488,18 +492,18 @@ export class AdminMembersPage {
         const wasEditing = this.editingId() !== null;
         this.loading.set(false);
         this.resetForm();
-        this.message.set(wasEditing ? '✅ Membre mis à jour.' : '✅ Membre créé avec succès.');
+        this.message.set(wasEditing ? this.language.t('admin.members.updateSuccess') : this.language.t('admin.members.createSuccess'));
         this.loadData();
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Sauvegarde du membre impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.members.saveError')));
       }
     });
   }
 
   remove(id: number): void {
-    if (!confirm('Confirmer la suppression de ce membre ?')) return;
+    if (!confirm(this.language.t('admin.members.deleteConfirm'))) return;
     this.loading.set(true);
     this.message.set('');
     this.errorMessage.set('');
@@ -507,12 +511,12 @@ export class AdminMembersPage {
     this.membresApi.delete(id).subscribe({
       next: () => {
         this.loading.set(false);
-        this.message.set('🗑️ Membre supprimé.');
+        this.message.set(this.language.t('admin.members.deleteSuccess'));
         this.loadData();
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.members.deleteError')));
       }
     });
   }

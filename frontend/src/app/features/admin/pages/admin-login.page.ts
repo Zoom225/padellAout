@@ -1,49 +1,64 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
   selector: 'app-admin-login-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   template: `
     <div class="login-shell">
-      <!-- Hero côté gauche -->
       <div class="login-hero">
         <div class="login-hero-content">
           <div class="login-hero-icon">🏆</div>
-          <h1 class="login-hero-title">PadelPlay Admin</h1>
-          <p class="login-hero-sub">Espace réservé aux administrateurs<br>de sites et superviseurs globaux</p>
+          <h1 class="login-hero-title">{{ language.t('admin.login.heroTitle') }}</h1>
+          <p class="login-hero-sub">{{ language.t('admin.login.heroSubtitle') }}</p>
           <div class="login-hero-badges">
-            <span class="login-badge login-badge-global">🌐 Admin Global</span>
-            <span class="login-badge login-badge-site">🏟️ Admin Site</span>
+            <span class="login-badge login-badge-global">{{ language.t('admin.login.globalBadge') }}</span>
+            <span class="login-badge login-badge-site">{{ language.t('admin.login.siteBadge') }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Formulaire côté droit -->
       <div class="login-form-panel">
         <div class="login-form-card">
           <div class="login-form-header">
             <span class="login-form-icon">🔐</span>
-            <h2 class="login-form-title">Connexion</h2>
-            <p class="login-form-sub">Accès réservé aux administrateurs</p>
+            <h2 class="login-form-title">{{ language.t('admin.login.formTitle') }}</h2>
+            <p class="login-form-sub">{{ language.t('admin.login.formSubtitle') }}</p>
           </div>
 
           <form [formGroup]="form" class="login-form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>📧 Email</mat-label>
+              <mat-label>{{ language.t('admin.login.email') }}</mat-label>
               <input matInput type="email" formControlName="email" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="w-full">
-              <mat-label>🔑 Mot de passe</mat-label>
-              <input matInput type="password" formControlName="password" />
+              <mat-label>{{ language.t('admin.login.password') }}</mat-label>
+              <input
+                matInput
+                [type]="showAdminPassword ? 'text' : 'password'"
+                formControlName="password"
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                class="password-toggle-button"
+                [attr.aria-label]="showAdminPassword ? language.t('admin.login.hidePassword') : language.t('admin.login.showPassword')"
+                (click)="toggleAdminPassword()"
+              >
+                <mat-icon>{{ showAdminPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
             </mat-form-field>
 
             @if (errorMessage()) {
@@ -55,9 +70,9 @@ import { AuthService } from '../../../core/auth/auth.service';
                 @if (loading()) {
                   <mat-spinner diameter="20" style="display:inline-block;margin-right:8px;"></mat-spinner>
                 }
-                Se connecter
+                {{ language.t('admin.login.submit') }}
               </button>
-              <a routerLink="/" class="login-btn-secondary">← Retour</a>
+              <a routerLink="/" class="login-btn-secondary">{{ language.t('admin.login.back') }}</a>
             </div>
           </form>
         </div>
@@ -127,15 +142,24 @@ import { AuthService } from '../../../core/auth/auth.service';
         background: #f8fafc; transition: background 0.15s; white-space: nowrap;
       }
       .login-btn-secondary:hover { background: #f1f5f9; }
+
+      .password-toggle-button {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        color: #64748b;
+      }
     </style>
   `
 })
 export class AdminLoginPage {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
+  showAdminPassword = false;
 
   readonly form = new FormGroup({
     email: new FormControl('', {
@@ -163,8 +187,12 @@ export class AdminLoginPage {
       },
       error: () => {
         this.loading.set(false);
-        this.errorMessage.set("Échec de connexion. Vérifiez l'e-mail et le mot de passe.");
+        this.errorMessage.set(this.language.t('admin.login.error'));
       }
     });
+  }
+
+  toggleAdminPassword(): void {
+    this.showAdminPassword = !this.showAdminPassword;
   }
 }

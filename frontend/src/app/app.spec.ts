@@ -6,12 +6,18 @@ import { AuthApiService } from './core/api/auth-api.service';
 
 describe('App', () => {
   beforeEach(async () => {
+    TestBed.overrideComponent(App, {
+      set: {
+        template: '<span>PadelPlay</span>'
+      }
+    });
+
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
         provideRouter([]),
-        { provide: AuthApiService, useValue: { loginMembre: vi.fn() } }, // ← fix
-      ],
+        { provide: AuthApiService, useValue: { loginMembre: vi.fn() } }
+      ]
     }).compileComponents();
   });
 

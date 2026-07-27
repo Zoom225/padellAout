@@ -11,6 +11,7 @@ import { ReservationsApiService } from '../../../core/api/reservations-api.servi
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { TerrainsApiService } from '../../../core/api/terrains-api.service';
 import { AdminSessionService } from '../../../core/auth/admin-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { MatchResponse } from '../../../shared/models/match.model';
 import { MembreResponse } from '../../../shared/models/membre.model';
 import { ReservationResponse } from '../../../shared/models/reservation.model';
@@ -25,27 +26,26 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
     <section class="admin-shell">
       <div class="admin-hero">
         <div>
-          <p class="eyebrow">Tableau de bord</p>
-          <h1>Administration PadelPlay</h1>
+          <p class="eyebrow">{{ language.t('admin.home.eyebrow') }}</p>
+          <h1>{{ language.t('admin.home.title') }}</h1>
           <p class="hero-subtitle">
-            Vue {{ adminSession.isGlobalAdmin() ? 'globale' : 'site' }} des matchs,
-            reservations, membres et ressources du club.
+            {{ language.t('admin.home.subtitle', { scope: adminSession.isGlobalAdmin() ? 'global' : 'site' }) }}
           </p>
         </div>
 
         <div class="admin-actions">
-          <a routerLink="/admin/members">Membres</a>
-          <a routerLink="/admin/matches">Matchs</a>
-          <a routerLink="/admin/sites">Sites</a>
-          <a routerLink="/admin/terrains">Terrains</a>
-          <a routerLink="/admin/fermetures">Fermetures</a>
+          <a routerLink="/admin/members">{{ language.t('nav.members') }}</a>
+          <a routerLink="/admin/matches">{{ language.t('nav.matches') }}</a>
+          <a routerLink="/admin/sites">{{ language.t('nav.sites') }}</a>
+          <a routerLink="/admin/terrains">{{ language.t('nav.courts') }}</a>
+          <a routerLink="/admin/fermetures">{{ language.t('nav.closures') }}</a>
         </div>
       </div>
 
       @if (loading()) {
         <div class="loading-panel">
           <mat-spinner diameter="32"></mat-spinner>
-          <span>Chargement du tableau de bord...</span>
+          <span>{{ language.t('admin.home.loading') }}</span>
         </div>
       }
       @if (errorMessage()) {
@@ -54,42 +54,42 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
       <div class="kpi-grid">
         <div class="admin-kpi green">
-          <p>Matchs</p>
+          <p>{{ language.t('admin.home.matches') }}</p>
           <strong>{{ matches().length }}</strong>
-          <span>tous statuts</span>
+          <span>{{ language.t('admin.home.allStatuses') }}</span>
         </div>
         <div class="admin-kpi blue">
-          <p>Reservations</p>
+          <p>{{ language.t('admin.home.reservations') }}</p>
           <strong>{{ reservations().length }}</strong>
-          <span>{{ pendingReservationsCount() }} en attente</span>
+          <span>{{ pendingReservationsCount() }} {{ language.t('admin.home.waiting') }}</span>
         </div>
         <div class="admin-kpi slate">
-          <p>Membres</p>
+          <p>{{ language.t('admin.home.members') }}</p>
           <strong>{{ members().length }}</strong>
-          <span>visibles</span>
+          <span>{{ language.t('admin.home.visible') }}</span>
         </div>
         <div class="admin-kpi amber">
-          <p>Chiffre d'affaires</p>
+          <p>{{ language.t('admin.home.revenue') }}</p>
           <strong>{{ revenue() }} EUR</strong>
-          <span>paiements valides</span>
+          <span>{{ language.t('admin.home.validPayments') }}</span>
         </div>
       </div>
 
       <div class="dashboard-grid">
         <mat-card class="card-soft admin-panel">
           <mat-card-header>
-            <mat-card-title>Occupation par site</mat-card-title>
-            <mat-card-subtitle>Nombre de matchs rattaches a chaque site visible</mat-card-subtitle>
+            <mat-card-title>{{ language.t('admin.home.occupancy') }}</mat-card-title>
+            <mat-card-subtitle>{{ language.t('admin.home.occupancySub') }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="data-list">
               @for (item of occupancyBySite(); track item.site) {
                 <div class="data-row">
                   <span>{{ item.site }}</span>
-                  <strong>{{ item.count }} match(s)</strong>
+                  <strong>{{ item.count }} {{ language.t('admin.home.matchCount') }}</strong>
                 </div>
               } @empty {
-                <p class="empty-state">Aucune donnee.</p>
+                <p class="empty-state">{{ language.t('admin.home.empty') }}</p>
               }
             </div>
           </mat-card-content>
@@ -97,25 +97,25 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
         <mat-card class="card-soft admin-panel">
           <mat-card-header>
-            <mat-card-title>Ressources</mat-card-title>
-            <mat-card-subtitle>Controle rapide des elements geres par l'administration</mat-card-subtitle>
+            <mat-card-title>{{ language.t('admin.home.resources') }}</mat-card-title>
+            <mat-card-subtitle>{{ language.t('admin.home.resourcesSub') }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="resource-grid">
               <div>
-                <span>Sites visibles</span>
+                <span>{{ language.t('admin.home.sitesVisible') }}</span>
                 <strong>{{ sites().length }}</strong>
               </div>
               <div>
-                <span>Terrains visibles</span>
+                <span>{{ language.t('admin.home.terrainsVisible') }}</span>
                 <strong>{{ terrains().length }}</strong>
               </div>
               <div>
-                <span>Matchs complets</span>
+                <span>{{ language.t('admin.home.completeMatches') }}</span>
                 <strong>{{ completeMatchesCount() }}</strong>
               </div>
               <div>
-                <span>Reservations en attente</span>
+                <span>{{ language.t('admin.home.pendingReservations') }}</span>
                 <strong>{{ pendingReservationsCount() }}</strong>
               </div>
             </div>
@@ -362,6 +362,7 @@ export class AdminHomePage {
   private readonly sitesApi = inject(SitesApiService);
   private readonly terrainsApi = inject(TerrainsApiService);
   readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
@@ -424,13 +425,13 @@ export class AdminHomePage {
           },
           error: (error) => {
             this.loading.set(false);
-            this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les reservations administrateur.'));
+            this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.home.reservationsLoadError')));
           }
         });
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger le tableau de bord administrateur.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.home.dashboardLoadError')));
       }
     });
   }
