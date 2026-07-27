@@ -13,6 +13,7 @@ import { MatchesApiService } from '../../../core/api/matches-api.service';
 import { PaiementsApiService } from '../../../core/api/paiements-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { MatchResponse } from '../../../shared/models/match.model';
 import { ReservationResponse } from '../../../shared/models/reservation.model';
 import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
@@ -36,14 +37,14 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
     <section class="page-shell">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 class="title-gradient ds-section-title">Mes réservations</h1>
-          <p class="ds-subtitle">Paiement et annulation de vos inscriptions.</p>
+          <h1 class="title-gradient ds-section-title">{{ language.t('member.reservations.title') }}</h1>
+          <p class="ds-subtitle">{{ language.t('member.reservations.subtitle') }}</p>
         </div>
         <div class="toolbar-actions">
-          <a mat-flat-button color="primary" routerLink="/member/matches/new" [queryParams]="{ type: 'PUBLIC' }">Créer un match PUBLIC</a>
-          <a mat-flat-button color="accent" routerLink="/member/matches/new" [queryParams]="{ type: 'PRIVE' }">Créer un match PRIVÉ</a>
-          <a mat-stroked-button routerLink="/member/matches">Matchs publics</a>
-          <a mat-stroked-button routerLink="/member/payments">Mes paiements</a>
+          <a mat-flat-button color="primary" routerLink="/member/matches/new" [queryParams]="{ type: 'PUBLIC' }">{{ language.t('member.reservations.createPublic') }}</a>
+          <a mat-flat-button color="accent" routerLink="/member/matches/new" [queryParams]="{ type: 'PRIVE' }">{{ language.t('member.reservations.createPrivate') }}</a>
+          <a mat-stroked-button routerLink="/member/matches">{{ language.t('member.reservations.matches') }}</a>
+          <a mat-stroked-button routerLink="/member/payments">{{ language.t('member.payments.title') }}</a>
         </div>
       </div>
 
@@ -61,17 +62,17 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
       <mat-card class="card-soft panel-gradient">
         <mat-card-header>
-          <mat-card-title>🎾 Mes matchs organisés</mat-card-title>
-          <mat-card-subtitle>Modifier, supprimer ou gérer les joueurs de vos matchs.</mat-card-subtitle>
+          <mat-card-title>{{ language.t('member.reservations.organizedTitle') }}</mat-card-title>
+          <mat-card-subtitle>{{ language.t('member.reservations.organizedSub') }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="grid gap-4 md:grid-cols-3">
           <mat-form-field appearance="outline">
-            <mat-label>Sélectionner un match organisé</mat-label>
+            <mat-label>{{ language.t('member.reservations.select') }}</mat-label>
             <mat-select [value]="managedMatchId()" (valueChange)="onManagedMatchChange($event)">
-              <mat-option [value]="null">-- Choisir un match --</mat-option>
+              <mat-option [value]="null">{{ language.t('member.reservations.chooseMatch') }}</mat-option>
               @for (match of managedMatches(); track match.id) {
                 <mat-option [value]="match.id">
-                  #{{ match.id }} – {{ match.date }} {{ match.heureDebut }} [{{ match.typeMatch }}]
+                  #{{ match.id }} – {{ match.date }} {{ match.heureDebut }} [{{ matchTypeLabel(match.typeMatch) }}]
                 </mat-option>
               }
             </mat-select>
@@ -79,8 +80,8 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           @if (selectedManagedMatch()?.typeMatch === 'PRIVE') {
             <mat-form-field appearance="outline">
-              <mat-label>Matricule joueur à ajouter</mat-label>
-              <input matInput [formControl]="inviteMatricule" placeholder="Ex: G1002" />
+              <mat-label>{{ language.t('member.reservations.inviteMatricule') }}</mat-label>
+              <input matInput [formControl]="inviteMatricule" [placeholder]="language.t('member.reservations.inviteMatricule')" />
             </mat-form-field>
 
             <div class="flex items-end gap-2">
@@ -91,61 +92,61 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                 (click)="addPlayer()"
                 [disabled]="!selectedManagedMatch() || inviteMatricule.invalid || actionId() !== null"
               >
-                Ajouter joueur
+                {{ language.t('member.reservations.addPlayer') }}
               </button>
             </div>
           }
 
           @if (!managedMatches().length) {
-            <div class="md:col-span-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-              ✅ Aucun match organisé pour l'instant. Créez un match PUBLIC ou PRIVÉ via les boutons ci-dessus.
+              <div class="md:col-span-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              ✅ {{ language.t('member.reservations.noOrganized') }}
             </div>
           }
 
           @if (selectedManagedMatch()) {
             <div class="md:col-span-3 rounded-lg border border-slate-200 bg-white p-4">
-              <p class="mb-3 text-sm font-semibold text-slate-800">
-                ✏️ Modifier le match #{{ selectedManagedMatch()!.id }}
+                <p class="mb-3 text-sm font-semibold text-slate-800">
+                ✏️ {{ language.t('member.reservations.edit') }} #{{ selectedManagedMatch()!.id }}
                 <span class="ml-2 ds-badge" [class]="typeBadgeClass(selectedManagedMatch()!.typeMatch)">
-                  {{ selectedManagedMatch()!.typeMatch }}
+                  {{ matchTypeLabel(selectedManagedMatch()!.typeMatch) }}
                 </span>
               </p>
               <form [formGroup]="managedMatchForm" class="grid gap-3 md:grid-cols-4" (ngSubmit)="updateManagedMatch()">
                 <mat-form-field appearance="outline">
-                  <mat-label>Date</mat-label>
+                  <mat-label>{{ language.t('member.public.date') }}</mat-label>
                   <input matInput type="date" formControlName="date" />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Heure début</mat-label>
+                  <mat-label>{{ language.t('member.public.time') }}</mat-label>
                   <input matInput type="time" formControlName="heureDebut" />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Type</mat-label>
+                  <mat-label>{{ language.t('member.public.typeLabel') }}</mat-label>
                   <mat-select formControlName="typeMatch">
-                    <mat-option value="PRIVE">PRIVÉ</mat-option>
-                    <mat-option value="PUBLIC">PUBLIC</mat-option>
+                    <mat-option value="PRIVE">{{ language.t('member.create.private') }}</mat-option>
+                    <mat-option value="PUBLIC">{{ language.t('member.create.public') }}</mat-option>
                   </mat-select>
                 </mat-form-field>
 
                 <div class="flex items-end gap-2">
-                  <button mat-flat-button color="primary" type="submit" [disabled]="managedMatchForm.invalid || actionId() !== null">
-                    💾 Enregistrer
+                    <button mat-flat-button color="primary" type="submit" [disabled]="managedMatchForm.invalid || actionId() !== null">
+                    💾 {{ language.t('common.save') }}
                   </button>
                   <button mat-stroked-button color="warn" type="button" (click)="requestDeleteManagedMatch()" [disabled]="actionId() !== null">
-                    🗑️ Supprimer
+                    🗑️ {{ language.t('common.delete') }}
                   </button>
                 </div>
               </form>
 
               @if (pendingDeleteMatchId() === selectedManagedMatch()!.id) {
                 <div class="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900">
-                  <p class="font-semibold">Confirmation requise</p>
-                  <p class="mt-1">Ce match sera annulé et masqué de votre historique.</p>
+                  <p class="font-semibold">{{ language.t('member.reservations.confirmation') }}</p>
+                  <p class="mt-1">{{ language.t('member.reservations.emptyBody') }}</p>
                   <div class="mt-3 flex gap-2">
-                    <button mat-flat-button color="warn" type="button" (click)="deleteManagedMatch()" [disabled]="actionId() !== null">Confirmer la suppression</button>
-                    <button mat-stroked-button type="button" (click)="cancelDeleteManagedMatch()" [disabled]="actionId() !== null">Annuler</button>
+                    <button mat-flat-button color="warn" type="button" (click)="deleteManagedMatch()" [disabled]="actionId() !== null">{{ language.t('common.confirm') }}</button>
+                    <button mat-stroked-button type="button" (click)="cancelDeleteManagedMatch()" [disabled]="actionId() !== null">{{ language.t('common.cancel') }}</button>
                   </div>
                 </div>
               }
@@ -154,15 +155,15 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
           <div class="md:col-span-3">
             @if (managedReservations().length) {
-              <p class="mb-2 text-sm font-semibold text-slate-700">Joueurs inscrits :</p>
+              <p class="mb-2 text-sm font-semibold text-slate-700">{{ language.t('member.reservations.players') }}</p>
               <div class="grid gap-2 md:grid-cols-2">
                 @for (res of managedReservations(); track res.id) {
                   <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 flex items-center justify-between">
                     <div>
                       <p class="font-medium text-slate-800">{{ res.membreNom }}</p>
                       <p class="mt-1 flex flex-wrap gap-1 text-xs">
-                        <span class="ds-badge" [class]="reservationBadgeClass(res.statut)">Réservation: {{ res.statut }}</span>
-                        <span class="ds-badge" [class]="paymentBadgeClass(res.paiement?.statut)">Paiement: {{ res.paiement?.statut || 'N/A' }}</span>
+                        <span class="ds-badge" [class]="reservationBadgeClass(res.statut)">{{ language.t('member.reservations.reservationLabel') }}: {{ reservationStatusLabel(res.statut) }}</span>
+                        <span class="ds-badge" [class]="paymentBadgeClass(res.paiement?.statut)">{{ language.t('member.reservations.paymentLabel') }}: {{ paymentStatusLabel(res.paiement?.statut) }}</span>
                       </p>
                     </div>
                     @if (selectedManagedMatch()?.typeMatch === 'PRIVE') {
@@ -173,14 +174,14 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                         (click)="removePlayer(res)"
                         [disabled]="actionId() === res.id || res.statut === 'ANNULEE' || res.membreId === memberId()"
                       >
-                        Retirer
+                        {{ language.t('member.reservations.removePlayer') }}
                       </button>
                     }
                   </div>
                 }
               </div>
             } @else if (selectedManagedMatch()) {
-              <p class="text-sm text-slate-500 italic">Aucun joueur inscrit sur ce match.</p>
+                <p class="text-sm text-slate-500 italic">{{ language.t('member.reservations.noPlayer') }}</p>
             }
           </div>
         </mat-card-content>
@@ -190,15 +191,15 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
         @for (reservation of reservations(); track reservation.id) {
           <mat-card class="card-soft">
             <mat-card-header>
-              <mat-card-title>📋 Réservation #{{ reservation.id }}</mat-card-title>
+              <mat-card-title>📋 {{ language.t('member.reservations.reservationTitle') }} #{{ reservation.id }}</mat-card-title>
               <mat-card-subtitle>{{ reservation.matchDateTime }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content class="ds-data-list">
-              <div class="ds-data-row"><span class="ds-data-key">Joueur</span><span class="ds-data-value">{{ reservation.membreNom }}</span></div>
-              <div class="ds-data-row"><span class="ds-data-key">Match</span><span class="ds-data-value">#{{ reservation.matchId }}</span></div>
-              <div class="ds-data-row"><span class="ds-data-key">Réservation</span><span class="ds-data-value"><span class="ds-badge" [class]="reservationBadgeClass(reservation.statut)">{{ reservation.statut }}</span></span></div>
-              <div class="ds-data-row"><span class="ds-data-key">Paiement</span><span class="ds-data-value"><span class="ds-badge" [class]="paymentBadgeClass(reservation.paiement?.statut)">{{ reservation.paiement?.statut || 'N/A' }}</span></span></div>
-              <div class="ds-data-row"><span class="ds-data-key">Montant</span><span class="ds-data-value">{{ reservation.paiement?.montant ?? 0 }} €</span></div>
+              <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.reservations.player') }}</span><span class="ds-data-value">{{ reservation.membreNom }}</span></div>
+              <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.reservations.match') }}</span><span class="ds-data-value">#{{ reservation.matchId }}</span></div>
+              <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.reservations.reservation') }}</span><span class="ds-data-value"><span class="ds-badge" [class]="reservationBadgeClass(reservation.statut)">{{ reservationStatusLabel(reservation.statut) }}</span></span></div>
+              <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.reservations.payment') }}</span><span class="ds-data-value"><span class="ds-badge" [class]="paymentBadgeClass(reservation.paiement?.statut)">{{ paymentStatusLabel(reservation.paiement?.statut) }}</span></span></div>
+              <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.reservations.amount') }}</span><span class="ds-data-value">{{ reservation.paiement?.montant ?? 0 }} €</span></div>
             </mat-card-content>
             <mat-card-actions>
               <button
@@ -208,7 +209,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                 (click)="pay(reservation)"
                 [disabled]="reservation.statut === 'ANNULEE' || reservation.paiement?.statut !== 'EN_ATTENTE' || actionId() === reservation.id"
               >
-                💳 Payer
+                💳 {{ language.t('member.reservations.pay') }}
               </button>
               <button
                 mat-stroked-button
@@ -217,7 +218,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                 (click)="cancel(reservation)"
                 [disabled]="reservation.statut === 'ANNULEE' || actionId() === reservation.id"
               >
-                ❌ Annuler
+                ❌ {{ language.t('member.reservations.cancel') }}
               </button>
             </mat-card-actions>
           </mat-card>
@@ -225,8 +226,8 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
           @if (!loading()) {
             <mat-card>
               <mat-card-content class="py-6 text-slate-600">
-                <p>Aucune réservation trouvée.</p>
-                <p class="mt-2 text-sm text-slate-400">Créez un match ou rejoignez un match public pour voir vos réservations ici.</p>
+                <p>{{ language.t('member.payments.none') }}</p>
+              <p class="mt-2 text-sm text-slate-400">{{ language.t('member.reservations.emptyBody') }}</p>
               </mat-card-content>
             </mat-card>
           }
@@ -240,6 +241,7 @@ export class MemberReservationsPage {
   private readonly reservationsApi = inject(ReservationsApiService);
   private readonly paiementsApi = inject(PaiementsApiService);
   private readonly memberSession = inject(MemberSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly actionId = signal<number | null>(null);
@@ -276,9 +278,9 @@ export class MemberReservationsPage {
   }
 
   loadReservations(): void {
-    const memberId = this.memberId();
-    if (!memberId) {
-      this.errorMessage.set('Aucun membre connecté.');
+      const memberId = this.memberId();
+      if (!memberId) {
+      this.errorMessage.set(this.language.t('member.reservations.noMember'));
       return;
     }
 
@@ -292,7 +294,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les réservations.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.loadError')));
       }
     });
   }
@@ -324,7 +326,7 @@ export class MemberReservationsPage {
     // On bloque la sélection d'un match PUBLIC
     const match = this.organisedMatches().find((m) => m.id === matchId) ?? null;
     if (match && match.typeMatch !== 'PRIVE') {
-      this.errorMessage.set('La gestion des joueurs est réservée aux matchs PRIVÉS.');
+      this.errorMessage.set(this.language.t('member.reservations.privateOnly'));
       this.managedMatchId.set(null);
       this.managedReservations.set([]);
       this.pendingDeleteMatchId.set(null);
@@ -345,7 +347,7 @@ export class MemberReservationsPage {
     this.reservationsApi.getByMatch(matchId).subscribe({
       next: (reservations) => this.managedReservations.set(reservations),
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les joueurs du match.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playersLoadError')));
       }
     });
   }
@@ -372,7 +374,7 @@ export class MemberReservationsPage {
       .subscribe({
         next: (updatedMatch) => {
           this.actionId.set(null);
-        this.message.set('Match mis à jour avec succès.');
+          this.message.set(this.language.t('member.reservations.updateSuccess'));
           this.organisedMatches.update((matches) => matches.map((match) => (match.id === updatedMatch.id ? updatedMatch : match)));
 
           if (updatedMatch.typeMatch !== 'PRIVE') {
@@ -386,7 +388,7 @@ export class MemberReservationsPage {
         },
         error: (error) => {
           this.actionId.set(null);
-          this.errorMessage.set(extractApiErrorMessage(error, 'Modification du match impossible.'));
+          this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.updateError')));
         }
       });
   }
@@ -414,7 +416,7 @@ export class MemberReservationsPage {
     }
     // Sécurité : on ne supprime qu'un match PRIVÉ
     if (selectedMatch.typeMatch !== 'PRIVE') {
-      this.errorMessage.set('Seuls les matchs PRIVÉS peuvent être annulés ici.');
+      this.errorMessage.set(this.language.t('member.reservations.privateOnly'));
       return;
     }
     if (this.pendingDeleteMatchId() !== selectedMatch.id) {
@@ -429,7 +431,7 @@ export class MemberReservationsPage {
       next: () => {
         this.actionId.set(null);
         this.pendingDeleteMatchId.set(null);
-        this.message.set('Match annulé avec succès.');
+        this.message.set(this.language.t('member.reservations.deleteSuccess'));
         this.managedMatchId.set(null);
         this.managedReservations.set([]);
         this.managedMatchForm.reset({ date: '', heureDebut: '', typeMatch: 'PRIVE' });
@@ -442,7 +444,7 @@ export class MemberReservationsPage {
       error: (error) => {
         this.actionId.set(null);
         this.pendingDeleteMatchId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression du match impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.deleteError')));
       }
     });
   }
@@ -481,13 +483,13 @@ export class MemberReservationsPage {
       next: () => {
         this.actionId.set(null);
         this.inviteMatricule.setValue('');
-        this.message.set('Joueur ajouté avec succès.');
+        this.message.set(this.language.t('member.reservations.playerAdded'));
         this.onManagedMatchChange(matchId);
         this.loadReservations();
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Ajout du joueur impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playerAddError')));
       }
     });
   }
@@ -501,7 +503,7 @@ export class MemberReservationsPage {
     this.reservationsApi.cancel(reservation.id).subscribe({
       next: () => {
         this.actionId.set(null);
-        this.message.set('Joueur retiré du match.');
+        this.message.set(this.language.t('member.reservations.playerRemoved'));
         if (matchId) {
           this.onManagedMatchChange(matchId);
         }
@@ -509,7 +511,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Suppression du joueur impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playerRemoveError')));
       }
     });
   }
@@ -527,12 +529,12 @@ export class MemberReservationsPage {
     this.paiementsApi.pay(reservation.id, memberId).subscribe({
       next: () => {
         this.actionId.set(null);
-        this.message.set('Paiement effectué avec succès.');
+        this.message.set(this.language.t('member.reservations.paymentSuccess'));
         this.loadReservations();
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Paiement impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.paymentError')));
       }
     });
   }
@@ -545,18 +547,22 @@ export class MemberReservationsPage {
     this.reservationsApi.cancel(reservation.id).subscribe({
       next: () => {
         this.actionId.set(null);
-        this.message.set('Réservation annulée.');
+        this.message.set(this.language.t('member.reservations.reservationCanceled'));
         this.loadReservations();
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Annulation impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.reservationCancelError')));
       }
     });
   }
 
   typeBadgeClass(type: MatchResponse['typeMatch']): string {
     return type === 'PRIVE' ? 'ds-badge-info' : 'ds-badge-success';
+  }
+
+  matchTypeLabel(type: MatchResponse['typeMatch']): string {
+    return type === 'PRIVE' ? this.language.t('member.create.private') : this.language.t('member.create.public');
   }
 
   reservationBadgeClass(statut: ReservationResponse['statut']): string {
@@ -567,6 +573,16 @@ export class MemberReservationsPage {
       return 'ds-badge-warning';
     }
     return 'ds-badge-danger';
+  }
+
+  reservationStatusLabel(statut: ReservationResponse['statut']): string {
+    if (statut === 'CONFIRMEE') {
+      return this.language.t('common.reservationConfirmed');
+    }
+    if (statut === 'EN_ATTENTE') {
+      return this.language.t('common.reservationPending');
+    }
+    return this.language.t('common.reservationCanceled');
   }
 
   paymentBadgeClass(statut: string | undefined): string {
@@ -583,5 +599,21 @@ export class MemberReservationsPage {
       return 'ds-badge-danger';
     }
     return 'ds-badge-neutral';
+  }
+
+  paymentStatusLabel(statut: string | undefined): string {
+    if (statut === 'PAYE') {
+      return this.language.t('common.paymentPaid');
+    }
+    if (statut === 'EN_ATTENTE') {
+      return this.language.t('common.paymentPending');
+    }
+    if (statut === 'REMBOURSE') {
+      return this.language.t('common.paymentRefunded');
+    }
+    if (statut === 'ANNULE') {
+      return this.language.t('common.paymentCanceled');
+    }
+    return this.language.t('common.none');
   }
 }

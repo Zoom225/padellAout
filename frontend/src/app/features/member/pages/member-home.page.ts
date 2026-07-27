@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { MembresApiService } from '../../../core/api/membres-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { MembreResponse } from '../../../shared/models/membre.model';
 
 @Component({
@@ -25,39 +26,36 @@ import { MembreResponse } from '../../../shared/models/membre.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatChipsModule,
+    MatChipsModule
   ],
   template: `
-    <!-- Hero banner padel -->
     <div class="padel-hero">
       <div class="padel-hero-content">
         <div class="padel-ball">🎾</div>
-        <h1 class="padel-hero-title">Espace Membre Padel</h1>
-        <p class="padel-hero-sub">Entrez votre matricule pour accéder à votre espace de jeu</p>
+        <h1 class="padel-hero-title">{{ language.t('member.home.title') }}</h1>
+        <p class="padel-hero-sub">{{ language.t('member.home.subtitle') }}</p>
       </div>
     </div>
 
     <section class="page-shell max-w-4xl">
-      <!-- Carte identification -->
       <div class="padel-login-card">
         <div class="padel-login-icon">🏓</div>
-        <h2 class="padel-login-title">Identification</h2>
-        <p class="padel-login-sub">Saisissez votre matricule et mot de passe pour rejoindre le court</p>
+        <h2 class="padel-login-title">{{ language.t('member.home.identification') }}</h2>
+        <p class="padel-login-sub">{{ language.t('member.home.loginHint') }}</p>
 
         <form [formGroup]="form" class="padel-form" (ngSubmit)="submit()">
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Matricule</mat-label>
+            <mat-label>{{ language.t('member.home.matricule') }}</mat-label>
             <input
               matInput
               formControlName="matricule"
-              placeholder="Ex: G1234, S12345, L12345"
+              [placeholder]="language.t('member.home.matriculePlaceholder')"
               style="text-transform:uppercase; font-weight:600; letter-spacing:0.08em;"
             />
           </mat-form-field>
 
-          <!-- Added password field -->
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Mot de passe</mat-label>
+            <mat-label>{{ language.t('member.home.password') }}</mat-label>
             <input
               matInput
               [type]="showMemberPassword ? 'text' : 'password'"
@@ -69,34 +67,33 @@ import { MembreResponse } from '../../../shared/models/membre.model';
               matSuffix
               type="button"
               class="password-toggle-button"
-              [attr.aria-label]="showMemberPassword ? 'Masquer le mot de passe membre' : 'Afficher le mot de passe membre'"
+              [attr.aria-label]="showMemberPassword ? language.t('member.home.hidePassword') : language.t('member.home.showPassword')"
               (click)="toggleMemberPassword()"
             >
               <mat-icon>{{ showMemberPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
           </mat-form-field>
 
-          <!-- Légende des types -->
           <div class="padel-types-grid">
             <div class="padel-type-badge padel-type-global">
               <span class="padel-type-icon">🌍</span>
               <div>
-                <div class="padel-type-name">GLOBAL</div>
-                <div class="padel-type-hint">G + 4 chiffres · Tous les sites</div>
+                <div class="padel-type-name">{{ language.t('member.home.global') }}</div>
+                <div class="padel-type-hint">{{ language.t('member.home.globalHint') }}</div>
               </div>
             </div>
             <div class="padel-type-badge padel-type-site">
               <span class="padel-type-icon">🏟️</span>
               <div>
-                <div class="padel-type-name">SITE</div>
-                <div class="padel-type-hint">S + 5 chiffres · Site dédié</div>
+                <div class="padel-type-name">{{ language.t('member.home.site') }}</div>
+                <div class="padel-type-hint">{{ language.t('member.home.siteHint') }}</div>
               </div>
             </div>
             <div class="padel-type-badge padel-type-libre">
               <span class="padel-type-icon">⚡</span>
               <div>
-                <div class="padel-type-name">LIBRE</div>
-                <div class="padel-type-hint">L + 5 chiffres · Accès libre</div>
+                <div class="padel-type-name">{{ language.t('member.home.livre') }}</div>
+                <div class="padel-type-hint">{{ language.t('member.home.livreHint') }}</div>
               </div>
             </div>
           </div>
@@ -105,7 +102,6 @@ import { MembreResponse } from '../../../shared/models/membre.model';
             <div class="padel-error"><span>❌</span> {{ errorMessage() }}</div>
           }
 
-          <!-- Résultat trouvé en prévisualisation -->
           @if (foundMember()) {
             <div class="padel-found-card">
               <div class="padel-found-icon">✅</div>
@@ -120,7 +116,7 @@ import { MembreResponse } from '../../../shared/models/membre.model';
                   >
                     {{ foundMember()!.typeMembre }}
                   </span>
-                  <span>· {{ foundMember()!.siteNom || 'Tous les sites' }}</span>
+                  <span>· {{ foundMember()!.siteNom || language.t('member.home.allSites') }}</span>
                 </div>
               </div>
             </div>
@@ -134,7 +130,7 @@ import { MembreResponse } from '../../../shared/models/membre.model';
                   style="display:inline-block; margin-right:8px;"
                 ></mat-spinner>
               }
-              🎾 Accéder à mon espace
+              🎾 {{ language.t('member.home.cta') }}
             </button>
           </div>
         </form>
@@ -375,6 +371,7 @@ export class MemberHomePage {
   private readonly membresApi = inject(MembresApiService);
   private readonly memberSession = inject(MemberSessionService);
   private readonly router = inject(Router);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
@@ -384,12 +381,12 @@ export class MemberHomePage {
   readonly form = new FormGroup({
     matricule: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.pattern(/^(G\d{4}|S\d{5}|L\d{5})$/i)],
+      validators: [Validators.required, Validators.pattern(/^(G\d{4}|S\d{5}|L\d{5})$/i)]
     }),
-    password: new FormControl('', { // Added password FormControl
+    password: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required],
-    }),
+      validators: [Validators.required]
+    })
   });
 
   constructor() {
@@ -408,10 +405,9 @@ export class MemberHomePage {
     this.foundMember.set(null);
 
     const matricule = this.form.controls.matricule.getRawValue().trim().toUpperCase();
-    const password = this.form.controls.password.getRawValue(); // Get password value
+    const password = this.form.controls.password.getRawValue();
 
-    // ← Remplacer getByMatricule par login
-    this.memberSession.login(matricule, password).subscribe({ // Modified to pass password
+    this.memberSession.login(matricule, password).subscribe({
       next: (member) => {
         this.foundMember.set(member);
         this.loading.set(false);
@@ -419,10 +415,8 @@ export class MemberHomePage {
       },
       error: () => {
         this.loading.set(false);
-        this.errorMessage.set(
-          'Identifiants invalides. Verifiez le matricule et le mot de passe.', // Modified error message
-        );
-      },
+        this.errorMessage.set(this.language.t('member.home.invalid'));
+      }
     });
   }
 

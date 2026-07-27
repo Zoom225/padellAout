@@ -13,6 +13,7 @@ import { ReservationsApiService } from '../../../core/api/reservations-api.servi
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { TerrainsApiService } from '../../../core/api/terrains-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { TypeMembre } from '../../../shared/models/enums.model';
 import { MatchResponse } from '../../../shared/models/match.model';
 import { SiteResponse, TerrainResponse } from '../../../shared/models/site-terrain.model';
@@ -63,15 +64,15 @@ const createMaxBookingDateValidator = (getMaxDate: () => string): ValidatorFn =>
     <section class="page-shell max-w-6xl">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 class="title-gradient ds-section-title">Créer un match</h1>
-          <p class="ds-subtitle">Public ou privé, selon les règles du backend.</p>
+          <h1 class="title-gradient ds-section-title">{{ language.t('member.create.title') }}</h1>
+          <p class="ds-subtitle">{{ language.t('member.create.subtitle') }}</p>
           <span class="ds-badge"
                 [class]="form.controls.typeMatch.value === 'PRIVE' ? 'ds-badge-info' : 'ds-badge-success'">
-            Mode création : {{ form.controls.typeMatch.value }}
+            {{ language.t('member.create.mode') }} : {{ form.controls.typeMatch.value }}
           </span>
         </div>
         <div class="toolbar-actions">
-          <a mat-stroked-button routerLink="/member/matches">Retour aux matchs publics</a>
+          <a mat-stroked-button routerLink="/member/matches">{{ language.t('member.public.title') }}</a>
         </div>
       </div>
 
@@ -79,7 +80,7 @@ const createMaxBookingDateValidator = (getMaxDate: () => string): ValidatorFn =>
         <mat-card-content>
           <form [formGroup]="form" class="grid gap-4 pt-4 md:grid-cols-2" (ngSubmit)="submit()">
             <mat-form-field appearance="outline">
-              <mat-label>Site</mat-label>
+              <mat-label>{{ language.t('member.create.site') }}</mat-label>
               <mat-select formControlName="siteId" (valueChange)="onSiteChange($event)" [disabled]="isSiteMember()">
                 @for (site of sites(); track site.id) {
                   <mat-option [value]="site.id">{{ site.nom }}</mat-option>
@@ -88,7 +89,7 @@ const createMaxBookingDateValidator = (getMaxDate: () => string): ValidatorFn =>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Terrain</mat-label>
+              <mat-label>{{ language.t('member.create.terrain') }}</mat-label>
               <mat-select formControlName="terrainId" [disabled]="!terrains().length">
                 @for (terrain of terrains(); track terrain.id) {
                   <mat-option [value]="terrain.id">{{ terrain.nom }}{{ terrain.prix != null ? ' - ' + terrain.prix + ' EUR' : '' }}</mat-option>
@@ -97,61 +98,61 @@ const createMaxBookingDateValidator = (getMaxDate: () => string): ValidatorFn =>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Date</mat-label>
+              <mat-label>{{ language.t('member.create.date') }}</mat-label>
               <input matInput type="date" formControlName="date" [min]="todayDate()" [max]="maxBookingDate()" />
-              <mat-hint>Entre {{ todayDate() }} et {{ maxBookingDate() }}</mat-hint>
+              <mat-hint>{{ language.t('member.create.dateHint') }} {{ todayDate() }} - {{ maxBookingDate() }}</mat-hint>
               @if (form.controls.date.hasError('maxBookingDate') && (form.controls.date.dirty || form.controls.date.touched)) {
                 <mat-error>{{ bookingDelayErrorMessage() }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Heure début</mat-label>
+              <mat-label>{{ language.t('member.create.time') }}</mat-label>
               <input matInput type="time" formControlName="heureDebut" />
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Type de match</mat-label>
+              <mat-label>{{ language.t('member.create.matchType') }}</mat-label>
               <mat-select formControlName="typeMatch">
-                <mat-option value="PUBLIC">PUBLIC</mat-option>
-                <mat-option value="PRIVE">PRIVÉ</mat-option>
+                <mat-option value="PUBLIC">{{ language.t('member.create.public') }}</mat-option>
+                <mat-option value="PRIVE">{{ language.t('member.create.private') }}</mat-option>
               </mat-select>
             </mat-form-field>
 
             <div class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 md:col-span-2">
-              <p class="font-semibold text-slate-800">Rappel</p>
+              <p class="font-semibold text-slate-800">{{ language.t('member.create.rappel') }}</p>
               <ul class="ml-4 list-disc space-y-1">
-                <li>GLOBAL : jusqu'à 3 semaines à l'avance</li>
-                <li>SITE : jusqu'à 2 semaines à l'avance sur son site</li>
-                <li>LIBRE : jusqu'à 5 jours à l'avance</li>
+                <li>{{ language.t('member.create.ruleGlobal') }}</li>
+                <li>{{ language.t('member.create.ruleSite') }}</li>
+                <li>{{ language.t('member.create.ruleLibre') }}</li>
               </ul>
-              <p class="mt-2 text-slate-500">Dernière date autorisée selon votre profil : {{ maxBookingDate() }}</p>
+              <p class="mt-2 text-slate-500">{{ language.t('member.create.bookingLimit') }} {{ maxBookingDate() }}</p>
             </div>
 
             @if (errorMessage()) {
               <p class="status-error md:col-span-2">{{ errorMessage() }}</p>
             } @else if (!sites().length && !loading()) {
-              <p class="status-info md:col-span-2">Aucun site disponible pour créer un match.</p>
+              <p class="status-info md:col-span-2">{{ language.t('member.create.noSite') }}</p>
             }
 
             @if (form.controls.siteId.value && !terrains().length && !loading()) {
-              <p class="status-info md:col-span-2">Aucun terrain disponible pour le site sélectionné.</p>
+              <p class="status-info md:col-span-2">{{ language.t('member.create.noTerrain') }}</p>
             }
 
             @if (form.controls.typeMatch.value === 'PRIVE') {
               <div class="md:col-span-2">
-                <p class="mb-2 text-sm font-medium text-slate-800">Joueurs a inviter maintenant (optionnel)</p>
+                <p class="mb-2 text-sm font-medium text-slate-800">{{ language.t('member.create.privatePlayers') }}</p>
                 <div class="grid gap-3 md:grid-cols-3">
                   <mat-form-field appearance="outline">
-                    <mat-label>Matricule joueur 2</mat-label>
+                    <mat-label>{{ language.t('member.create.player2') }}</mat-label>
                     <input matInput formControlName="player1" />
                   </mat-form-field>
                   <mat-form-field appearance="outline">
-                    <mat-label>Matricule joueur 3</mat-label>
+                    <mat-label>{{ language.t('member.create.player3') }}</mat-label>
                     <input matInput formControlName="player2" />
                   </mat-form-field>
                   <mat-form-field appearance="outline">
-                    <mat-label>Matricule joueur 4</mat-label>
+                    <mat-label>{{ language.t('member.create.player4') }}</mat-label>
                     <input matInput formControlName="player3" />
                   </mat-form-field>
                 </div>
@@ -164,9 +165,9 @@ const createMaxBookingDateValidator = (getMaxDate: () => string): ValidatorFn =>
 
             <div class="toolbar-actions justify-start md:col-span-2">
               <button mat-flat-button color="primary" type="submit" [disabled]="loading() || form.invalid || !terrains().length">
-                Créer le match
+                {{ language.t('member.create.submit') }}
               </button>
-              <a mat-stroked-button routerLink="/member/profile">Retour profil</a>
+              <a mat-stroked-button routerLink="/member/profile">{{ language.t('member.create.back') }}</a>
               @if (loading()) {
                 <mat-spinner diameter="24"></mat-spinner>
               }
@@ -185,6 +186,7 @@ export class MemberCreateMatchPage {
   private readonly memberSession = inject(MemberSessionService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -205,8 +207,18 @@ export class MemberCreateMatchPage {
     return formatDateForInput(today);
   });
   readonly bookingDelayErrorMessage = computed(() => {
+    return this.language.t('member.create.bookingLimitError', {
+      date: this.maxBookingDate()
+    });
+  });
+
+  readonly bookingDelayProfileErrorMessage = computed(() => {
     const memberType = this.member()?.typeMembre ?? 'LIBRE';
-    return `Le profil ${memberType} ne peut pas réserver plus de ${getMaxBookingDays(memberType)} jours à l'avance. Dernière date autorisée : ${this.maxBookingDate()}.`;
+    return this.language.t('member.create.bookingLimitProfileError', {
+      type: memberType,
+      days: getMaxBookingDays(memberType),
+      date: this.maxBookingDate()
+    });
   });
 
   readonly form = new FormGroup({
@@ -272,7 +284,7 @@ export class MemberCreateMatchPage {
         this.loading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les sites.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.noSiteLoaded')));
         this.loading.set(false);
       }
     });
@@ -298,11 +310,11 @@ export class MemberCreateMatchPage {
       error: (error) => {
         const status = error?.status;
         if (status === 404) {
-          this.errorMessage.set('Site introuvable.');
+          this.errorMessage.set(this.language.t('member.create.noSiteLoaded'));
         } else if (status === 500) {
-          this.errorMessage.set('Erreur serveur lors du chargement des terrains.');
+          this.errorMessage.set(this.language.t('member.create.noTerrainLoaded'));
         } else {
-          this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les terrains.'));
+          this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.noTerrainLoaded')));
         }
         this.terrains.set([]);
         this.loading.set(false);
@@ -323,12 +335,12 @@ export class MemberCreateMatchPage {
     const { terrainId, date, heureDebut, typeMatch } = this.form.getRawValue();
 
     if (!terrainId) {
-      this.errorMessage.set('Veuillez sélectionner un terrain.');
+      this.errorMessage.set(this.language.t('member.create.noTerrain'));
       return;
     }
 
     if (typeMatch !== 'PUBLIC' && typeMatch !== 'PRIVE') {
-      this.errorMessage.set('Le type de match est invalide.');
+      this.errorMessage.set(this.language.t('member.create.invalidType'));
       return;
     }
 
@@ -371,17 +383,17 @@ export class MemberCreateMatchPage {
   }
 
   private toFriendlyCreationErrorMessage(error: unknown): string {
-    const apiMessage = extractApiErrorMessage(error, 'Création du match impossible.');
+    const apiMessage = extractApiErrorMessage(error, this.language.t('member.create.createError'));
     const status = (error as any)?.status || (error as any)?.error?.status;
 
     const errorMappings: Record<string, string> = {
-      'outstanding balance': 'Vous avez un solde impayé. Réglez vos dettes avant de créer un match.',
-      'active penalty': 'Vous avez une pénalité active. Attendez avant de créer un match.',
-      'ne peut pas reserver plus de': this.bookingDelayErrorMessage(),
-      'ce créneau est déjà réservé': 'Ce créneau est déjà réservé. Choisissez un autre horaire.',
-      'site est fermé': 'Le site est fermé à cette date.',
-      'en dehors des heures d\'ouverture': "Cet horaire est en dehors des heures d'ouverture du site.",
-      'ne peut créer un match que sur son propre site': 'Un membre SITE ne peut créer un match que sur son propre site.'
+      'outstanding balance': this.language.t('member.create.outstandingBalance'),
+      'active penalty': this.language.t('member.create.activePenalty'),
+      'ne peut pas reserver plus de': this.bookingDelayProfileErrorMessage(),
+      'ce créneau est déjà réservé': this.language.t('member.create.slotTaken'),
+      'site est fermé': this.language.t('member.create.siteClosed'),
+      'en dehors des heures d\'ouverture': this.language.t('member.create.outOfHours'),
+      'ne peut créer un match que sur son propre site': this.language.t('member.create.siteOnly')
     };
 
     const normalizedMessage = apiMessage
@@ -403,7 +415,7 @@ export class MemberCreateMatchPage {
     }
 
     if (status === 500) {
-      return 'Une erreur interne du serveur est survenue lors de la création du match.';
+      return this.language.t('member.create.internalError');
     }
 
     return apiMessage;
@@ -420,7 +432,7 @@ export class MemberCreateMatchPage {
 
     if (this.form.controls.typeMatch.getRawValue() !== 'PRIVE' || !invitees.length) {
       this.loading.set(false);
-      this.message.set('Match créé. Votre place sera confirmée après paiement depuis vos réservations.');
+      this.message.set(this.language.t('member.create.success'));
       setTimeout(() => this.router.navigateByUrl('/member/reservations'), 1000);
       return;
     }
@@ -431,13 +443,13 @@ export class MemberCreateMatchPage {
     }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.message.set('Match privé créé. Les invitations sont en attente de paiement des joueurs.');
+        this.message.set(this.language.t('member.create.successPrivate'));
         setTimeout(() => this.router.navigateByUrl('/member/reservations'), 1000);
       },
       error: (error) => {
         this.loading.set(false);
-        this.message.set("Match créé, mais certains joueurs n'ont pas pu être ajoutés.");
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible d\'ajouter tous les joueurs.'));
+        this.message.set(this.language.t('member.create.partialSuccess'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.addPlayersError')));
         setTimeout(() => this.router.navigateByUrl('/member/reservations'), 2000);
       }
     });

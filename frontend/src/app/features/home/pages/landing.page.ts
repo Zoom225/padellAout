@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -21,38 +22,35 @@ import { MemberSessionService } from '../../../core/auth/member-session.service'
     <section class="home-shell">
       <div class="home-hero">
         <div class="home-hero-copy">
-          <p class="eyebrow">Gestion de club de padel</p>
-          <h1>PadelPlay</h1>
-          <p class="lead">
-            Une interface claire pour reserver, rejoindre un match, suivre les paiements
-            et piloter les sites depuis un tableau de bord admin.
-          </p>
+          <p class="eyebrow">{{ copy().eyebrow }}</p>
+          <h1>{{ copy().title }}</h1>
+          <p class="lead">{{ copy().lead }}</p>
 
           <div class="hero-actions">
             <a mat-flat-button color="primary" routerLink="/member">
-              {{ memberSession.isAuthenticated() ? 'Ouvrir mon espace' : 'Entrer avec un matricule' }}
+              {{ memberSession.isAuthenticated() ? copy().memberCtaConnected : copy().memberCta }}
             </a>
-            <a mat-stroked-button routerLink="/admin/login">Connexion admin</a>
+            <a mat-stroked-button routerLink="/admin/login">{{ copy().adminCta }}</a>
             <button mat-stroked-button type="button" (click)="checkApi()" [disabled]="loading()">
-              Tester l'API
+              {{ copy().testApi }}
             </button>
           </div>
         </div>
 
-        <div class="court-panel" aria-label="Apercu des matchs">
+        <div class="court-panel" [attr.aria-label]="copy().matchPreviewLabel">
           <div class="court-lines">
             <span></span>
             <span></span>
           </div>
           <div class="match-card live">
-            <p>Match public</p>
+            <p>{{ copy().matchPublic }}</p>
             <strong>{{ count() ?? '--' }}</strong>
-            <span>match(s) disponible(s)</span>
+            <span>{{ copy().matchAvailable }}</span>
           </div>
           <div class="match-card">
-            <p>Reservation</p>
-            <strong>Simple</strong>
-            <span>membre, terrain, paiement</span>
+            <p>{{ copy().reservation }}</p>
+            <strong>{{ copy().simpleReservation }}</strong>
+            <span>{{ copy().reservationBody }}</span>
           </div>
         </div>
       </div>
@@ -63,7 +61,7 @@ import { MemberSessionService } from '../../../core/auth/member-session.service'
             @if (loading()) {
               <div class="loading-line">
                 <mat-spinner diameter="28"></mat-spinner>
-                <span>Verification de /api/matches/public...</span>
+                <span>{{ copy().loadingApi }}</span>
               </div>
             }
 
@@ -81,29 +79,29 @@ import { MemberSessionService } from '../../../core/auth/member-session.service'
         <mat-card class="feature-card">
           <mat-card-content>
             <span class="feature-code">01</span>
-            <h2>Reservations</h2>
-            <p>Choix du terrain, controle des disponibilites et suivi du statut.</p>
+            <h2>{{ copy().feature1Title }}</h2>
+            <p>{{ copy().feature1Body }}</p>
           </mat-card-content>
         </mat-card>
         <mat-card class="feature-card">
           <mat-card-content>
             <span class="feature-code">02</span>
-            <h2>Matchs publics et prives</h2>
-            <p>Creation rapide avec des regles claires pour les participants.</p>
+            <h2>{{ copy().feature2Title }}</h2>
+            <p>{{ copy().feature2Body }}</p>
           </mat-card-content>
         </mat-card>
         <mat-card class="feature-card">
           <mat-card-content>
             <span class="feature-code">03</span>
-            <h2>Paiements</h2>
-            <p>Vue propre des paiements, penalites et confirmations.</p>
+            <h2>{{ copy().feature3Title }}</h2>
+            <p>{{ copy().feature3Body }}</p>
           </mat-card-content>
         </mat-card>
         <mat-card class="feature-card">
           <mat-card-content>
             <span class="feature-code">04</span>
-            <h2>Administration</h2>
-            <p>Indicateurs, membres, sites, terrains et fermetures au meme endroit.</p>
+            <h2>{{ copy().feature4Title }}</h2>
+            <p>{{ copy().feature4Body }}</p>
           </mat-card-content>
         </mat-card>
       </div>
@@ -328,21 +326,53 @@ import { MemberSessionService } from '../../../core/auth/member-session.service'
 export class LandingPage {
   private readonly matchesApi = inject(MatchesApiService);
   readonly memberSession = inject(MemberSessionService);
+  private readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly count = signal<number | null>(null);
-  readonly error = signal<string>('');
+  readonly errorCode = signal<'api' | ''>('');
   readonly message = computed(() => {
     if (this.count() === null) {
       return '';
     }
 
-    return `Proxy OK - ${this.count()} match(s) public(s) recupere(s)`;
+    return this.language.t('landing.apiSuccess', { count: this.count() ?? 0 });
   });
+  readonly error = computed(() => {
+    if (!this.errorCode()) {
+      return '';
+    }
+
+    return this.language.t('landing.apiError');
+  });
+  readonly copy = computed(() => ({
+    eyebrow: this.language.t('landing.eyebrow'),
+    title: this.language.t('landing.title'),
+    lead: this.language.t('landing.lead'),
+    memberCta: this.language.t('landing.memberCta'),
+    memberCtaConnected: this.language.t('landing.memberCtaConnected'),
+    adminCta: this.language.t('landing.adminCta'),
+    testApi: this.language.t('landing.testApi'),
+    loadingApi: this.language.t('landing.loadingApi'),
+    matchPreviewLabel: this.language.t('landing.matchPreviewLabel'),
+    matchPublic: this.language.t('landing.matchPublic'),
+    matchAvailable: this.language.t('landing.matchAvailable'),
+    reservation: this.language.t('landing.reservation'),
+    reservationBody: this.language.t('landing.reservationBody'),
+    simpleReservation: this.language.t('landing.simpleReservation'),
+    feature1Title: this.language.t('landing.feature1.title'),
+    feature1Body: this.language.t('landing.feature1.body'),
+    feature2Title: this.language.t('landing.feature2.title'),
+    feature2Body: this.language.t('landing.feature2.body'),
+    feature3Title: this.language.t('landing.feature3.title'),
+    feature3Body: this.language.t('landing.feature3.body'),
+    feature4Title: this.language.t('landing.feature4.title'),
+    feature4Body: this.language.t('landing.feature4.body')
+  }));
 
   checkApi(): void {
     this.loading.set(true);
-    this.error.set('');
+    this.errorCode.set('');
 
     this.matchesApi.getPublic().subscribe({
       next: (matches) => {
@@ -351,7 +381,7 @@ export class LandingPage {
       },
       error: () => {
         this.count.set(null);
-        this.error.set("Echec de l'appel API. Verifiez que le backend tourne sur le port 8080.");
+        this.errorCode.set('api');
         this.loading.set(false);
       }
     });

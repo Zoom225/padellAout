@@ -8,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { MembresApiService } from '../../../core/api/membres-api.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { MembreResponse } from '../../../shared/models/membre.model';
 
 @Component({
@@ -25,8 +26,8 @@ import { MembreResponse } from '../../../shared/models/membre.model';
     <section class="page-shell max-w-6xl">
       <mat-card class="card-soft">
         <mat-card-header>
-          <mat-card-title class="title-gradient ds-section-title">Mon profil membre</mat-card-title>
-          <mat-card-subtitle class="ds-subtitle">Informations rechargees depuis le backend</mat-card-subtitle>
+          <mat-card-title class="title-gradient ds-section-title">{{ language.t('member.profile.title') }}</mat-card-title>
+          <mat-card-subtitle class="ds-subtitle">{{ language.t('member.profile.subtitle') }}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
@@ -37,26 +38,26 @@ import { MembreResponse } from '../../../shared/models/membre.model';
           } @else if (profile()) {
             <div class="grid gap-4 md:grid-cols-2">
               <div class="ds-data-list">
-                <div class="ds-data-row"><span class="ds-data-key">Nom</span><span class="ds-data-value">{{ profile()!.nom }}</span></div>
-                <div class="ds-data-row"><span class="ds-data-key">Prénom</span><span class="ds-data-value">{{ profile()!.prenom }}</span></div>
-                <div class="ds-data-row"><span class="ds-data-key">Email</span><span class="ds-data-value">{{ profile()!.email || 'Non renseigne' }}</span></div>
-                <div class="ds-data-row"><span class="ds-data-key">Matricule</span><span class="ds-data-value">{{ profile()!.matricule }}</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.nom') }}</span><span class="ds-data-value">{{ profile()!.nom }}</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.prenom') }}</span><span class="ds-data-value">{{ profile()!.prenom }}</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.email') }}</span><span class="ds-data-value">{{ profile()!.email || language.t('common.notProvided') }}</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.matricule') }}</span><span class="ds-data-value">{{ profile()!.matricule }}</span></div>
               </div>
 
               <div class="ds-data-list">
-                <div class="ds-data-row"><span class="ds-data-key">Type</span><span class="ds-data-value"><span class="ds-badge" [class]="memberTypeBadgeClass(profile()!.typeMembre)">{{ profile()!.typeMembre }}</span></span></div>
-                <div class="ds-data-row"><span class="ds-data-key">Site</span><span class="ds-data-value">{{ profile()!.siteNom || 'Tous les sites' }}</span></div>
-                <div class="ds-data-row"><span class="ds-data-key">Solde</span><span class="ds-data-value">{{ profile()!.solde }} EUR</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.type') }}</span><span class="ds-data-value"><span class="ds-badge" [class]="memberTypeBadgeClass(profile()!.typeMembre)">{{ profile()!.typeMembre }}</span></span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.site') }}</span><span class="ds-data-value">{{ profile()!.siteNom || language.t('member.home.tousSites') }}</span></div>
+                <div class="ds-data-row"><span class="ds-data-key">{{ language.t('member.profile.solde') }}</span><span class="ds-data-value">{{ profile()!.solde }} EUR</span></div>
               </div>
             </div>
 
             <div class="mt-4 flex flex-wrap gap-2">
               <mat-chip-set>
                 <mat-chip [highlighted]="true" [color]="hasPenalty() ? 'warn' : 'primary'">
-                  Penalite active: {{ hasPenalty() ? 'Oui' : 'Non' }}
+                  {{ language.t('member.profile.penaltyActive') }}: {{ hasPenalty() ? language.t('member.profile.yes') : language.t('member.profile.no') }}
                 </mat-chip>
                 <mat-chip [highlighted]="true" [color]="hasBalance() ? 'warn' : 'primary'">
-                  Solde en attente: {{ hasBalance() ? 'Oui' : 'Non' }}
+                  {{ language.t('member.profile.balancePending') }}: {{ hasBalance() ? language.t('member.profile.yes') : language.t('member.profile.no') }}
                 </mat-chip>
               </mat-chip-set>
             </div>
@@ -66,11 +67,10 @@ import { MembreResponse } from '../../../shared/models/membre.model';
             <p class="status-error mt-4">{{ errorMessage() }}</p>
           }
 
-          <!-- Bloc creation rapide de match -->
           <div class="mt-6">
             <div class="mb-3 flex items-center gap-2">
               <span class="text-xl">🎾</span>
-              <h3 class="m-0 text-lg font-bold text-slate-800">Créer un match rapidement</h3>
+              <h3 class="m-0 text-lg font-bold text-slate-800">{{ language.t('member.profile.createQuick') }}</h3>
             </div>
             <div class="grid gap-3 md:grid-cols-2">
               <a [routerLink]="['/member/matches/new']" [queryParams]="{type:'PUBLIC'}"
@@ -78,11 +78,11 @@ import { MembreResponse } from '../../../shared/models/membre.model';
                 <div class="mb-2 flex items-center gap-3">
                   <span class="text-3xl">🌍</span>
                   <div>
-                    <div class="text-xs font-bold uppercase tracking-wide text-emerald-700">Match ouvert</div>
-                    <div class="text-lg font-extrabold text-emerald-900">Créer un match PUBLIC</div>
+                    <div class="text-xs font-bold uppercase tracking-wide text-emerald-700">{{ language.t('member.profile.publicMatch') }}</div>
+                    <div class="text-lg font-extrabold text-emerald-900">{{ language.t('member.profile.quickPublic') }}</div>
                   </div>
                 </div>
-                <p class="m-0 text-sm text-emerald-800">N'importe quel membre peut rejoindre · 15 EUR/joueur · 4 joueurs requis</p>
+                <p class="m-0 text-sm text-emerald-800">{{ language.t('member.profile.quickPublicBody') }}</p>
               </a>
 
               <a [routerLink]="['/member/matches/new']" [queryParams]="{type:'PRIVE'}"
@@ -90,40 +90,39 @@ import { MembreResponse } from '../../../shared/models/membre.model';
                 <div class="mb-2 flex items-center gap-3">
                   <span class="text-3xl">🔒</span>
                   <div>
-                    <div class="text-xs font-bold uppercase tracking-wide text-violet-700">Match sur invitation</div>
-                    <div class="text-lg font-extrabold text-violet-900">Créer un match PRIVÉ</div>
+                    <div class="text-xs font-bold uppercase tracking-wide text-violet-700">{{ language.t('member.profile.privateMatch') }}</div>
+                    <div class="text-lg font-extrabold text-violet-900">{{ language.t('member.profile.quickPrivate') }}</div>
                   </div>
                 </div>
-                <p class="m-0 text-sm text-violet-800">Tu invites 3 joueurs par matricule · Converti en public si incomplet la veille</p>
+                <p class="m-0 text-sm text-violet-800">{{ language.t('member.profile.quickPrivateBody') }}</p>
               </a>
             </div>
           </div>
 
-          <!-- Navigation rapide -->
           <div class="mt-6 grid gap-4 md:grid-cols-3">
             <a routerLink="/member/matches" class="card-soft block rounded-2xl p-5 no-underline transition hover:-translate-y-0.5 hover:shadow-md">
-              <p class="text-sm font-medium uppercase tracking-wide text-indigo-700">🔍 Explorer</p>
-              <p class="mt-2 text-xl font-semibold text-slate-900">Matchs publics</p>
-              <p class="mt-2 text-sm text-slate-600">Rejoins rapidement une partie disponible.</p>
+              <p class="text-sm font-medium uppercase tracking-wide text-indigo-700">🔍 {{ language.t('member.profile.explore') }}</p>
+              <p class="mt-2 text-xl font-semibold text-slate-900">{{ language.t('member.public.title') }}</p>
+              <p class="mt-2 text-sm text-slate-600">{{ language.t('member.profile.exploreBody') }}</p>
             </a>
             <a routerLink="/member/reservations" class="card-soft block rounded-2xl p-5 no-underline transition hover:-translate-y-0.5 hover:shadow-md">
-              <p class="text-sm font-medium uppercase tracking-wide text-emerald-700">📋 Suivi</p>
-              <p class="mt-2 text-xl font-semibold text-slate-900">Mes réservations</p>
-              <p class="mt-2 text-sm text-slate-600">Paie, annule ou suis tes inscriptions.</p>
+              <p class="text-sm font-medium uppercase tracking-wide text-emerald-700">📋 {{ language.t('member.profile.followup') }}</p>
+              <p class="mt-2 text-xl font-semibold text-slate-900">{{ language.t('member.reservations.title') }}</p>
+              <p class="mt-2 text-sm text-slate-600">{{ language.t('member.profile.followupBody') }}</p>
             </a>
             <a routerLink="/member/payments" class="card-soft block rounded-2xl p-5 no-underline transition hover:-translate-y-0.5 hover:shadow-md">
-              <p class="text-sm font-medium uppercase tracking-wide text-orange-700">💳 Finances</p>
-              <p class="mt-2 text-xl font-semibold text-slate-900">Mes paiements</p>
-              <p class="mt-2 text-sm text-slate-600">Historique de tes paiements.</p>
+              <p class="text-sm font-medium uppercase tracking-wide text-orange-700">💳 {{ language.t('member.profile.finance') }}</p>
+              <p class="mt-2 text-xl font-semibold text-slate-900">{{ language.t('member.payments.title') }}</p>
+              <p class="mt-2 text-sm text-slate-600">{{ language.t('member.profile.financeBody') }}</p>
             </a>
           </div>
 
           <div class="toolbar-actions mt-6 justify-start">
-            <button mat-flat-button color="primary" type="button" (click)="reload()">Rafraichir</button>
-            <a mat-stroked-button routerLink="/member/matches">Matchs publics</a>
-            <a mat-stroked-button routerLink="/member/reservations">Mes réservations</a>
-            <a mat-stroked-button routerLink="/member">Retour espace membre</a>
-            <button mat-stroked-button type="button" (click)="logout()">Déconnexion membre</button>
+            <button mat-flat-button color="primary" type="button" (click)="reload()">{{ language.t('member.profile.refresh') }}</button>
+            <a mat-stroked-button routerLink="/member/matches">{{ language.t('member.public.title') }}</a>
+            <a mat-stroked-button routerLink="/member/reservations">{{ language.t('member.reservations.title') }}</a>
+            <a mat-stroked-button routerLink="/member">{{ language.t('common.profile') }}</a>
+            <button mat-stroked-button type="button" (click)="logout()">{{ language.t('member.profile.logout') }}</button>
           </div>
         </mat-card-content>
       </mat-card>
@@ -134,6 +133,7 @@ export class MemberProfilePage {
   private readonly membresApi = inject(MembresApiService);
   private readonly memberSession = inject(MemberSessionService);
   private readonly router = inject(Router);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly errorMessage = signal('');
@@ -170,7 +170,7 @@ export class MemberProfilePage {
       },
       error: () => {
         this.loading.set(false);
-        this.errorMessage.set('Impossible de charger le profil membre.');
+        this.errorMessage.set(this.language.t('member.profile.loadError'));
       }
     });
   }

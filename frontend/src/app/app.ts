@@ -1,66 +1,72 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { AdminSessionService } from './core/auth/admin-session.service';
 import { MemberSessionService } from './core/auth/member-session.service';
+import { LanguageService } from './core/i18n/language.service';
+import { LanguageSwitcherComponent } from './shared/components/language-switcher.component';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, MatToolbarModule, MatButtonModule, LanguageSwitcherComponent],
   template: `
-    <header class="app-header">
-      <div class="app-header-inner">
-        <a routerLink="/" class="app-logo">
-          <span class="app-logo-badge">P</span>
-          <span class="app-logo-text">PadelPlay</span>
-        </a>
+<header class="app-header">
+  <div class="app-header-inner">
+    <a routerLink="/" class="app-logo">
+      <span class="app-logo-badge">P</span>
+      <span class="app-logo-text">PadelPlay</span>
+    </a>
 
-        <nav class="app-nav">
-          <a routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Accueil</a>
+    <nav class="app-nav">
+      <a routerLink="/" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+        {{ navText().home }}
+      </a>
 
-          @if (!adminSession.isAuthenticated()) {
-            <a routerLink="/admin/login" class="nav-link">Admin</a>
-          }
+      @if (!adminSession.isAuthenticated()) {
+        <a routerLink="/admin/login" class="nav-link">{{ navText().admin }}</a>
+      }
 
-          @if (!memberSession.isAuthenticated()) {
-            <a routerLink="/member" class="nav-btn-outline">Espace membre</a>
-          }
+      @if (!memberSession.isAuthenticated()) {
+        <a routerLink="/member" class="nav-btn-outline">{{ navText().member }}</a>
+      }
 
-          @if (memberSession.isAuthenticated()) {
-            <div class="nav-divider"></div>
-            <a routerLink="/member/profile" routerLinkActive="nav-active" class="nav-link">Profil</a>
-            <a routerLink="/member/matches" routerLinkActive="nav-active" class="nav-link">Matchs</a>
-            <a routerLink="/member/reservations" routerLinkActive="nav-active" class="nav-link">Reservations</a>
-            <a routerLink="/member/payments" routerLinkActive="nav-active" class="nav-link">Paiements</a>
-            <div class="nav-divider"></div>
-            <a routerLink="/member/matches/new" class="nav-btn-create">Creer</a>
-            <a routerLink="/member/matches/new" [queryParams]="{type:'PUBLIC'}" class="nav-btn-green">Public</a>
-            <a routerLink="/member/matches/new" [queryParams]="{type:'PRIVE'}" class="nav-btn-purple">Prive</a>
-            <div class="nav-divider"></div>
-            <button class="nav-btn-logout" type="button" (click)="logoutMember()">Deconnexion</button>
-          }
+      @if (memberSession.isAuthenticated()) {
+        <div class="nav-divider"></div>
+        <a routerLink="/member/profile" routerLinkActive="nav-active" class="nav-link">{{ navText().profile }}</a>
+        <a routerLink="/member/matches" routerLinkActive="nav-active" class="nav-link">{{ navText().matches }}</a>
+        <a routerLink="/member/reservations" routerLinkActive="nav-active" class="nav-link">{{ navText().reservations }}</a>
+        <a routerLink="/member/payments" routerLinkActive="nav-active" class="nav-link">{{ navText().payments }}</a>
+        <div class="nav-divider"></div>
+        <a routerLink="/member/matches/new" class="nav-btn-create">{{ navText().create }}</a>
+        <a routerLink="/member/matches/new" [queryParams]="{type:'PUBLIC'}" class="nav-btn-green">{{ navText().public }}</a>
+        <a routerLink="/member/matches/new" [queryParams]="{type:'PRIVE'}" class="nav-btn-purple">{{ navText().private }}</a>
+        <div class="nav-divider"></div>
+        <button class="nav-btn-logout" type="button" (click)="logoutMember()">{{ navText().logout }}</button>
+      }
 
-          @if (adminSession.isAuthenticated()) {
-            <div class="nav-divider"></div>
-            <a routerLink="/admin" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Dashboard</a>
-            <a routerLink="/admin/members" routerLinkActive="nav-active" class="nav-link">Membres</a>
-            <a routerLink="/admin/matches" routerLinkActive="nav-active" class="nav-link">Matchs</a>
-            <a routerLink="/admin/sites" routerLinkActive="nav-active" class="nav-link">Sites</a>
-            <a routerLink="/admin/terrains" routerLinkActive="nav-active" class="nav-link">Terrains</a>
-            <a routerLink="/admin/fermetures" routerLinkActive="nav-active" class="nav-link">Fermetures</a>
-            <div class="nav-divider"></div>
-            <button class="nav-btn-logout" type="button" (click)="logoutAdmin()">Deconnexion</button>
-          }
-        </nav>
-      </div>
-    </header>
+      @if (adminSession.isAuthenticated()) {
+        <div class="nav-divider"></div>
+        <a routerLink="/admin" routerLinkActive="nav-active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">{{ navText().dashboard }}</a>
+        <a routerLink="/admin/members" routerLinkActive="nav-active" class="nav-link">{{ navText().members }}</a>
+        <a routerLink="/admin/matches" routerLinkActive="nav-active" class="nav-link">{{ navText().matches }}</a>
+        <a routerLink="/admin/sites" routerLinkActive="nav-active" class="nav-link">{{ navText().sites }}</a>
+        <a routerLink="/admin/terrains" routerLinkActive="nav-active" class="nav-link">{{ navText().courts }}</a>
+        <a routerLink="/admin/fermetures" routerLinkActive="nav-active" class="nav-link">{{ navText().closures }}</a>
+        <div class="nav-divider"></div>
+        <button class="nav-btn-logout" type="button" (click)="logoutAdmin()">{{ navText().logout }}</button>
+      }
+    </nav>
 
-    <main class="app-main-shell">
-      <router-outlet></router-outlet>
-    </main>
-  `,
+    <app-language-switcher class="app-lang-switcher"></app-language-switcher>
+  </div>
+</header>
+
+<main class="app-main-shell">
+  <router-outlet></router-outlet>
+</main>
+`,
   styles: [`
     .app-header {
       position: sticky;
@@ -118,6 +124,11 @@ import { MemberSessionService } from './core/auth/member-session.service';
       flex-wrap: wrap;
       gap: 0.4rem;
       flex: 1;
+    }
+
+    .app-lang-switcher {
+      flex-shrink: 0;
+      margin-left: auto;
     }
 
     .nav-link {
@@ -228,6 +239,11 @@ import { MemberSessionService } from './core/auth/member-session.service';
         width: 100%;
       }
 
+      .app-lang-switcher {
+        width: 100%;
+        margin-left: 0;
+      }
+
       .nav-divider {
         display: none;
       }
@@ -237,7 +253,26 @@ import { MemberSessionService } from './core/auth/member-session.service';
 export class App {
   readonly adminSession = inject(AdminSessionService);
   readonly memberSession = inject(MemberSessionService);
+  private readonly language = inject(LanguageService);
   private readonly router = inject(Router);
+  readonly navText = computed(() => ({
+    home: this.language.t('nav.home'),
+    admin: this.language.t('nav.admin'),
+    member: this.language.t('nav.member'),
+    profile: this.language.t('nav.profile'),
+    matches: this.language.t('nav.matches'),
+    dashboard: this.language.t('nav.dashboard'),
+    members: this.language.t('nav.members'),
+    sites: this.language.t('nav.sites'),
+    courts: this.language.t('nav.courts'),
+    closures: this.language.t('nav.closures'),
+    reservations: this.language.t('nav.reservations'),
+    payments: this.language.t('nav.payments'),
+    create: this.language.t('nav.create'),
+    public: this.language.t('nav.public'),
+    private: this.language.t('nav.private'),
+    logout: this.language.t('nav.logout')
+  }));
 
   logoutAdmin(): void {
     this.adminSession.clearSession();

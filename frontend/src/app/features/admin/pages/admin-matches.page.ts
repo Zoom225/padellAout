@@ -9,6 +9,7 @@ import { MatchesApiService } from '../../../core/api/matches-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
 import { SitesApiService } from '../../../core/api/sites-api.service';
 import { AdminSessionService } from '../../../core/auth/admin-session.service';
+import { LanguageService } from '../../../core/i18n/language.service';
 import { MatchResponse } from '../../../shared/models/match.model';
 import { ReservationResponse } from '../../../shared/models/reservation.model';
 import { SiteResponse } from '../../../shared/models/site-terrain.model';
@@ -23,13 +24,13 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
     <div class="adm-match-header">
       <div class="adm-match-header-inner">
         <div class="adm-match-title-block">
-          <span class="adm-match-icon">🎾</span>
+<span class="adm-match-icon">🎾</span>
           <div>
-            <h1 class="adm-match-title">Gestion des matchs</h1>
-            <p class="adm-match-sub">Consultation, détails et conversion en public</p>
+            <h1 class="adm-match-title">{{ language.t('admin.matches.title') }}</h1>
+            <p class="adm-match-sub">{{ language.t('admin.matches.subtitle') }}</p>
           </div>
         </div>
-        <a routerLink="/admin" class="adm-match-back-btn">← Tableau de bord</a>
+        <a routerLink="/admin" class="adm-match-back-btn">{{ language.t('common.back') }}</a>
       </div>
     </div>
 
@@ -53,7 +54,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                   <mat-card-title class="adm-match-card-title">{{ match.terrainNom }}</mat-card-title>
                   <mat-card-subtitle class="adm-match-card-sub">🏟️ {{ match.siteNom }}</mat-card-subtitle>
                 </div>
-                <span class="ds-badge" [class]="typeBadgeClass(match.typeMatch)">{{ match.typeMatch }}</span>
+                <span class="ds-badge" [class]="typeBadgeClass(match.typeMatch)">{{ typeLabel(match.typeMatch) }}</span>
               </div>
               <div class="adm-match-date-row">
                 <span>📅 {{ match.date }}</span>
@@ -64,15 +65,15 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
             <mat-card-content class="adm-match-content">
               <div class="adm-match-info-grid">
                 <div class="adm-info-item">
-                  <span class="adm-info-label">Organisateur</span>
+<span class="adm-info-label">{{ language.t('admin.matches.organizer') }}</span>
                   <span class="adm-info-value">{{ match.organisateurNom }}</span>
                 </div>
                 <div class="adm-info-item">
-                  <span class="adm-info-label">Statut</span>
-                  <span class="ds-badge" [class]="statusBadgeClass(match.statut)">{{ match.statut }}</span>
+<span class="adm-info-label">{{ language.t('admin.matches.status') }}</span>
+                  <span class="ds-badge" [class]="statusBadgeClass(match.statut)">{{ matchStatusLabel(match.statut) }}</span>
                 </div>
                 <div class="adm-info-item adm-players-item">
-                  <span class="adm-info-label">Joueurs</span>
+<span class="adm-info-label">{{ language.t('admin.matches.players') }}</span>
                   <div class="adm-players-bar">
                     <div class="adm-players-fill" [style.width.%]="(match.nbJoueursActuels / 4) * 100">
                       <span>{{ match.nbJoueursActuels }}/4</span>
@@ -83,17 +84,17 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
               @if (selectedMatchId() === match.id) {
                 <div class="adm-reservations-panel">
-                  <p class="adm-reservations-title">📋 Réservations du match</p>
+<p class="adm-reservations-title">{{ language.t('admin.matches.reservations') }}</p>
                   @for (reservation of selectedReservations(); track reservation.id) {
                     <div class="adm-reservation-item">
                       <span class="font-medium">{{ reservation.membreNom }}</span>
                       <div class="flex gap-2">
-                        <span class="ds-badge" [class]="reservationBadgeClass(reservation.statut)">{{ reservation.statut }}</span>
-                        <span class="ds-badge" [class]="paymentBadgeClass(reservation.paiement?.statut)">{{ reservation.paiement?.statut || 'N/A' }}</span>
+                        <span class="ds-badge" [class]="reservationBadgeClass(reservation.statut)">{{ reservationStatusLabel(reservation.statut) }}</span>
+                        <span class="ds-badge" [class]="paymentBadgeClass(reservation.paiement?.statut)">{{ paymentStatusLabel(reservation.paiement?.statut) }}</span>
                       </div>
                     </div>
                   } @empty {
-                    <p class="text-sm text-slate-500 text-center py-2">Aucune réservation.</p>
+<p class="text-sm text-slate-500 text-center py-2">{{ language.t('admin.matches.noReservations') }}</p>
                   }
                 </div>
               }
@@ -101,7 +102,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
             <mat-card-actions class="adm-match-actions">
               <button class="adm-match-btn-details" type="button" (click)="showReservations(match)">
-                {{ selectedMatchId() === match.id ? '🙈 Masquer' : '👁 Voir détails' }}
+{{ selectedMatchId() === match.id ? language.t('admin.matches.hideDetails') : language.t('admin.matches.showDetails') }}
               </button>
               <button
                 class="adm-match-btn-convert"
@@ -109,14 +110,14 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
                 (click)="convertToPublic(match.id)"
                 [disabled]="match.typeMatch !== 'PRIVE'"
               >
-                🌐 Convertir en public
+{{ language.t('admin.matches.convert') }}
               </button>
             </mat-card-actions>
           </mat-card>
         } @empty {
           <div class="adm-match-empty lg:col-span-2">
             <span>🎾</span>
-            <p>Aucun match disponible</p>
+<p>{{ language.t('admin.matches.empty') }}</p>
           </div>
         }
       </div>
@@ -222,6 +223,7 @@ export class AdminMatchesPage {
   private readonly reservationsApi = inject(ReservationsApiService);
   private readonly sitesApi = inject(SitesApiService);
   private readonly adminSession = inject(AdminSessionService);
+  readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -256,7 +258,7 @@ export class AdminMatchesPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les matchs admin.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.matches.loadError')));
       }
     });
   }
@@ -272,7 +274,7 @@ export class AdminMatchesPage {
     this.reservationsApi.getByMatch(match.id).subscribe({
       next: (reservations) => this.selectedReservations.set(reservations),
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Impossible de charger les réservations du match.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.matches.reservationsError')));
       }
     });
   }
@@ -283,17 +285,21 @@ export class AdminMatchesPage {
 
     this.matchesApi.convertToPublic(matchId).subscribe({
       next: () => {
-        this.message.set('Match converti en public.');
+        this.message.set(this.language.t('admin.matches.convertSuccess'));
         this.loadData();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, 'Conversion impossible.'));
+        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.matches.convertError')));
       }
     });
   }
 
   typeBadgeClass(type: MatchResponse['typeMatch']): string {
     return type === 'PRIVE' ? 'ds-badge-info' : 'ds-badge-neutral';
+  }
+
+  typeLabel(type: MatchResponse['typeMatch']): string {
+    return type === 'PRIVE' ? this.language.t('member.create.private') : this.language.t('member.create.public');
   }
 
   statusBadgeClass(statut: MatchResponse['statut']): string {
@@ -306,6 +312,16 @@ export class AdminMatchesPage {
     return 'ds-badge-danger';
   }
 
+  matchStatusLabel(statut: MatchResponse['statut']): string {
+    if (statut === 'PLANIFIE') {
+      return this.language.t('common.matchPlanned');
+    }
+    if (statut === 'COMPLET') {
+      return this.language.t('common.matchFull');
+    }
+    return this.language.t('common.matchCanceled');
+  }
+
   reservationBadgeClass(statut: ReservationResponse['statut']): string {
     if (statut === 'CONFIRMEE') {
       return 'ds-badge-success';
@@ -314,6 +330,16 @@ export class AdminMatchesPage {
       return 'ds-badge-warning';
     }
     return 'ds-badge-danger';
+  }
+
+  reservationStatusLabel(statut: ReservationResponse['statut']): string {
+    if (statut === 'CONFIRMEE') {
+      return this.language.t('common.reservationConfirmed');
+    }
+    if (statut === 'EN_ATTENTE') {
+      return this.language.t('common.reservationPending');
+    }
+    return this.language.t('common.reservationCanceled');
   }
 
   paymentBadgeClass(statut: string | undefined): string {
@@ -327,5 +353,21 @@ export class AdminMatchesPage {
       return 'ds-badge-info';
     }
     return 'ds-badge-neutral';
+  }
+
+  paymentStatusLabel(statut: string | undefined): string {
+    if (statut === 'PAYE') {
+      return this.language.t('common.paymentPaid');
+    }
+    if (statut === 'EN_ATTENTE') {
+      return this.language.t('common.paymentPending');
+    }
+    if (statut === 'REMBOURSE') {
+      return this.language.t('common.paymentRefunded');
+    }
+    if (statut === 'ANNULE') {
+      return this.language.t('common.paymentCanceled');
+    }
+    return this.language.t('common.none');
   }
 }
