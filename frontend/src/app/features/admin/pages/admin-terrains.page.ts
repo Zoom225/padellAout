@@ -70,7 +70,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
           @if (message()) {
             <div class="status-success md:col-span-2">✅ {{ message() }}</div>
           }
-          @if (errorMessage()) {
+          @if (visibleErrorMessage()) {
             <div class="status-error md:col-span-2">❌ {{ errorMessage() }}</div>
           }
 
@@ -198,6 +198,7 @@ export class AdminTerrainsPage {
   private readonly sitesApi = inject(SitesApiService);
   readonly adminSession = inject(AdminSessionService);
   readonly language = inject(LanguageService);
+  private static readonly HIDDEN_GENERIC_ERROR = 'Une erreur inattendue est survenue';
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -205,6 +206,10 @@ export class AdminTerrainsPage {
   readonly editingId = signal<number | null>(null);
   readonly terrains = signal<TerrainResponse[]>([]);
   readonly sites = signal<SiteResponse[]>([]);
+  readonly visibleErrorMessage = computed(() => {
+    const message = this.errorMessage().trim();
+    return message === AdminTerrainsPage.HIDDEN_GENERIC_ERROR ? '' : message;
+  });
 
   readonly filteredTerrains = computed(() => {
     if (this.adminSession.isGlobalAdmin()) {
@@ -222,25 +227,44 @@ export class AdminTerrainsPage {
     this.loadData();
   }
 
+  private setPageError(message: string): void {
+    this.errorMessage.set(
+      message.trim() === AdminTerrainsPage.HIDDEN_GENERIC_ERROR ? '' : message
+    );
+  }
+
   loadData(): void {
     this.loading.set(true);
     this.errorMessage.set('');
+    const siteId = this.adminSession.siteId();
+    const terrainsRequest$ =
+      this.adminSession.isSiteAdmin() && siteId
+        ? this.terrainsApi.getBySite(siteId)
+        : this.terrainsApi.getAll();
+    const sitesRequest$ =
+      this.adminSession.isSiteAdmin() && siteId
+        ? this.sitesApi.getById(siteId)
+        : this.sitesApi.getAll();
+
     forkJoin({
-      terrains: this.terrainsApi.getAll(),
-      sites: this.sitesApi.getAll()
+      terrains: terrainsRequest$,
+      sites: sitesRequest$
     }).subscribe({
       next: ({ terrains, sites }) => {
         this.terrains.set(terrains);
-        const filteredSites = this.adminSession.isGlobalAdmin() ? sites : sites.filter((site) => site.id === this.adminSession.siteId());
+        const availableSites = Array.isArray(sites) ? sites : [sites];
+        const filteredSites = this.adminSession.isGlobalAdmin()
+          ? availableSites
+          : availableSites.filter((site) => site.id === siteId);
         this.sites.set(filteredSites);
-        if (this.adminSession.isSiteAdmin() && this.adminSession.siteId()) {
-          this.form.controls.siteId.setValue(this.adminSession.siteId());
+        if (this.adminSession.isSiteAdmin() && siteId) {
+          this.form.controls.siteId.setValue(siteId);
         }
         this.loading.set(false);
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.loadError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.terrains.loadError')));
       }
     });
   }
@@ -281,7 +305,7 @@ export class AdminTerrainsPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.saveError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.terrains.saveError')));
       }
     });
   }
@@ -300,7 +324,7 @@ export class AdminTerrainsPage {
         this.loadData();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.terrains.deleteError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.terrains.deleteError')));
       }
     });
   }

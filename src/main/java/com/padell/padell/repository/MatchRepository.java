@@ -5,6 +5,7 @@ import com.padell.padell.entity.enums.StatutMatch;
 import com.padell.padell.entity.enums.TypeMatch;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,10 +18,19 @@ import java.util.Optional;
 @Repository
 public interface MatchRepository extends JpaRepository<Match, Long> {
 
+    @EntityGraph(attributePaths = {"terrain", "terrain.site", "organisateur"})
+    List<Match> findAll();
+
+    @EntityGraph(attributePaths = {"terrain", "terrain.site", "organisateur"})
+    Optional<Match> findById(Long id);
+
+    @EntityGraph(attributePaths = {"terrain", "terrain.site", "organisateur"})
     List<Match> findByTypeMatchAndStatut(TypeMatch type, StatutMatch statut);
 
+    @EntityGraph(attributePaths = {"terrain", "terrain.site", "organisateur"})
     List<Match> findByTerrainSiteId(Long siteId);
 
+    @EntityGraph(attributePaths = {"terrain", "terrain.site", "organisateur"})
     List<Match> findByOrganisateurId(Long organisateurId);
 
     List<Match> findByDateDebutBetweenAndStatut(LocalDateTime start, LocalDateTime end, StatutMatch statut);

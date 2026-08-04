@@ -164,7 +164,7 @@ describe('MemberCreateMatchPage', () => {
 
   it('crée un match privé et ajoute les joueurs invités', () => {
     const router = TestBed.inject(Router);
-    const navigateSpy = vi.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     vi.useFakeTimers();
     const fixture = TestBed.createComponent(MemberCreateMatchPage);
     const component = fixture.componentInstance;
@@ -190,7 +190,14 @@ describe('MemberCreateMatchPage', () => {
     });
     expect(component.message()).toContain('Les invitations sont en attente de paiement');
     vi.runAllTimers();
-    expect(navigateSpy).toHaveBeenCalledWith('/member/reservations');
+    expect(navigateSpy).toHaveBeenCalledWith(
+      ['/member/reservations'],
+      expect.objectContaining({
+        state: expect.objectContaining({
+          createdMatchId: 99
+        })
+      })
+    );
     vi.useRealTimers();
   });
 

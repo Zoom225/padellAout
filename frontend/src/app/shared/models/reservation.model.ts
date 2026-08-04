@@ -13,6 +13,7 @@ export interface ReservationInviteRequest {
 
 export interface PaiementResponse {
   id: number;
+  reservationId: number | null;
   montant: number;
   statut: StatutPaiement;
   datePaiement: string | null;

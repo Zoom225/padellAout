@@ -1,0 +1,61 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.0)
+
+2026-08-04T12:04:27.496+02:00  INFO 16788 --- [           main] com.padell.padell.PadellApplication      : Starting PadellApplication v0.0.1-SNAPSHOT using Java 21.0.9 with PID 16788 (C:\Users\user\Desktop\padellAout\target\padelmultiple-0.0.1-SNAPSHOT.jar started by user in C:\Users\user\Desktop\padellAout)
+2026-08-04T12:04:27.694+02:00  INFO 16788 --- [           main] com.padell.padell.PadellApplication      : No active profile set, falling back to 1 default profile: "default"
+2026-08-04T12:04:37.669+02:00  INFO 16788 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-04T12:04:38.075+02:00  INFO 16788 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 351 ms. Found 9 JPA repository interfaces.
+2026-08-04T12:04:41.450+02:00  INFO 16788 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-08-04T12:04:41.516+02:00  INFO 16788 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-04T12:04:41.518+02:00  INFO 16788 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.41]
+2026-08-04T12:04:41.641+02:00  INFO 16788 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-04T12:04:41.644+02:00  INFO 16788 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 13133 ms
+2026-08-04T12:04:42.257+02:00  INFO 16788 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-04T12:04:43.046+02:00  INFO 16788 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-08-04T12:04:43.217+02:00  INFO 16788 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-04T12:04:44.733+02:00  INFO 16788 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-04T12:04:44.913+02:00  INFO 16788 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-04T12:04:46.695+02:00  INFO 16788 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@a55e82a
+2026-08-04T12:04:46.700+02:00  INFO 16788 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-04T12:04:47.653+02:00  WARN 16788 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-08-04T12:04:47.807+02:00  INFO 16788 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 15.18
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-04T12:04:57.024+02:00  INFO 16788 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-04T12:04:59.642+02:00  INFO 16788 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-04T12:05:01.781+02:00  INFO 16788 --- [           main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-04T12:05:06.279+02:00  WARN 16788 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-08-04T12:05:10.142+02:00  INFO 16788 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-08-04T12:05:10.183+02:00  INFO 16788 --- [           main] com.padell.padell.PadellApplication      : Started PadellApplication in 54.014 seconds (process running for 56.677)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0
+Hibernate: select count(*) from sites s1_0
+Hibernate: select count(*) from matches m1_0
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 where upper(m1_0.matricule)=upper(?)
+Hibernate: select p1_0.id from penalites p1_0 left join membres m1_0 on m1_0.id=p1_0.membre_id where m1_0.id=? and p1_0.date_fin>? fetch first ? rows only
+2026-08-04T12:05:11.014+02:00  INFO 16788 --- [           main] com.padell.padell.DataInitializer        : DataInitializer : base de donnees deja initialisee, initialisation ignoree...
+2026-08-04T12:06:27.909+02:00  INFO 16788 --- [nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-04T12:06:27.910+02:00  INFO 16788 --- [nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-04T12:06:27.913+02:00  INFO 16788 --- [nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-08-04T12:06:30.892+02:00  INFO 16788 --- [nio-8080-exec-1] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 2043 ms
+2026-08-04T12:06:47.490+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@6886bdca (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:06:50.567+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@ac0a363 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:10.654+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5775371c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:10.955+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@613b9784 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:11.796+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@6e6ffb7b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:17.810+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@105cfc7d (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:20.420+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@a55e82a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:28.868+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@10857baf (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:30.942+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@76e855ba (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-04T12:08:38.247+02:00  WARN 16788 --- [l-1:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@21f1935a (This connection has been closed.). Possibly consider using a shorter maxLifetime value.

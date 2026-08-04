@@ -10,6 +10,7 @@ import com.padell.padell.dto.response.MatchDto;
 import com.padell.padell.repository.AdministrateurRepository;
 import com.padell.padell.repository.MatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AdminAuthorizationService {
 
     private final AdministrateurRepository administrateurRepository;
@@ -54,19 +56,25 @@ public class AdminAuthorizationService {
 
     public void checkTerrainAccess(Terrain terrain) {
         checkSiteAccess(terrain.getSite().getId());
-    }    public void checkMatchAccess(Long matchId) {
+    }
+
+    public void checkMatchAccess(Long matchId) {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new BusinessException("Match introuvable avec l'ID : " + matchId));
         checkSiteAccess(match.getTerrain().getSite().getId());
     }
 
     public void checkMembreAccess(Membre membre) {
+        checkMembreAccess(membre != null && membre.getSite() != null ? membre.getSite().getId() : null);
+    }
+
+    public void checkMembreAccess(Long siteId) {
         Administrateur admin = currentAdmin();
         if (admin.getTypeAdministrateur() == TypeAdministrateur.GLOBAL) {
             return;
         }
         // Regle metier : un admin SITE ne peut gerer que les membres de son site.
-        if (membre.getSite() == null || admin.getSite() == null || !membre.getSite().getId().equals(admin.getSite().getId())) {
+        if (siteId == null || admin.getSite() == null || !siteId.equals(admin.getSite().getId())) {
             throw new BusinessException("Un admin SITE ne peut gérer que les membres de son site.");
         }
     }

@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        // si pas de token → on laisse passer (les routes publiques sont gérées dans SecurityConfig)
+        // si pas de token → on laisse passer (les routes publiques sont gérées dans SecurityConfig.)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -53,21 +54,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String subject = jwtConfig.extractEmail(token); // peut être un email (Admin) ou un matricule (Membre)
         String role = jwtConfig.extractRole(token);
+        String principalType = jwtConfig.extractPrincipalType(token);
 
-        // Distinguer admin et membre par le format du subject
-        boolean isAdmin = subject.contains("@"); // email = admin, matricule = membre
+        if (!StringUtils.hasText(role)) {
+            log.warn("JWT missing required claims for subject {}", subject);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        if (isAdmin) {
+        if ("ADMIN".equalsIgnoreCase(principalType)) {
             Administrateur admin = administrateurRepository.findByEmail(subject).orElse(null);
             if (admin != null) {
                 authenticate(subject, role, true);
                 log.debug("Admin {} authenticated with role {}", subject, role);
             }
-        } else {
+        } else if ("MEMBER".equalsIgnoreCase(principalType)) {
             Membre membre = membreRepository.findByMatriculeIgnoreCase(subject).orElse(null);
             if (membre != null) {
                 authenticate(subject, role, false);
                 log.debug("Member {} authenticated with role {}", subject, role);
+            }
+        } else {
+            log.warn("JWT missing or unsupported principalType '{}' for subject {}, falling back to legacy lookup", principalType, subject);
+            Administrateur admin = administrateurRepository.findByEmail(subject).orElse(null);
+            if (admin != null) {
+                authenticate(subject, role, true);
+                log.debug("Admin {} authenticated with role {}", subject, role);
+            } else {
+                Membre membre = membreRepository.findByMatriculeIgnoreCase(subject).orElse(null);
+                if (membre != null) {
+                    authenticate(subject, role, false);
+                    log.debug("Member {} authenticated with role {}", subject, role);
+                }
             }
         }
 

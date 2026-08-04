@@ -2,14 +2,27 @@ package com.padell.padell.repository;
 
 import com.padell.padell.entity.Membre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface MembreRepository extends JpaRepository<Membre, Long> {
+    @EntityGraph(attributePaths = "site")
+    List<Membre> findAll();
+
+    @EntityGraph(attributePaths = "site")
+    Optional<Membre> findById(Long id);
+
+    @EntityGraph(attributePaths = "site")
     Optional<Membre> findByMatricule(String matricule);
+
+    @EntityGraph(attributePaths = "site")
     Optional<Membre> findByMatriculeIgnoreCase(String matricule);
+
     boolean existsByMatricule(String matricule);
+
     boolean existsByEmail(String email);
 }

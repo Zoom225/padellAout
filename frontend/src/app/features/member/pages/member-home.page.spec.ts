@@ -3,7 +3,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { MembresApiService } from '../../../core/api/membres-api.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
 import { MembreResponse } from '../../../shared/models/membre.model';
 import { MemberHomePage } from './member-home.page';
@@ -21,24 +21,20 @@ describe('MemberHomePage', () => {
     solde: 0
   };
 
-  let membresApiMock: { getByMatricule: ReturnType<typeof vi.fn> };
+  let authServiceMock: { loginMember: ReturnType<typeof vi.fn> };
   let memberSessionMock = {
-    isAuthenticated: vi.fn().mockReturnValue(false),
-    setMember: vi.fn(),
-    login: vi.fn().mockReturnValue(of(member)),
+    isAuthenticated: vi.fn().mockReturnValue(false)
   };
 
   beforeEach(async () => {
     vi.useFakeTimers();
 
-    membresApiMock = {
-      getByMatricule: vi.fn().mockReturnValue(of(member))
+    authServiceMock = {
+      loginMember: vi.fn().mockReturnValue(of(member))
     };
 
     memberSessionMock = {
-      isAuthenticated: vi.fn().mockReturnValue(false),
-      setMember: vi.fn(),
-      login: vi.fn().mockReturnValue(of(member))
+      isAuthenticated: vi.fn().mockReturnValue(false)
     };
 
     await TestBed.configureTestingModule({
@@ -46,7 +42,7 @@ describe('MemberHomePage', () => {
       providers: [
         provideRouter([]),
         provideNoopAnimations(),
-        { provide: MembresApiService, useValue: membresApiMock },
+        { provide: AuthService, useValue: authServiceMock },
         { provide: MemberSessionService, useValue: memberSessionMock }
       ]
     }).compileComponents();
@@ -76,10 +72,10 @@ describe('MemberHomePage', () => {
     const component = fixture.componentInstance;
 
     component.form.controls.matricule.setValue('s10001');
-    component.form.controls.password.setValue('Membre1234!'); // Added
+    component.form.controls.password.setValue('Membre1234!');
     component.submit();
 
-    expect(memberSessionMock.login).toHaveBeenCalledWith('S10001', 'Membre1234!'); // Modified
+    expect(authServiceMock.loginMember).toHaveBeenCalledWith({ matricule: 'S10001', password: 'Membre1234!' });
     expect(component.foundMember()).toEqual(member);
 
     vi.advanceTimersByTime(600);
@@ -87,8 +83,8 @@ describe('MemberHomePage', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/member/profile');
   });
 
-  it('affiche un message utile quand les identifiants sont invalides', () => { // Modified description
-    memberSessionMock.login.mockReturnValue(
+  it('affiche un message utile quand les identifiants sont invalides', () => {
+    authServiceMock.loginMember.mockReturnValue(
       throwError(() => ({ error: { message: 'Identifiants invalides' } })),
     );
     const router = TestBed.inject(Router);
@@ -97,12 +93,11 @@ describe('MemberHomePage', () => {
     const component = fixture.componentInstance;
 
     component.form.controls.matricule.setValue('L99999');
-    component.form.controls.password.setValue('wrong-password'); // Added
+    component.form.controls.password.setValue('wrong-password');
     component.submit();
 
     expect(component.loading()).toBe(false);
-    expect(component.errorMessage()).toContain('Identifiants invalides'); // Modified
-    expect(memberSessionMock.setMember).not.toHaveBeenCalled();
+    expect(component.errorMessage()).toContain('Identifiants invalides');
     expect(navigateSpy).not.toHaveBeenCalledWith('/member/profile');
   });
 });

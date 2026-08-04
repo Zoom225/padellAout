@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
 import { PaiementsApiService } from '../../../core/api/paiements-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
@@ -66,6 +66,39 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
           <mat-card-subtitle>{{ language.t('member.reservations.organizedSub') }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content class="grid gap-4 md:grid-cols-3">
+          @if (managedMatches().length) {
+            <div class="md:col-span-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+              @for (match of managedMatches(); track match.id) {
+                <button
+                  type="button"
+                  class="text-left rounded-lg border p-4 transition"
+                  [class.border-teal-400]="managedMatchId() === match.id"
+                  [class.bg-teal-50]="managedMatchId() === match.id"
+                  [class.border-slate-200]="managedMatchId() !== match.id"
+                  [class.bg-white]="managedMatchId() !== match.id"
+                  (click)="onManagedMatchChange(match.id)"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="font-semibold text-slate-900">#{{ match.id }} - {{ match.terrainNom }}</p>
+                      <p class="mt-1 text-sm text-slate-600">{{ match.siteNom }}</p>
+                    </div>
+                    <div class="flex flex-col items-end gap-1">
+                      <span class="ds-badge" [class]="typeBadgeClass(match.typeMatch)">{{ matchTypeLabel(match.typeMatch) }}</span>
+                      <span class="ds-badge" [class]="matchStatusBadgeClass(match.statut)">{{ matchStatusLabel(match.statut) }}</span>
+                    </div>
+                  </div>
+                  <div class="mt-3 text-sm text-slate-700">
+                    {{ match.date }} - {{ match.heureDebut.slice(0, 5) }} / {{ match.heureFin.slice(0, 5) }}
+                  </div>
+                  <div class="mt-1 text-xs text-slate-500">
+                    {{ match.nbJoueursActuels }}/4 joueurs
+                  </div>
+                </button>
+              }
+            </div>
+          }
+
           <mat-form-field appearance="outline">
             <mat-label>{{ language.t('member.reservations.select') }}</mat-label>
             <mat-select [value]="managedMatchId()" (valueChange)="onManagedMatchChange($event)">
@@ -241,7 +274,11 @@ export class MemberReservationsPage {
   private readonly reservationsApi = inject(ReservationsApiService);
   private readonly paiementsApi = inject(PaiementsApiService);
   private readonly memberSession = inject(MemberSessionService);
+  private readonly router = inject(Router);
   readonly language = inject(LanguageService);
+  private static readonly HIDDEN_GENERIC_ERROR = 'Une erreur inattendue est survenue';
+  private pendingCreatedMatchId: number | null = null;
+  private pendingSuccessMessage = '';
 
   readonly loading = signal(false);
   readonly actionId = signal<number | null>(null);
@@ -273,8 +310,28 @@ export class MemberReservationsPage {
   readonly memberId = computed(() => this.memberSession.memberId());
 
   constructor() {
+    const navigationState = (this.router.getCurrentNavigation()?.extras.state ?? window.history.state ?? {}) as {
+      createdMatchId?: number;
+      successMessage?: string;
+    };
+    this.pendingCreatedMatchId = typeof navigationState.createdMatchId === 'number'
+      ? navigationState.createdMatchId
+      : null;
+    this.pendingSuccessMessage = typeof navigationState.successMessage === 'string'
+      ? navigationState.successMessage.trim()
+      : '';
+
+    if (typeof navigationState.successMessage === 'string' && navigationState.successMessage.trim()) {
+      this.message.set(navigationState.successMessage);
+    }
     this.loadReservations();
     this.loadOrganisedMatches();
+  }
+
+  private setPageError(message: string): void {
+    this.errorMessage.set(
+      message.trim() === MemberReservationsPage.HIDDEN_GENERIC_ERROR ? '' : message
+    );
   }
 
   loadReservations(): void {
@@ -285,16 +342,22 @@ export class MemberReservationsPage {
     }
 
     this.loading.set(true);
-    this.message.set('');
+    if (!this.pendingSuccessMessage) {
+      this.message.set('');
+    }
     this.errorMessage.set('');
     this.reservationsApi.getByMembre(memberId).subscribe({
       next: (reservations) => {
         this.reservations.set(reservations);
+        if (this.pendingSuccessMessage) {
+          this.message.set(this.pendingSuccessMessage);
+          this.pendingSuccessMessage = '';
+        }
         this.loading.set(false);
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.loadError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.loadError')));
       }
     });
   }
@@ -308,6 +371,7 @@ export class MemberReservationsPage {
     this.matchesApi.getByOrganisateur(memberId).subscribe({
       next: (matches) => {
         this.organisedMatches.set(matches.filter((match) => match.statut !== 'ANNULE'));
+        this.selectCreatedMatchIfNeeded();
         if (this.managedMatchId() && !this.selectedManagedMatch()) {
           this.managedMatchId.set(null);
           this.managedReservations.set([]);
@@ -347,9 +411,21 @@ export class MemberReservationsPage {
     this.reservationsApi.getByMatch(matchId).subscribe({
       next: (reservations) => this.managedReservations.set(reservations),
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playersLoadError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.playersLoadError')));
       }
     });
+  }
+
+  private selectCreatedMatchIfNeeded(): void {
+    if (!this.pendingCreatedMatchId) {
+      return;
+    }
+
+    const createdMatch = this.managedMatches().find((match) => match.id === this.pendingCreatedMatchId);
+    this.pendingCreatedMatchId = null;
+    if (createdMatch) {
+      this.onManagedMatchChange(createdMatch.id);
+    }
   }
 
   updateManagedMatch(): void {
@@ -388,7 +464,7 @@ export class MemberReservationsPage {
         },
         error: (error) => {
           this.actionId.set(null);
-          this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.updateError')));
+          this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.updateError')));
         }
       });
   }
@@ -444,7 +520,7 @@ export class MemberReservationsPage {
       error: (error) => {
         this.actionId.set(null);
         this.pendingDeleteMatchId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.deleteError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.deleteError')));
       }
     });
   }
@@ -489,7 +565,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playerAddError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.playerAddError')));
       }
     });
   }
@@ -511,7 +587,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.playerRemoveError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.playerRemoveError')));
       }
     });
   }
@@ -534,7 +610,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.paymentError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.paymentError')));
       }
     });
   }
@@ -552,7 +628,7 @@ export class MemberReservationsPage {
       },
       error: (error) => {
         this.actionId.set(null);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.reservations.reservationCancelError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.reservations.reservationCancelError')));
       }
     });
   }
@@ -563,6 +639,26 @@ export class MemberReservationsPage {
 
   matchTypeLabel(type: MatchResponse['typeMatch']): string {
     return type === 'PRIVE' ? this.language.t('member.create.private') : this.language.t('member.create.public');
+  }
+
+  matchStatusBadgeClass(statut: MatchResponse['statut']): string {
+    if (statut === 'COMPLET') {
+      return 'ds-badge-success';
+    }
+    if (statut === 'ANNULE') {
+      return 'ds-badge-danger';
+    }
+    return 'ds-badge-warning';
+  }
+
+  matchStatusLabel(statut: MatchResponse['statut']): string {
+    if (statut === 'COMPLET') {
+      return this.language.t('common.matchFull');
+    }
+    if (statut === 'ANNULE') {
+      return this.language.t('common.matchCanceled');
+    }
+    return this.language.t('common.matchPlanned');
   }
 
   reservationBadgeClass(statut: ReservationResponse['statut']): string {

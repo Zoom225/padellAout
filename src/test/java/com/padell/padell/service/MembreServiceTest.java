@@ -8,6 +8,7 @@ import com.padell.padell.exception.ResourceNotFoundException;
 import com.padell.padell.repository.MembreRepository;
 import com.padell.padell.repository.PenaliteRepository;
 import com.padell.padell.service.impl.MembreServiceImpl;
+import com.padell.padell.service.SiteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,6 +36,9 @@ class MembreServiceTest {
 
     @Mock
     private PenaliteRepository penaliteRepository;
+
+    @Mock
+    private SiteService siteService;
 
     @Mock // Added PasswordEncoder mock
     private PasswordEncoder passwordEncoder;

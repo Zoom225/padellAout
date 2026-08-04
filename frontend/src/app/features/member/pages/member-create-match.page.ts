@@ -187,6 +187,7 @@ export class MemberCreateMatchPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly language = inject(LanguageService);
+  private static readonly HIDDEN_GENERIC_ERROR = 'Une erreur inattendue est survenue';
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -250,6 +251,12 @@ export class MemberCreateMatchPage {
     this.loadSites();
   }
 
+  private setPageError(message: string): void {
+    this.errorMessage.set(
+      message.trim() === MemberCreateMatchPage.HIDDEN_GENERIC_ERROR ? '' : message
+    );
+  }
+
   private applyDefaultStartTime(): void {
     if (!this.form.controls.heureDebut.value) {
       this.form.controls.heureDebut.setValue('09:00');
@@ -284,7 +291,7 @@ export class MemberCreateMatchPage {
         this.loading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.noSiteLoaded')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.create.noSiteLoaded')));
         this.loading.set(false);
       }
     });
@@ -310,11 +317,11 @@ export class MemberCreateMatchPage {
       error: (error) => {
         const status = error?.status;
         if (status === 404) {
-          this.errorMessage.set(this.language.t('member.create.noSiteLoaded'));
+          this.setPageError(this.language.t('member.create.noSiteLoaded'));
         } else if (status === 500) {
-          this.errorMessage.set(this.language.t('member.create.noTerrainLoaded'));
+          this.setPageError(this.language.t('member.create.noTerrainLoaded'));
         } else {
-          this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.noTerrainLoaded')));
+          this.setPageError(extractApiErrorMessage(error, this.language.t('member.create.noTerrainLoaded')));
         }
         this.terrains.set([]);
         this.loading.set(false);
@@ -327,7 +334,7 @@ export class MemberCreateMatchPage {
 
     if (this.form.invalid || this.loading()) {
       if (this.form.controls.date.hasError('maxBookingDate')) {
-        this.errorMessage.set(this.bookingDelayErrorMessage());
+        this.setPageError(this.bookingDelayErrorMessage());
       }
       return;
     }
@@ -335,12 +342,12 @@ export class MemberCreateMatchPage {
     const { terrainId, date, heureDebut, typeMatch } = this.form.getRawValue();
 
     if (!terrainId) {
-      this.errorMessage.set(this.language.t('member.create.noTerrain'));
+      this.setPageError(this.language.t('member.create.noTerrain'));
       return;
     }
 
     if (typeMatch !== 'PUBLIC' && typeMatch !== 'PRIVE') {
-      this.errorMessage.set(this.language.t('member.create.invalidType'));
+      this.setPageError(this.language.t('member.create.invalidType'));
       return;
     }
 
@@ -362,7 +369,7 @@ export class MemberCreateMatchPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(this.toFriendlyCreationErrorMessage(error));
+        this.setPageError(this.toFriendlyCreationErrorMessage(error));
       }
     });
   }
@@ -432,8 +439,7 @@ export class MemberCreateMatchPage {
 
     if (this.form.controls.typeMatch.getRawValue() !== 'PRIVE' || !invitees.length) {
       this.loading.set(false);
-      this.message.set(this.language.t('member.create.success'));
-      setTimeout(() => this.router.navigateByUrl('/member/reservations'), 1000);
+      this.navigateToReservations(createdMatch.id, this.language.t('member.create.success'));
       return;
     }
 
@@ -443,15 +449,27 @@ export class MemberCreateMatchPage {
     }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.message.set(this.language.t('member.create.successPrivate'));
-        setTimeout(() => this.router.navigateByUrl('/member/reservations'), 1000);
+        this.navigateToReservations(createdMatch.id, this.language.t('member.create.successPrivate'));
       },
       error: (error) => {
         this.loading.set(false);
-        this.message.set(this.language.t('member.create.partialSuccess'));
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.create.addPlayersError')));
-        setTimeout(() => this.router.navigateByUrl('/member/reservations'), 2000);
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.create.addPlayersError')));
+        this.navigateToReservations(createdMatch.id, this.language.t('member.create.partialSuccess'));
       }
     });
+  }
+
+  private navigateToReservations(createdMatchId: number, successMessage: string): void {
+    this.message.set(successMessage);
+    setTimeout(
+      () =>
+        this.router.navigate(['/member/reservations'], {
+          state: {
+            createdMatchId,
+            successMessage
+          }
+        }),
+      1000
+    );
   }
 }

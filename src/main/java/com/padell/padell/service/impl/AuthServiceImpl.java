@@ -34,7 +34,8 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtConfig.generateToken(
                 admin.getEmail(),
-                admin.getTypeAdministrateur().name()
+                admin.getTypeAdministrateur().name(),
+                "ADMIN"
         );
 
         log.info("Administrateur {} connecté avec succès", admin.getEmail());

@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -14,10 +15,10 @@ import java.util.Date;
 @Component
 public class JwtConfig {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:default-jwt-secret-default-jwt-secret-default-jwt-secret-default-jwt-secret-123456}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:86400000}")
     private long expiration;
 
     private SecretKey getSigningKey() {
@@ -26,13 +27,22 @@ public class JwtConfig {
 
     // génère un token JWT pour un admin
     public String generateToken(String email, String role) {
-        return Jwts.builder()
-                .subject(email)
+        return generateToken(email, role, null);
+    }
+
+    // génère un token JWT avec un type de principal explicite
+    public String generateToken(String subject, String role, String principalType) {
+        var builder = Jwts.builder()
+                .subject(subject)
                 .claim("role", role)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
-                .compact();
+                .expiration(new Date(System.currentTimeMillis() + expiration));
+
+        if (StringUtils.hasText(principalType)) {
+            builder.claim("principalType", principalType);
+        }
+
+        return builder.signWith(getSigningKey()).compact();
     }
 
     // extrait l'email depuis le token
@@ -43,6 +53,11 @@ public class JwtConfig {
     // extrait le rôle depuis le token
     public String extractRole(String token) {
         return extractClaims(token).get("role", String.class);
+    }
+
+    // extrait le type de principal depuis le token
+    public String extractPrincipalType(String token) {
+        return extractClaims(token).get("principalType", String.class);
     }
 
     // vérifie si le token est valide

@@ -3,7 +3,8 @@ package com.padell.padell.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.padell.padell.config.JwtConfig;
 import com.padell.padell.config.SecurityConfig;
-import com.padell.padell.dto.request.MembreLoginRequest; // Added import
+import com.padell.test.TestSecurityConfig;
+import com.padell.padell.dto.request.MembreLoginRequest;
 import com.padell.padell.dto.request.MembreRequest;
 import com.padell.padell.dto.response.MembreResponse;
 import com.padell.padell.entity.Membre;
@@ -11,24 +12,24 @@ import com.padell.padell.mapper.MembreMapper;
 import com.padell.padell.repository.AdministrateurRepository;
 import com.padell.padell.repository.MembreRepository;
 import com.padell.padell.service.MembreService;
-import com.padell.padell.service.SiteService;
-import com.padell.padell.service.impl.AdminAuthorizationService;
 import com.padell.padell.service.impl.CurrentMemberService;
+import com.padell.padell.service.impl.MembreAccessService;
+import com.padell.padell.service.impl.MembreCreationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -36,9 +37,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, TestSecurityConfig.class})
 @WebMvcTest(controllers = MembreController.class)
-@SuppressWarnings("deprecation")
 @DisplayName("Tests de MembreController")
 class MembreControllerTest {
 
@@ -48,24 +48,22 @@ class MembreControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private MembreService membreService;
-    @MockBean
-    private SiteService siteService;
-    @MockBean
+    @MockitoBean
     private MembreMapper membreMapper;
-    @MockBean
-    private AdminAuthorizationService adminAuthorizationService;
-    @MockBean
+    @MockitoBean
+    private MembreAccessService membreAccessService;
+    @MockitoBean
+    private MembreCreationService membreCreationService;
+    @MockitoBean
     private CurrentMemberService currentMemberService;
 
-    @MockBean
+    @MockitoBean
     private JwtConfig jwtConfig;
-    @MockBean
-    private PasswordEncoder passwordEncoder;
-    @MockBean
+    @MockitoBean
     private AdministrateurRepository administrateurRepository;
-    @MockBean
+    @MockitoBean
     private MembreRepository membreRepository;
 
     private MembreRequest membreRequest;
@@ -115,14 +113,12 @@ class MembreControllerTest {
     @WithMockUser(roles = "ADMIN")
     @DisplayName("POST /api/membres - Doit creer un membre avec un role admin")
     void createMember_WithAdminRole_ShouldReturnCreated() throws Exception {
-        when(membreService.create(any(Membre.class))).thenReturn(new Membre());
-        when(membreMapper.toEntity(any(MembreRequest.class))).thenReturn(new Membre());
+        when(membreCreationService.create(any(MembreRequest.class))).thenReturn(membreEntity);
         when(membreMapper.toResponse(any(Membre.class))).thenReturn(membreResponse);
-        when(passwordEncoder.encode(anyString())).thenReturn("$2a$10$hashed");
 
         mockMvc.perform(post("/api/membres")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(membreRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L));
@@ -171,7 +167,7 @@ class MembreControllerTest {
         MembreLoginRequest loginRequest = new MembreLoginRequest("L12345", "Membre1234!");
         when(membreService.authenticate("L12345", "Membre1234!")).thenReturn(membreEntity);
         when(membreMapper.toResponse(any(Membre.class))).thenReturn(membreResponse);
-        when(jwtConfig.generateToken(any(String.class), any(String.class))).thenReturn("mocked-jwt-token");
+        when(jwtConfig.generateToken(anyString(), anyString(), anyString())).thenReturn("mocked-jwt-token");
 
         mockMvc.perform(post("/api/membres/login")
                         .with(csrf())

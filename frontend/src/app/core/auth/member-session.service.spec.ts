@@ -1,20 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AuthApiService } from '../api/auth-api.service';
 import { MEMBER_SESSION_KEY, MemberSessionService } from './member-session.service';
 
 describe('MemberSessionService', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: AuthApiService,
-          useValue: { loginMembre: vi.fn() }, // ← mock AuthApiService
-        },
-      ],
-    });
+    TestBed.configureTestingModule({});
   });
 
   it('devrait persister et restaurer une session membre', () => {

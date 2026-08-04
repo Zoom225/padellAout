@@ -17,10 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import com.padell.test.TestSecurityConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // Étape 2 : Cibler le contrôleur
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = MatchController.class)
-@SuppressWarnings("deprecation")
+@Import(TestSecurityConfig.class)
 @DisplayName("Tests de MatchController")
 class MatchControllerTest {
 
@@ -49,19 +52,19 @@ class MatchControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private MatchService matchService;
-    @MockBean
+    @MockitoBean
     private AdminAuthorizationService adminAuthorizationService;
-    @MockBean
+    @MockitoBean
     private CurrentMemberService currentMemberService;
 
     // Étape 3 : Mocker les dépendances de la chaîne de sécurité (Je wtAuthenticationFilter)
-    @MockBean
+    @MockitoBean
     private JwtConfig jwtConfig;
-    @MockBean
+    @MockitoBean
     private AdministrateurRepository administrateurRepository;
-    @MockBean
+    @MockitoBean
     private MembreRepository membreRepository;
 
 

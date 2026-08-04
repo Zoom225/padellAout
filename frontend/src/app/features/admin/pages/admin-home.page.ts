@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
 import { MembresApiService } from '../../../core/api/membres-api.service';
 import { ReservationsApiService } from '../../../core/api/reservations-api.service';
@@ -16,7 +16,6 @@ import { MatchResponse } from '../../../shared/models/match.model';
 import { MembreResponse } from '../../../shared/models/membre.model';
 import { ReservationResponse } from '../../../shared/models/reservation.model';
 import { SiteResponse, TerrainResponse } from '../../../shared/models/site-terrain.model';
-import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
 
 @Component({
   selector: 'app-admin-home-page',
@@ -48,10 +47,6 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
           <span>{{ language.t('admin.home.loading') }}</span>
         </div>
       }
-      @if (errorMessage()) {
-        <p class="status-error">{{ errorMessage() }}</p>
-      }
-
       <div class="kpi-grid">
         <div class="admin-kpi green">
           <p>{{ language.t('admin.home.matches') }}</p>
@@ -365,7 +360,6 @@ export class AdminHomePage {
   readonly language = inject(LanguageService);
 
   readonly loading = signal(false);
-  readonly errorMessage = signal('');
   readonly matches = signal<MatchResponse[]>([]);
   readonly members = signal<MembreResponse[]>([]);
   readonly reservations = signal<ReservationResponse[]>([]);
@@ -393,13 +387,32 @@ export class AdminHomePage {
 
   loadDashboard(): void {
     this.loading.set(true);
-    this.errorMessage.set('');
 
     forkJoin({
-      matches: this.matchesApi.getAll(),
-      members: this.membresApi.getAll(),
-      sites: this.sitesApi.getAll(),
-      terrains: this.terrainsApi.getAll()
+      matches: this.matchesApi.getAll().pipe(
+        catchError((error) => {
+          console.error('Dashboard admin: impossible de charger les matchs', error);
+          return of([] as MatchResponse[]);
+        })
+      ),
+      members: this.membresApi.getAll().pipe(
+        catchError((error) => {
+          console.error('Dashboard admin: impossible de charger les membres', error);
+          return of([] as MembreResponse[]);
+        })
+      ),
+      sites: this.sitesApi.getAll().pipe(
+        catchError((error) => {
+          console.error('Dashboard admin: impossible de charger les sites', error);
+          return of([] as SiteResponse[]);
+        })
+      ),
+      terrains: this.terrainsApi.getAll().pipe(
+        catchError((error) => {
+          console.error('Dashboard admin: impossible de charger les terrains', error);
+          return of([] as TerrainResponse[]);
+        })
+      )
     }).subscribe({
       next: ({ matches, members, sites, terrains }) => {
         const filteredSites = this.filterSites(sites);
@@ -418,20 +431,33 @@ export class AdminHomePage {
           return;
         }
 
-        forkJoin(filteredMatches.map((match) => this.reservationsApi.getByMatch(match.id))).subscribe({
+        forkJoin(
+          filteredMatches.map((match) =>
+            this.reservationsApi.getByMatch(match.id).pipe(
+              catchError((error) => {
+                console.error(`Dashboard admin: impossible de charger les reservations du match ${match.id}`, error);
+                return of([] as ReservationResponse[]);
+              })
+            )
+          )
+        ).subscribe({
           next: (allReservations) => {
             this.reservations.set(allReservations.flat());
             this.loading.set(false);
           },
-          error: (error) => {
+          error: () => {
+            this.reservations.set([]);
             this.loading.set(false);
-            this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.home.reservationsLoadError')));
           }
         });
       },
-      error: (error) => {
+      error: () => {
+        this.matches.set([]);
+        this.members.set([]);
+        this.sites.set([]);
+        this.terrains.set([]);
+        this.reservations.set([]);
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.home.dashboardLoadError')));
       }
     });
   }
