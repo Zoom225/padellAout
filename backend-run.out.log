@@ -1,0 +1,1307 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.padel:padelmultiple >-----------------------
+[INFO] Building padelmultiple 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.0:run (default-cli) > test-compile @ padelmultiple >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ padelmultiple ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ padelmultiple ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ padelmultiple ---
+[INFO] Copying 0 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ padelmultiple ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< spring-boot:3.5.0:run (default-cli) < test-compile @ padelmultiple <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.0:run (default-cli) @ padelmultiple ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.0)
+
+2026-08-05T12:24:06.958+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : Starting PadellApplication using Java 21.0.9 with PID 14096 (C:\Users\user\Desktop\padellAout\target\classes started by user in C:\Users\user\Desktop\padellAout)
+2026-08-05T12:24:06.968+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : No active profile set, falling back to 1 default profile: "default"
+2026-08-05T12:24:08.019+02:00  INFO 14096 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-08-05T12:24:08.021+02:00  INFO 14096 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-05T12:24:15.494+02:00  INFO 14096 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-05T12:24:16.101+02:00  INFO 14096 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 563 ms. Found 9 JPA repository interfaces.
+2026-08-05T12:24:19.338+02:00  INFO 14096 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-08-05T12:24:19.391+02:00  INFO 14096 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-05T12:24:19.394+02:00  INFO 14096 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.41]
+2026-08-05T12:24:19.577+02:00  INFO 14096 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-05T12:24:19.581+02:00  INFO 14096 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 11553 ms
+2026-08-05T12:24:20.327+02:00  INFO 14096 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-05T12:24:20.541+02:00  INFO 14096 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2026-08-05T12:24:20.658+02:00  INFO 14096 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-05T12:24:21.856+02:00  INFO 14096 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-05T12:24:21.986+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-05T12:24:22.631+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@68eb2a33
+2026-08-05T12:24:22.636+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-05T12:24:22.949+02:00  INFO 14096 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 15.18
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-05T12:24:27.959+02:00  INFO 14096 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-05T12:24:33.486+02:00  INFO 14096 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-05T12:24:36.267+02:00  INFO 14096 --- [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-05T12:24:43.408+02:00  INFO 14096 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-08-05T12:24:43.546+02:00  INFO 14096 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-08-05T12:24:43.592+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : Started PadellApplication in 41.887 seconds (process running for 50.039)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id
+Hibernate: select count(*) from sites s1_0
+Hibernate: select count(*) from matches m1_0
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select p1_0.id from penalites p1_0 left join membres m1_0 on m1_0.id=p1_0.membre_id where m1_0.id=? and p1_0.date_fin>? fetch first ? rows only
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+2026-08-05T12:24:46.124+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.DataInitializer        : DataInitializer : base de donnees deja initialisee, initialisation ignoree...
+2026-08-05T12:27:02.628+02:00  INFO 14096 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-08-05T12:27:02.805+02:00  INFO 14096 --- [       Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-05T12:27:02.905+02:00  INFO 14096 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-08-05T12:27:03.007+02:00  INFO 14096 --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-05T12:27:03.094+02:00  INFO 14096 --- [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-05T12:27:03.133+02:00  INFO 14096 --- [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.0)
+
+2026-08-05T12:27:04.085+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : Starting PadellApplication using Java 21.0.9 with PID 14096 (C:\Users\user\Desktop\padellAout\target\classes started by user in C:\Users\user\Desktop\padellAout)
+2026-08-05T12:27:04.086+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : No active profile set, falling back to 1 default profile: "default"
+2026-08-05T12:27:05.604+02:00  INFO 14096 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-05T12:27:05.747+02:00  INFO 14096 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 9 JPA repository interfaces.
+2026-08-05T12:27:06.342+02:00  INFO 14096 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2026-08-05T12:27:06.382+02:00  INFO 14096 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-05T12:27:06.391+02:00  INFO 14096 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.41]
+2026-08-05T12:27:06.597+02:00  INFO 14096 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-08-05T12:27:06.598+02:00  INFO 14096 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2504 ms
+2026-08-05T12:27:06.881+02:00  INFO 14096 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-05T12:27:06.909+02:00  INFO 14096 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-08-05T12:27:07.028+02:00  INFO 14096 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-05T12:27:07.053+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-08-05T12:27:07.373+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@559f8f10
+2026-08-05T12:27:07.374+02:00  INFO 14096 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-08-05T12:27:07.428+02:00  INFO 14096 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 15.18
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-05T12:27:07.928+02:00  INFO 14096 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-05T12:27:12.265+02:00  INFO 14096 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-05T12:27:14.175+02:00  INFO 14096 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-08-05T12:27:14.200+02:00  INFO 14096 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2026-08-05T12:27:14.211+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.PadellApplication      : Started PadellApplication in 10.276 seconds (process running for 200.658)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id
+Hibernate: select count(*) from sites s1_0
+Hibernate: select count(*) from matches m1_0
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select p1_0.id from penalites p1_0 left join membres m1_0 on m1_0.id=p1_0.membre_id where m1_0.id=? and p1_0.date_fin>? fetch first ? rows only
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: select r1_0.match_id,r1_0.id,r1_0.created_at,r1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.match_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join sites s1_0 on s1_0.id=m1_0.site_id where upper(m1_0.matricule)=upper(?)
+Hibernate: select m1_0.id,m1_0.created_at,m1_0.email,mo1_0.organisateur_id,mo1_0.id,mo1_0.created_at,mo1_0.date_conversion_public,mo1_0.date_debut,mo1_0.date_fin,mo1_0.nb_joueurs_actuels,mo1_0.prix_par_joueur,mo1_0.prix_total,mo1_0.statut,mo1_0.terrain_id,mo1_0.type_match,mo1_0.updated_at,m1_0.matricule,m1_0.nom,m1_0.password_hash,m1_0.prenom,m1_0.site_id,m1_0.solde,m1_0.type_membre,m1_0.updated_at from membres m1_0 left join matches mo1_0 on m1_0.id=mo1_0.organisateur_id where m1_0.id=?
+Hibernate: select r1_0.membre_id,r1_0.id,r1_0.created_at,r1_0.match_id,p1_0.id,p1_0.created_at,p1_0.date_paiement,p1_0.montant,p1_0.reservation_id,p1_0.statut,p1_0.updated_at,r1_0.statut,r1_0.updated_at from reservations r1_0 left join paiements p1_0 on r1_0.id=p1_0.reservation_id where r1_0.membre_id=?
+Hibernate: select p1_0.membre_id,p1_0.id,p1_0.created_at,p1_0.date_fin,p1_0.motif,p1_0.updated_at from penalites p1_0 where p1_0.membre_id=?
+Hibernate: update membres set email=?,matricule=?,nom=?,password_hash=?,prenom=?,site_id=?,solde=?,type_membre=?,updated_at=? where id=?
+2026-08-05T12:27:15.364+02:00  INFO 14096 --- [  restartedMain] com.padell.padell.DataInitializer        : DataInitializer : base de donnees deja initialisee, initialisation ignoree...
+2026-08-05T12:27:15.369+02:00  INFO 14096 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2026-08-05T12:28:23.061+02:00  INFO 14096 --- [nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-05T12:28:23.062+02:00  INFO 14096 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-05T12:28:23.067+02:00  INFO 14096 --- [nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-08-05T12:28:25.156+02:00  INFO 14096 --- [io-8082-exec-10] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1341 ms
+Hibernate: select a1_0.id,a1_0.created_at,a1_0.email,a1_0.matricule,a1_0.nom,a1_0.password_hash,a1_0.prenom,a1_0.site_id,a1_0.type_administrateur,a1_0.updated_at from administrateurs a1_0 where a1_0.email=?
+2026-08-05T12:34:07.928+02:00  INFO 14096 --- [nio-8082-exec-5] c.p.padell.service.impl.AuthServiceImpl  : Administrateur admin@padel.com connecté avec succès
+2026-08-05T12:34:08.284+02:00  WARN 14096 --- [nio-8082-exec-8] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:08.284+02:00  WARN 14096 --- [nio-8082-exec-7] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:08.284+02:00  WARN 14096 --- [nio-8082-exec-9] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:08.286+02:00  WARN 14096 --- [io-8082-exec-10] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:34:08.570+02:00  WARN 14096 --- [io-8082-exec-10] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:34:23.859+02:00  WARN 14096 --- [nio-8082-exec-4] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:23.874+02:00  WARN 14096 --- [nio-8082-exec-1] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:34:34.589+02:00  WARN 14096 --- [nio-8082-exec-2] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:34.594+02:00  WARN 14096 --- [nio-8082-exec-3] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:34:38.459+02:00  WARN 14096 --- [nio-8082-exec-6] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:34:40.610+02:00  WARN 14096 --- [nio-8082-exec-5] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:40.610+02:00  WARN 14096 --- [nio-8082-exec-7] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:34:40.772+02:00  WARN 14096 --- [nio-8082-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:34:42.202+02:00  WARN 14096 --- [nio-8082-exec-9] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:42.202+02:00  WARN 14096 --- [nio-8082-exec-8] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:34:45.868+02:00  WARN 14096 --- [io-8082-exec-10] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:45.871+02:00  WARN 14096 --- [nio-8082-exec-1] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:45.869+02:00  WARN 14096 --- [nio-8082-exec-4] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:45.873+02:00  WARN 14096 --- [nio-8082-exec-2] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:34:45.972+02:00  WARN 14096 --- [nio-8082-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:34:47.734+02:00  WARN 14096 --- [nio-8082-exec-3] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:34:47.757+02:00  WARN 14096 --- [nio-8082-exec-6] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:34.096+02:00  WARN 14096 --- [nio-8082-exec-7] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:34.099+02:00  WARN 14096 --- [nio-8082-exec-5] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:34.116+02:00  WARN 14096 --- [nio-8082-exec-9] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:34.120+02:00  WARN 14096 --- [nio-8082-exec-8] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:35:34.255+02:00  WARN 14096 --- [nio-8082-exec-8] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:35:36.163+02:00  WARN 14096 --- [io-8082-exec-10] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:36.174+02:00  WARN 14096 --- [nio-8082-exec-4] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:38.653+02:00  WARN 14096 --- [nio-8082-exec-1] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:38.663+02:00  WARN 14096 --- [nio-8082-exec-2] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:41.121+02:00  WARN 14096 --- [nio-8082-exec-3] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:41.122+02:00  WARN 14096 --- [nio-8082-exec-7] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:41.128+02:00  WARN 14096 --- [nio-8082-exec-5] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:41.123+02:00  WARN 14096 --- [nio-8082-exec-6] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:35:41.245+02:00  WARN 14096 --- [nio-8082-exec-5] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:35:46.761+02:00  WARN 14096 --- [nio-8082-exec-9] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:46.772+02:00  WARN 14096 --- [nio-8082-exec-8] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:49.398+02:00  WARN 14096 --- [nio-8082-exec-4] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:49.398+02:00  WARN 14096 --- [io-8082-exec-10] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:51.206+02:00  WARN 14096 --- [nio-8082-exec-1] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:52.591+02:00  WARN 14096 --- [nio-8082-exec-2] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:52.608+02:00  WARN 14096 --- [nio-8082-exec-3] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:35:52.706+02:00  WARN 14096 --- [nio-8082-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:35:53.485+02:00  WARN 14096 --- [nio-8082-exec-6] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:53.486+02:00  WARN 14096 --- [nio-8082-exec-7] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:35:57.339+02:00  WARN 14096 --- [nio-8082-exec-5] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:35:57.362+02:00  WARN 14096 --- [nio-8082-exec-9] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:36:49.204+02:00  WARN 14096 --- [nio-8082-exec-8] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:36:49.211+02:00  WARN 14096 --- [nio-8082-exec-4] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:36:50.290+02:00  WARN 14096 --- [io-8082-exec-10] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:36:54.896+02:00  WARN 14096 --- [nio-8082-exec-1] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:36:54.897+02:00  WARN 14096 --- [nio-8082-exec-3] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+Hibernate: select t1_0.id,t1_0.created_at,t1_0.nom,t1_0.prix,t1_0.site_id,t1_0.updated_at from terrains t1_0
+org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:174)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:328)
+	at org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor.intercept(ByteBuddyInterceptor.java:44)
+	at org.hibernate.proxy.ProxyConfiguration$InterceptorDispatcher.intercept(ProxyConfiguration.java:102)
+	at com.padell.padell.entity.Site$HibernateProxy.getNom(Unknown Source)
+	at com.padell.padell.mapper.TerrainMapper.toResponse(TerrainMapper.java:22)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1708)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:575)
+	at java.base/java.util.stream.AbstractPipeline.evaluateToArrayNode(AbstractPipeline.java:260)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:616)
+	at java.base/java.util.stream.ReferencePipeline.toArray(ReferencePipeline.java:622)
+	at java.base/java.util.stream.ReferencePipeline.toList(ReferencePipeline.java:627)
+	at com.padell.padell.controller.TerrainController.getAll(TerrainController.java:72)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.padell.padell.config.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:53)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+2026-08-05T12:36:55.011+02:00  WARN 14096 --- [nio-8082-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.hibernate.LazyInitializationException: Could not initialize proxy [com.padell.padell.entity.Site#1] - no session]
+2026-08-05T12:36:57.194+02:00  WARN 14096 --- [nio-8082-exec-2] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+2026-08-05T12:36:57.212+02:00  WARN 14096 --- [nio-8082-exec-6] c.p.p.config.JwtAuthenticationFilter     : JWT missing or unsupported role for subject admin@padel.com
+Hibernate: select s1_0.id,s1_0.adresse,s1_0.annee_civile,s1_0.created_at,s1_0.duree_entre_match_minutes,s1_0.duree_match_minutes,s1_0.heure_fermeture,s1_0.heure_ouverture,s1_0.nom,s1_0.updated_at from sites s1_0
+2026-08-05T12:56:25.999+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@1403b317 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:56:28.946+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@560057f8 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:56:36.615+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@260dfd08 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:56:38.986+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@a7fc1c3 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:57:04.616+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@5e14f8e3 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:57:18.026+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@433d3977 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:57:43.011+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@4e12acee (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:57:55.309+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@36f8bec1 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:57:57.674+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@1e55b040 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:58:08.815+02:00  WARN 14096 --- [l-2:housekeeper] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Failed to validate connection org.postgresql.jdbc.PgConnection@241e806b (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-08-05T12:58:11.442+02:00  WARN 14096 --- [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Pool is empty, failed to create/setup connection (61ab4381-ddf7-4215-a14f-c1ba1685fe8d)
+
+org.postgresql.util.PSQLException: Connection to localhost:5440 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.makeConnection(Driver.java:446) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.connect(Driver.java:298) ~[postgresql-42.7.5.jar:42.7.5]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:139) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:368) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:205) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:483) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:747) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-6.3.0.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:690) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268) ~[postgresql-42.7.5.jar:42.7.5]
+	... 14 common frames omitted
+
+2026-08-05T12:59:16.658+02:00  WARN 14096 --- [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Pool is empty, failed to create/setup connection (3a4f7b24-8928-43f8-9e1a-0290cb13d6bf)
+
+org.postgresql.util.PSQLException: Connection to localhost:5440 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.makeConnection(Driver.java:446) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.connect(Driver.java:298) ~[postgresql-42.7.5.jar:42.7.5]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:139) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:368) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:205) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:483) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:747) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-6.3.0.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:690) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268) ~[postgresql-42.7.5.jar:42.7.5]
+	... 14 common frames omitted
+
+2026-08-05T13:00:21.824+02:00  WARN 14096 --- [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Pool is empty, failed to create/setup connection (108928c6-3151-42e5-8b09-491ca72dc8c0)
+
+org.postgresql.util.PSQLException: Connection to localhost:5440 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.makeConnection(Driver.java:446) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.connect(Driver.java:298) ~[postgresql-42.7.5.jar:42.7.5]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:139) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:368) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:205) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:483) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:747) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-6.3.0.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:690) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268) ~[postgresql-42.7.5.jar:42.7.5]
+	... 14 common frames omitted
+
+2026-08-05T13:01:26.978+02:00  WARN 14096 --- [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Pool is empty, failed to create/setup connection (61fa8a7b-230e-4931-b370-096879fbbb55)
+
+org.postgresql.util.PSQLException: Connection to localhost:5440 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.makeConnection(Driver.java:446) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.connect(Driver.java:298) ~[postgresql-42.7.5.jar:42.7.5]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:139) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:368) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:205) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:483) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:747) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-6.3.0.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:690) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268) ~[postgresql-42.7.5.jar:42.7.5]
+	... 14 common frames omitted
+
+2026-08-05T13:02:32.163+02:00  WARN 14096 --- [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : HikariPool-2 - Pool is empty, failed to create/setup connection (7cc3c1ff-f009-4e4a-a34f-c9f51da8734b)
+
+org.postgresql.util.PSQLException: Connection to localhost:5440 refused. Check that the hostname and port are correct and that the postmaster is accepting TCP/IP connections.
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:352) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:54) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:273) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.makeConnection(Driver.java:446) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.Driver.connect(Driver.java:298) ~[postgresql-42.7.5.jar:42.7.5]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:139) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:368) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:205) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:483) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:747) ~[HikariCP-6.3.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:726) ~[HikariCP-6.3.0.jar:na]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:690) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:751) ~[na:na]
+	at org.postgresql.core.PGStream.createSocket(PGStream.java:260) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.PGStream.<init>(PGStream.java:121) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:140) ~[postgresql-42.7.5.jar:42.7.5]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:268) ~[postgresql-42.7.5.jar:42.7.5]
+	... 14 common frames omitted
+

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { MembresApiService } from '../../../core/api/membres-api.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { MemberSessionService } from '../../../core/auth/member-session.service';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { MembreResponse } from '../../../shared/models/membre.model';
@@ -368,7 +368,7 @@ import { MembreResponse } from '../../../shared/models/membre.model';
   `,
 })
 export class MemberHomePage {
-  private readonly membresApi = inject(MembresApiService);
+  private readonly authService = inject(AuthService);
   private readonly memberSession = inject(MemberSessionService);
   private readonly router = inject(Router);
   readonly language = inject(LanguageService);
@@ -407,7 +407,7 @@ export class MemberHomePage {
     const matricule = this.form.controls.matricule.getRawValue().trim().toUpperCase();
     const password = this.form.controls.password.getRawValue();
 
-    this.memberSession.login(matricule, password).subscribe({
+    this.authService.loginMember({ matricule, password }).subscribe({
       next: (member) => {
         this.foundMember.set(member);
         this.loading.set(false);

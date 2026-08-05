@@ -18,10 +18,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import com.padell.test.TestSecurityConfig;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(controllers = JourFermetureController.class)
+@Import(TestSecurityConfig.class)
 @DisplayName("Tests de JourFermetureController")
 class JourFermetureControllerTest {
 
@@ -46,22 +50,22 @@ class JourFermetureControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private JourFermetureRepository jourFermetureRepository;
 
-    @MockBean
+    @MockitoBean
     private SiteService siteService;
 
-    @MockBean
+    @MockitoBean
     private AdministrateurRepository administrateurRepository;
 
-    @MockBean
+    @MockitoBean
     private MembreRepository membreRepository;
 
-    @MockBean
+    @MockitoBean
     private JwtConfig jwtConfig;
 
-    @MockBean
+    @MockitoBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private Site siteLyon;

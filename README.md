@@ -4,14 +4,85 @@ Projet fullstack de gestion de matchs de padel.
 
 - Backend : Spring Boot 3.5, Java 21, Maven
 - Frontend : Angular 21, Angular Material, Tailwind, Vitest
-- Base de donnees : PostgreSQL 15 avec Docker Compose
+- Base de donnees : PostgreSQL 15 via Docker Compose
+
+## Vue d'ensemble
+
+Le projet est compose de deux applications :
+
+- un backend Spring Boot expose sur `http://localhost:8082`
+- un frontend Angular expose en developpement sur `http://localhost:4200`
+
+Le frontend appelle le backend via un proxy `/api`.
+
+## Structure du projet
+
+```text
+padellAout/
+  src/                       Backend Spring Boot
+  frontend/                  Frontend Angular
+  docker-compose.yml         PostgreSQL local
+  pom.xml                    Build Maven backend
+  README.md                  Documentation projet
+```
+
+### Backend
+
+Organisation principale du backend :
+
+```text
+src/main/java/com/padell/padell/
+  config/                    Securite, JWT, CORS, Swagger
+  controller/                Endpoints REST
+  dto/                       Requetes et reponses
+  entity/                    Entites JPA
+  mapper/                    Mapping DTO <-> entites
+  repository/                Acces base de donnees
+  service/                   Contrats de services
+  service/impl/              Implementations metier
+```
+
+Points notables de l'architecture actuelle :
+
+- `SecurityConfig` definit les acces par route
+- `JwtAuthenticationFilter` reconstruit l'authentification depuis le JWT
+- `JwtConfig` gere la generation et la lecture des claims JWT
+- `MembreAccessService` centralise les controles d'acces sur les membres
+- `MembreCreationService` sort la logique de creation hors du controller
+- `CurrentMemberService` et `AdminAuthorizationService` se partagent les regles d'acces membre/admin
+
+### Frontend
+
+Organisation principale du frontend :
+
+```text
+frontend/src/app/
+  core/
+    api/                     Services HTTP
+    auth/                    Session, login, stockage
+    guards/                  Protections de routes
+    interceptors/            Injection du token JWT
+    i18n/                    Traductions FR/EN
+  features/
+    admin/                   Ecrans administrateur
+    member/                  Ecrans membre
+    home/                    Landing page
+  shared/                    Modeles, composants, utilitaires
+```
+
+Points notables de l'architecture actuelle :
+
+- `AuthSessionService` est la source centrale de verite pour les sessions frontend
+- `AdminSessionService` et `MemberSessionService` sont des facades legeres au-dessus de cette session unifiee
+- le projet est bilingue FR / EN via `core/i18n/translations.ts`
+- l'interceptor HTTP ajoute automatiquement le token JWT sur les appels API proteges
 
 ## Prerequis
 
 Installer sur la machine :
 
 - Java 21
-- Node.js compatible avec Angular 21
+- Node.js compatible Angular 21
 - npm
 - Docker Desktop
 
@@ -24,29 +95,19 @@ npm -v
 docker --version
 ```
 
-## Structure du projet
-
-```text
-padell/
-  src/                 Backend Spring Boot
-  frontend/            Frontend Angular
-  docker-compose.yml   PostgreSQL Docker
-  pom.xml              Configuration Maven backend
-  README.md            Documentation compilation et lancement
-```
-
 ## Base de donnees PostgreSQL
 
-Le projet utilise PostgreSQL via Docker.
+Le projet utilise PostgreSQL via Docker Compose.
 
-Configuration :
+Configuration actuelle :
 
 ```text
-Base       : padelService
-Utilisateur: padel
+Base        : padelService
+Utilisateur : padel
 Mot de passe: padel
-Port local : 5440
-Port Docker: 5432
+Port local  : 5440
+Port Docker : 5432
+Conteneur   : padel-db
 ```
 
 Demarrer PostgreSQL :
@@ -67,21 +128,21 @@ Arreter PostgreSQL :
 docker compose down
 ```
 
-Supprimer aussi les donnees de la base :
+Supprimer aussi les donnees :
 
 ```bash
 docker compose down -v
 ```
 
+Voir les logs PostgreSQL :
+
+```bash
+docker logs padel-db
+```
+
 ## Backend Spring Boot
 
 Le backend se trouve a la racine du projet.
-
-Port backend :
-
-```text
-http://localhost:8080
-```
 
 Configuration principale :
 
@@ -89,21 +150,24 @@ Configuration principale :
 src/main/resources/application.properties
 ```
 
-Connexion a la base :
+Configuration runtime actuelle :
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5440/padelService
 spring.datasource.username=padel
 spring.datasource.password=padel
-server.port=8080
+server.port=8082
+springdoc.swagger-ui.path=/swagger-ui.html
 ```
 
-### Installer/compiler le backend
+### Compiler le backend
 
 Depuis la racine du projet :
 
 ```bash
 .\mvnw.cmd clean compile
+ou
+a la racine du projet : padellApplication avec la fleche droite
 ```
 
 ### Lancer les tests backend
@@ -118,7 +182,7 @@ Depuis la racine du projet :
 .\mvnw.cmd clean package
 ```
 
-Le fichier genere se trouve dans :
+Le jar genere se trouve dans :
 
 ```text
 target/
@@ -132,24 +196,37 @@ Avec Maven :
 .\mvnw.cmd spring-boot:run
 ```
 
-Ou apres un package :
+Ou apres packaging :
 
 ```bash
 java -jar target/padelmultiple-0.0.1-SNAPSHOT.jar
 ```
 
-## Swagger API
+## API et securite
+
+Le backend utilise des JWT pour l'authentification.
+
+Points utiles :
+
+- login admin via `/api/auth/login`
+- login membre via `/api/membres/login`
+- les roles sont appliques a deux niveaux :
+  - filtrage des routes dans `SecurityConfig`
+  - verification metier fine dans les services d'autorisation
+- le JWT contient un `principalType` pour distinguer explicitement admin et membre
+
+## Swagger / OpenAPI
 
 Quand le backend tourne :
 
 ```text
-http://localhost:8080/swagger-ui.html
+http://localhost:8082/swagger-ui.html
 ```
 
 OpenAPI JSON :
 
 ```text
-http://localhost:8080/v3/api-docs
+http://localhost:8082/v3/api-docs
 ```
 
 ## Frontend Angular
@@ -171,7 +248,7 @@ Configuration proxy :
 ```json
 {
   "/api": {
-    "target": "http://localhost:8080",
+"target": "http://localhost:8082",
     "secure": false,
     "changeOrigin": true
   }
@@ -199,19 +276,13 @@ Ou explicitement sur le port 4200 :
 npm run start:4200
 ```
 
-URL frontend :
-
-```text
-http://localhost:4200
-```
-
 ### Compiler le frontend
 
 ```bash
 npm run build
 ```
 
-Le build Angular est genere dans :
+Le build est genere dans :
 
 ```text
 frontend/dist/
@@ -227,6 +298,25 @@ Mode watch :
 
 ```bash
 npm run test:watch
+```
+
+## Internationalisation
+
+Le frontend gere actuellement deux langues :
+
+- `fr`
+- `en`
+
+Les traductions se trouvent dans :
+
+```text
+frontend/src/app/core/i18n/translations.ts
+```
+
+Le service de langue se trouve dans :
+
+```text
+frontend/src/app/core/i18n/language.service.ts
 ```
 
 ## Compilation complete du projet
@@ -267,18 +357,12 @@ URLs :
 
 ```text
 Frontend : http://localhost:4200
-Backend  : http://localhost:8080
-Swagger  : http://localhost:8080/swagger-ui.html
+Backend  : http://localhost:8082
+Swagger  : http://localhost:8082/swagger-ui.html
 Postgres : localhost:5440
 ```
 
 ## Commandes utiles
-
-Voir les logs PostgreSQL :
-
-```bash
-docker logs padel-db
-```
 
 Relancer proprement la base :
 
@@ -302,33 +386,33 @@ Remove-Item -Recurse -Force dist
 
 ## Ordre conseille pour une demo
 
-1. Demarrer PostgreSQL :
+1. Demarrer PostgreSQL
 
 ```bash
 docker compose up -d
 ```
 
-2. Lancer le backend :
+2. Lancer le backend
 
 ```bash
 .\mvnw.cmd spring-boot:run
 ```
 
-3. Lancer le frontend :
+3. Lancer le frontend
 
 ```bash
 cd frontend
 npm start
 ```
 
-4. Ouvrir :
+4. Ouvrir l'application
 
 ```text
 http://localhost:4200
 ```
 
-5. Verifier l'API avec Swagger :
+5. Verifier l'API si besoin
 
 ```text
-http://localhost:8080/swagger-ui.html
+http://localhost:8082/swagger-ui.html
 ```

@@ -2,12 +2,14 @@ package com.padell.padell.service.impl;
 
 import com.padell.padell.entity.Membre;
 import com.padell.padell.entity.Penalite;
+import com.padell.padell.entity.Site;
 import com.padell.padell.entity.enums.TypeMembre;
 import com.padell.padell.exception.BusinessException;
 import com.padell.padell.exception.ResourceNotFoundException;
 import com.padell.padell.repository.MembreRepository;
 import com.padell.padell.repository.PenaliteRepository;
 import com.padell.padell.service.MembreService;
+import com.padell.padell.service.SiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,30 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class MembreServiceImpl implements MembreService {
 
+    private static final String DEFAULT_MEMBER_PASSWORD = "Membre1234!";
+
     private final MembreRepository membreRepository;
     private final PenaliteRepository penaliteRepository;
-    private final PasswordEncoder passwordEncoder; // Added PasswordEncoder
+    private final SiteService siteService;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public Membre create(Membre membre, Long siteId, String rawPassword) {
+        prepareForCreation(membre, siteId, rawPassword);
+        return create(membre);
+    }
+
+    @Override
+    public Membre prepareForCreation(Membre membre, Long siteId, String rawPassword) {
+        if (siteId != null) {
+            Site site = siteService.getById(siteId);
+            membre.setSite(site);
+        }
+
+        String password = StringUtils.hasText(rawPassword) ? rawPassword : DEFAULT_MEMBER_PASSWORD;
+        membre.setPasswordHash(passwordEncoder.encode(password));
+        return membre;
+    }
 
     @Override
     public Membre create(Membre membre) {
@@ -90,7 +113,6 @@ public class MembreServiceImpl implements MembreService {
         Membre membre = getById(membreId);
         return membre.getSolde() > 0.0;
     }
-// règle metier addition penalité à organisateur du match privée
     @Override
     public void addPenalty(Long membreId) {
         Membre membre = getById(membreId);

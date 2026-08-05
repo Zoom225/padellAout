@@ -3,6 +3,7 @@ package com.padell.padell.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.padell.padell.config.JwtConfig;
 import com.padell.padell.config.SecurityConfig;
+import com.padell.test.TestSecurityConfig;
 import com.padell.padell.dto.response.PaiementResponse;
 import com.padell.padell.entity.Paiement;
 import com.padell.padell.mapper.PaiementMapper;
@@ -15,11 +16,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -30,9 +31,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, TestSecurityConfig.class})
 @WebMvcTest(controllers = PaiementController.class)
-@SuppressWarnings("deprecation")
 @DisplayName("Tests de PaiementController")
 class PaiementControllerTest {
 
@@ -42,18 +42,18 @@ class PaiementControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private PaiementService paiementService;
-    @MockBean
+    @MockitoBean
     private PaiementMapper paiementMapper;
-    @MockBean
+    @MockitoBean
     private CurrentMemberService currentMemberService;
 
-    @MockBean
+    @MockitoBean
     private JwtConfig jwtConfig;
-    @MockBean
+    @MockitoBean
     private AdministrateurRepository administrateurRepository;
-    @MockBean
+    @MockitoBean
     private MembreRepository membreRepository;
 
     private Paiement paiement;

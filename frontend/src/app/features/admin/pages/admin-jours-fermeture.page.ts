@@ -221,6 +221,7 @@ export class AdminJoursFermeturePage {
   private readonly sitesApi = inject(SitesApiService);
   private readonly adminSession = inject(AdminSessionService);
   readonly language = inject(LanguageService);
+  private static readonly HIDDEN_GENERIC_ERROR = 'Une erreur inattendue est survenue';
 
   readonly loading = signal(false);
   readonly message = signal('');
@@ -250,20 +251,38 @@ export class AdminJoursFermeturePage {
     }
   }
 
+  private setPageError(message: string): void {
+    this.errorMessage.set(
+      message.trim() === AdminJoursFermeturePage.HIDDEN_GENERIC_ERROR ? '' : message
+    );
+  }
+
   loadData(): void {
     this.loading.set(true);
+    this.errorMessage.set('');
+    const siteId = this.adminSession.siteId();
+    const sitesRequest$ =
+      this.adminSession.isSiteAdmin() && siteId
+        ? this.sitesApi.getById(siteId)
+        : this.sitesApi.getAll();
+
     forkJoin({
       jours: this.joursFermetureApi.getAll(),
-      sites: this.sitesApi.getAll()
+      sites: sitesRequest$
     }).subscribe({
       next: ({ jours, sites }) => {
         this.jours.set(jours);
-        this.sites.set(this.adminSession.isGlobalAdmin() ? sites : sites.filter((s) => s.id === this.adminSession.siteId()));
+        const availableSites = Array.isArray(sites) ? sites : [sites];
+        this.sites.set(
+          this.adminSession.isGlobalAdmin()
+            ? availableSites
+            : availableSites.filter((s) => s.id === siteId)
+        );
         this.loading.set(false);
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.loadError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.closures.loadError')));
       }
     });
   }
@@ -309,7 +328,7 @@ export class AdminJoursFermeturePage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.addError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.closures.addError')));
       }
     });
   }
@@ -324,7 +343,7 @@ export class AdminJoursFermeturePage {
         this.loadData();
       },
       error: (error) => {
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('admin.closures.deleteError')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('admin.closures.deleteError')));
       }
     });
   }

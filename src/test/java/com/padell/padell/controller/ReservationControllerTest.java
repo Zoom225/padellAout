@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.padell.padell.config.JwtAuthenticationFilter;
 import com.padell.padell.config.JwtConfig;
 import com.padell.padell.config.SecurityConfig;
+import com.padell.test.TestSecurityConfig;
 import com.padell.padell.dto.request.ReservationRequest;
 import com.padell.padell.dto.response.ReservationResponse;
 import com.padell.padell.entity.Membre;
@@ -19,11 +20,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.io.IOException;
 
@@ -36,9 +37,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, TestSecurityConfig.class})
 @WebMvcTest(controllers = ReservationController.class)
-@SuppressWarnings("deprecation")
 @DisplayName("Tests de ReservationController")
 class ReservationControllerTest {
 
@@ -48,20 +48,20 @@ class ReservationControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @MockBean
+    @MockitoBean
     private ReservationService reservationService;
-    @MockBean
+    @MockitoBean
     private ReservationMapper reservationMapper;
-    @MockBean
+    @MockitoBean
     private CurrentMemberService currentMemberService;
 
-    @MockBean
+    @MockitoBean
     private JwtConfig jwtConfig;
-    @MockBean
+    @MockitoBean
     private AdministrateurRepository administrateurRepository;
-    @MockBean
+    @MockitoBean
     private MembreRepository membreRepository;
-    @MockBean
+    @MockitoBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     private ReservationRequest reservationRequest;
     private ReservationResponse reservationResponse;

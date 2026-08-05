@@ -16,7 +16,6 @@ public class CurrentMemberService {
 
     public Membre currentMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Regle metier : une action membre exige une authentification membre.
         if (authentication == null || authentication.getName() == null || "anonymousUser".equals(authentication.getName())) {
             throw new BusinessException("Authentification membre requise.");
         }
@@ -30,9 +29,17 @@ public class CurrentMemberService {
     }
 
     public void requireCurrentMember(Long membreId) {
-        // Regle metier : un membre ne peut agir que sur ses propres ressources.
         if (!currentMemberId().equals(membreId)) {
             throw new BusinessException("Accès refusé : cette ressource appartient à un autre membre.");
+        }
+    }
+
+    public boolean isCurrentMemberId(Long membreId) {
+        try {
+            requireCurrentMember(membreId);
+            return true;
+        } catch (BusinessException ex) {
+            return false;
         }
     }
 }

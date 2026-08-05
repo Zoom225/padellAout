@@ -36,6 +36,9 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       @if (errorMessage()) {
         <p class="status-error">{{ errorMessage() }}</p>
       }
+      @if (message()) {
+        <p class="status-success">{{ message() }}</p>
+      }
 
       <div class="pay-kpi-card">
         <div class="pay-kpi-grid">
@@ -65,6 +68,18 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
               <div class="pay-card-id">{{ language.t('member.payments.payment') }} #{{ payment.id }}</div>
               <div class="pay-card-date">{{ payment.datePaiement || language.t('member.payments.notSet') }}</div>
             </div>
+            @if (payment.statut === 'EN_ATTENTE' && payment.reservationId != null) {
+              <div class="pay-card-actions">
+                <button
+                  type="button"
+                  class="pay-action-btn"
+                  (click)="pay(payment)"
+                  [disabled]="actionPaymentId() === payment.id"
+                >
+                  {{ actionPaymentId() === payment.id ? 'Paiement...' : 'Payer maintenant' }}
+                </button>
+              </div>
+            }
             <div class="pay-card-body">
               <span class="pay-amount">{{ payment.montant }} €</span>
               <span class="pay-badge" [class]="payBadgeClass(payment.statut)">{{ paymentStatusLabel(payment.statut) }}</span>
@@ -122,6 +137,7 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       .pay-card-id { font-weight: 800; font-size: 0.95rem; color: #4c1d95; }
       .pay-card-date { font-size: 0.8rem; color: #94a3b8; }
       .pay-card-body { padding: 0.5rem 1.25rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+      .pay-card-actions { padding: 0 1.25rem 1rem; }
       .pay-amount { font-size: 1.35rem; font-weight: 800; color: #1e293b; }
       .pay-badge {
         font-size: 0.72rem; font-weight: 800; padding: 0.25rem 0.75rem;
@@ -131,6 +147,12 @@ import { extractApiErrorMessage } from '../../../shared/utils/api-error.util';
       .pay-badge-attente  { background: #fef3c7; color: #b45309; }
       .pay-badge-rembourse { background: #dbeafe; color: #1d4ed8; }
       .pay-badge-default  { background: #f1f5f9; color: #475569; }
+      .pay-action-btn {
+        width: 100%; border: none; border-radius: 0.75rem; padding: 0.7rem 1rem;
+        background: linear-gradient(135deg, #6d28d9, #7c3aed); color: #fff;
+        font-weight: 700; cursor: pointer; transition: opacity 0.15s ease;
+      }
+      .pay-action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
       .pay-empty {
         text-align: center; padding: 3rem; color: #94a3b8;
@@ -145,8 +167,11 @@ export class MemberPaymentsPage {
   private readonly paiementsApi = inject(PaiementsApiService);
   private readonly memberSession = inject(MemberSessionService);
   readonly language = inject(LanguageService);
+  private static readonly HIDDEN_GENERIC_ERROR = 'Une erreur inattendue est survenue';
 
   readonly loading = signal(false);
+  readonly actionPaymentId = signal<number | null>(null);
+  readonly message = signal('');
   readonly errorMessage = signal('');
   readonly payments = signal<PaiementResponse[]>([]);
   readonly memberId = computed(() => this.memberSession.memberId());
@@ -162,14 +187,22 @@ export class MemberPaymentsPage {
     this.loadPayments();
   }
 
+  private setPageError(message: string): void {
+    this.errorMessage.set(
+      message.trim() === MemberPaymentsPage.HIDDEN_GENERIC_ERROR ? '' : message
+    );
+  }
+
   loadPayments(): void {
     const memberId = this.memberId();
     if (!memberId) {
-      this.errorMessage.set(this.language.t('member.payments.noMember'));
+      this.setPageError(this.language.t('member.payments.noMember'));
       return;
     }
 
     this.loading.set(true);
+    this.message.set('');
+    this.errorMessage.set('');
     this.paiementsApi.getByMembre(memberId).subscribe({
       next: (payments) => {
         this.payments.set(payments);
@@ -177,7 +210,31 @@ export class MemberPaymentsPage {
       },
       error: (error) => {
         this.loading.set(false);
-        this.errorMessage.set(extractApiErrorMessage(error, this.language.t('member.payments.error')));
+        this.setPageError(extractApiErrorMessage(error, this.language.t('member.payments.error')));
+      }
+    });
+  }
+
+  pay(payment: PaiementResponse): void {
+    if (payment.reservationId == null || this.actionPaymentId() !== null) {
+      return;
+    }
+
+    this.actionPaymentId.set(payment.id);
+    this.message.set('');
+    this.errorMessage.set('');
+
+    this.paiementsApi.pay(payment.reservationId).subscribe({
+      next: (updatedPayment) => {
+        this.actionPaymentId.set(null);
+        this.payments.update((payments) =>
+          payments.map((currentPayment) => (currentPayment.id === updatedPayment.id ? updatedPayment : currentPayment))
+        );
+        this.message.set('Paiement effectue avec succes. Votre reservation est maintenant confirmee.');
+      },
+      error: (error) => {
+        this.actionPaymentId.set(null);
+        this.setPageError(extractApiErrorMessage(error, 'Paiement impossible.'));
       }
     });
   }

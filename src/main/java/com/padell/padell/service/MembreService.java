@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface MembreService {
     Membre create(Membre membre);
+    Membre create(Membre membre, Long siteId, String rawPassword);
+    Membre prepareForCreation(Membre membre, Long siteId, String rawPassword);
     Membre getById(Long id);
     Membre getByMatricule(String matricule);
     List<Membre> getAll();

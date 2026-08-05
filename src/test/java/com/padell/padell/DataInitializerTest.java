@@ -2,7 +2,9 @@ package com.padell.padell;
 
 import com.padell.padell.entity.Membre;
 import com.padell.padell.entity.Site;
+import com.padell.padell.entity.Administrateur;
 import com.padell.padell.entity.enums.TypeMembre;
+import com.padell.padell.entity.enums.TypeAdministrateur;
 import com.padell.padell.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -76,5 +78,48 @@ class DataInitializerTest {
                 .extracting(Membre::getPasswordHash)
                 .contains("hashed-default-password");
         assertThat(legacyMember.getPasswordHash()).isEqualTo("hashed-default-password");
+    }
+
+    @Test
+    void run_shouldBackfillDemoAdminPasswordHashes() {
+        Administrateur adminLyon = Administrateur.builder()
+                .email("admin.lyon@padel.com")
+                .nom("Admin")
+                .prenom("Lyon")
+                .typeAdministrateur(TypeAdministrateur.SITE)
+                .passwordHash("old-hash")
+                .build();
+        adminLyon.setId(10L);
+
+        Administrateur adminParis = Administrateur.builder()
+                .email("admin.paris@padel.com")
+                .nom("Admin")
+                .prenom("Paris")
+                .typeAdministrateur(TypeAdministrateur.SITE)
+                .passwordHash("old-hash-2")
+                .build();
+        adminParis.setId(11L);
+
+        when(siteRepository.count()).thenReturn(1L);
+        when(matchRepository.count()).thenReturn(1L);
+        when(membreRepository.findAll()).thenReturn(List.of());
+        when(administrateurRepository.findByEmail("admin@padel.com")).thenReturn(Optional.empty());
+        when(administrateurRepository.findByEmail("admin.lyon@padel.com")).thenReturn(Optional.of(adminLyon));
+        when(administrateurRepository.findByEmail("admin.paris@padel.com")).thenReturn(Optional.of(adminParis));
+        when(membreRepository.save(any(Membre.class))).thenAnswer(invocation -> {
+            Membre saved = invocation.getArgument(0);
+            saved.setId(99L);
+            return saved;
+        });
+        when(penaliteRepository.existsByMembreIdAndDateFinAfter(any(), any(LocalDate.class))).thenReturn(true);
+        when(passwordEncoder.encode("Membre1234!")).thenReturn("hashed-member-password");
+        when(passwordEncoder.encode("Admin1234!")).thenReturn("hashed-admin-password");
+
+        dataInitializer.run();
+
+        verify(administrateurRepository).save(adminLyon);
+        verify(administrateurRepository).save(adminParis);
+        assertThat(adminLyon.getPasswordHash()).isEqualTo("hashed-admin-password");
+        assertThat(adminParis.getPasswordHash()).isEqualTo("hashed-admin-password");
     }
 }

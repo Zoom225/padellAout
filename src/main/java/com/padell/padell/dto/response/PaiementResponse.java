@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PaiementResponse {
     private Long id;
+    private Long reservationId;
     private Double montant;
     private StatutPaiement statut;
     private LocalDateTime datePaiement;

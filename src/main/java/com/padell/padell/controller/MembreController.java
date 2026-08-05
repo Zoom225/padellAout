@@ -1,17 +1,15 @@
 package com.padell.padell.controller;
 
 import com.padell.padell.config.JwtConfig;
-import com.padell.padell.dto.request.MembreLoginRequest; // Added import
+import com.padell.padell.dto.request.MembreLoginRequest;
 import com.padell.padell.dto.request.MembreRequest;
 import com.padell.padell.dto.response.MembreResponse;
 import com.padell.padell.entity.Membre;
-import com.padell.padell.entity.Site;
-import com.padell.padell.entity.enums.TypeAdministrateur;
 import com.padell.padell.mapper.MembreMapper;
 import com.padell.padell.service.MembreService;
-import com.padell.padell.service.SiteService;
-import com.padell.padell.service.impl.AdminAuthorizationService;
 import com.padell.padell.service.impl.CurrentMemberService;
+import com.padell.padell.service.impl.MembreCreationService;
+import com.padell.padell.service.impl.MembreAccessService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,11 +22,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -39,15 +34,12 @@ import java.util.List;
         "Les membres se connectent avec leur matricule via /api/membres/login.")
 public class MembreController {
 
-    private static final String DEFAULT_MEMBER_PASSWORD = "Membre1234!";
-
     private final MembreService membreService;
-    private final SiteService siteService;
     private final MembreMapper membreMapper;
     private final JwtConfig jwtConfig;
-    private final AdminAuthorizationService adminAuthorizationService;
+    private final MembreAccessService membreAccessService;
+    private final MembreCreationService membreCreationService;
     private final CurrentMemberService currentMemberService;
-    private final PasswordEncoder passwordEncoder;
 
     @Operation(
             summary = "Créer un membre",
@@ -65,21 +57,9 @@ public class MembreController {
                     content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canCreate(#request.siteId)")
     public ResponseEntity<MembreResponse> create(@Valid @RequestBody MembreRequest request) {
-        Membre membre = membreMapper.toEntity(request);
-
-        if (request.getSiteId() != null) {
-            Site site = siteService.getById(request.getSiteId());
-            membre.setSite(site);
-        }
-
-        String rawPassword = StringUtils.hasText(request.getPassword())
-                ? request.getPassword()
-                : DEFAULT_MEMBER_PASSWORD;
-        membre.setPasswordHash(passwordEncoder.encode(rawPassword));
-
-        adminAuthorizationService.checkMembreAccess(membre);
-        Membre saved = membreService.create(membre);
+        Membre saved = membreCreationService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(membreMapper.toResponse(saved));
     }
 
@@ -93,8 +73,9 @@ public class MembreController {
                     content = @Content(schema = @Schema(implementation = MembreResponse.class)))
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MembreResponse>> getAll() {
-        List<MembreResponse> membres = adminAuthorizationService.filterMembres(membreService.getAll())
+        List<MembreResponse> membres = membreAccessService.filterMembres(membreService.getAll())
                 .stream()
                 .map(membreMapper::toResponse)
                 .toList();
@@ -114,11 +95,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<MembreResponse> getById(
             @Parameter(description = "ID interne du membre", required = true)
             @PathVariable Long id) {
         Membre membre = membreService.getById(id);
-        checkCurrentAccess(membre);
         return ResponseEntity.ok(membreMapper.toResponse(membre));
     }
 
@@ -135,11 +116,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/matricule/{matricule}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadByMatricule(#matricule)")
     public ResponseEntity<MembreResponse> getByMatricule(
             @Parameter(description = "Matricule unique du membre", required = true)
             @PathVariable String matricule) {
         Membre membre = membreService.getByMatricule(matricule);
-        checkCurrentAccess(membre);
         return ResponseEntity.ok(membreMapper.toResponse(membre));
     }
 
@@ -156,6 +137,7 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/me")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<MembreResponse> me() {
         Membre membre = currentMemberService.currentMember();
         return ResponseEntity.ok(membreMapper.toResponse(membre));
@@ -175,11 +157,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}/penalty")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<Boolean> hasActivePenalty(
             @Parameter(description = "ID du membre à vérifier", required = true)
             @PathVariable Long id) {
         try {
-            checkCurrentAccess(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasActivePenalty(id));
         } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -201,11 +183,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}/balance")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<Boolean> hasOutstandingBalance(
             @Parameter(description = "ID du membre à vérifier", required = true)
             @PathVariable Long id) {
         try {
-            checkCurrentAccess(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasOutstandingBalance(id));
         } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -229,11 +211,11 @@ public class MembreController {
                     content = @Content)
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canManageById(#id)")
     public ResponseEntity<MembreResponse> update(
             @Parameter(description = "ID du membre à modifier", required = true)
             @PathVariable Long id,
             @Valid @RequestBody MembreRequest request) {
-        adminAuthorizationService.checkMembreAccess(membreService.getById(id));
         Membre membre = membreMapper.toEntity(request);
         Membre updated = membreService.update(id, membre);
         return ResponseEntity.ok(membreMapper.toResponse(updated));
@@ -253,10 +235,10 @@ public class MembreController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canManageById(#id)")
     public ResponseEntity<Void> delete(
             @Parameter(description = "ID du membre à supprimer", required = true)
             @PathVariable Long id) {
-        adminAuthorizationService.checkMembreAccess(membreService.getById(id));
         membreService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -272,27 +254,11 @@ public class MembreController {
                     content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<MembreResponse> login(@Valid @RequestBody MembreLoginRequest request) { // Modified
-        Membre membre = membreService.authenticate(request.getMatricule(), request.getPassword()); // Modified
+    public ResponseEntity<MembreResponse> login(@Valid @RequestBody MembreLoginRequest request) {
+        Membre membre = membreService.authenticate(request.getMatricule(), request.getPassword());
         MembreResponse response = membreMapper.toResponse(membre);
-        String token = jwtConfig.generateToken(membre.getMatricule(), membre.getTypeMembre().name());
+        String token = jwtConfig.generateToken(membre.getMatricule(), membre.getTypeMembre().name(), "MEMBER");
         response.setToken(token);
         return ResponseEntity.ok(response);
-    }
-
-    private void checkCurrentAccess(Membre membre) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean admin = authentication != null && authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-
-        if (admin) {
-            if (adminAuthorizationService.currentAdmin().getTypeAdministrateur() == TypeAdministrateur.GLOBAL) {
-                return;
-            }
-            adminAuthorizationService.checkMembreAccess(membre);
-            return;
-        }
-
-        currentMemberService.requireCurrentMember(membre.getId());
     }
 }

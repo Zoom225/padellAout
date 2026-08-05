@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MatchesApiService } from '../../../core/api/matches-api.service';
@@ -87,6 +87,23 @@ describe('MemberReservationsPage', () => {
         { provide: MemberSessionService, useValue: { memberId: vi.fn().mockReturnValue(1) } }
       ]
     }).compileComponents();
+
+    const router = TestBed.inject(Router);
+    vi.spyOn(router, 'getCurrentNavigation').mockReturnValue({
+      extras: {
+        state: {
+          createdMatchId: 2,
+          successMessage: 'Match privé créé. Les invitations sont en attente de paiement des joueurs.'
+        }
+      }
+    } as any);
+    window.history.replaceState(
+      {
+        createdMatchId: 2,
+        successMessage: 'Match privé créé. Les invitations sont en attente de paiement des joueurs.'
+      },
+      ''
+    );
   });
 
   afterEach(() => {
@@ -97,15 +114,21 @@ describe('MemberReservationsPage', () => {
   it('n expose que les matchs PRIVE dans la gestion des joueurs', () => {
     const fixture = TestBed.createComponent(MemberReservationsPage);
     const component = fixture.componentInstance;
+    fixture.detectChanges();
 
     expect(component.organisedMatches()).toHaveLength(2);
     expect(component.managedMatches()).toHaveLength(1);
     expect(component.managedMatches()[0].id).toBe(2);
+    expect(component.managedMatchId()).toBe(2);
+    expect(component.message()).toContain('Match privé créé');
+    expect(fixture.nativeElement.textContent).toContain('Court A');
+    expect(fixture.nativeElement.textContent).toContain('Planifie');
   });
 
   it('bloque la selection d un match PUBLIC dans la gestion des joueurs', () => {
     const fixture = TestBed.createComponent(MemberReservationsPage);
     const component = fixture.componentInstance;
+    reservationsApiMock.getByMatch.mockClear();
 
     component.onManagedMatchChange(1);
 
