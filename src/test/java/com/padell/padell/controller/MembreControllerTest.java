@@ -52,7 +52,7 @@ class MembreControllerTest {
     private MembreService membreService;
     @MockitoBean
     private MembreMapper membreMapper;
-    @MockitoBean
+    @MockitoBean(name = "membreAccessService")
     private MembreAccessService membreAccessService;
     @MockitoBean
     private MembreCreationService membreCreationService;
@@ -77,6 +77,11 @@ class MembreControllerTest {
         membreRequest.setNom("Doe");
         membreRequest.setPrenom("John");
         membreRequest.setTypeMembre(com.padell.padell.entity.enums.TypeMembre.GLOBAL);
+
+        when(membreAccessService.canCreate(nullable(Long.class))).thenReturn(true);
+        when(membreAccessService.canManageById(anyLong())).thenReturn(true);
+        when(membreAccessService.canReadById(anyLong())).thenReturn(true);
+        when(membreAccessService.canReadByMatricule(anyString())).thenReturn(true);
 
         membreResponse = new MembreResponse();
         membreResponse.setId(1L);

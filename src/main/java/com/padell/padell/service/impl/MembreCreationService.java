@@ -13,10 +13,8 @@ public class MembreCreationService {
 
     private final MembreService membreService;
     private final MembreMapper membreMapper;
-    private final MembreAccessService membreAccessService;
 
     public Membre create(MembreRequest request) {
-        membreAccessService.assertCanCreate(request.getSiteId());
         Membre membre = membreMapper.toEntity(request);
         return membreService.create(membre, request.getSiteId(), request.getPassword());
     }

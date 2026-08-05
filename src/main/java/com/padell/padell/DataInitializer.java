@@ -64,6 +64,7 @@ public class DataInitializer implements CommandLineRunner {
             }
             ensurePenalizedDemoMember();
             ensureDemoMembersCredentials();
+            ensureDemoAdminCredentials();
             log.info("DataInitializer : base de donnees deja initialisee, initialisation ignoree...");
             return;
         }
@@ -302,6 +303,19 @@ public class DataInitializer implements CommandLineRunner {
             membre.setEmail(email);
             membre.setPasswordHash(passwordEncoder.encode(DEMO_MEMBER_PASSWORD));
             membreRepository.save(membre);
+        });
+    }
+
+    private void ensureDemoAdminCredentials() {
+        updateDemoAdminCredentials("admin@padel.com");
+        updateDemoAdminCredentials("admin.lyon@padel.com");
+        updateDemoAdminCredentials("admin.paris@padel.com");
+    }
+
+    private void updateDemoAdminCredentials(String email) {
+        administrateurRepository.findByEmail(email).ifPresent(admin -> {
+            admin.setPasswordHash(passwordEncoder.encode("Admin1234!"));
+            administrateurRepository.save(admin);
         });
     }
 

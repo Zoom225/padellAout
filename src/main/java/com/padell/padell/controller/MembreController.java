@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class MembreController {
                     content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canCreate(#request.siteId)")
     public ResponseEntity<MembreResponse> create(@Valid @RequestBody MembreRequest request) {
         Membre saved = membreCreationService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(membreMapper.toResponse(saved));
@@ -71,6 +73,7 @@ public class MembreController {
                     content = @Content(schema = @Schema(implementation = MembreResponse.class)))
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MembreResponse>> getAll() {
         List<MembreResponse> membres = membreAccessService.filterMembres(membreService.getAll())
                 .stream()
@@ -92,11 +95,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<MembreResponse> getById(
             @Parameter(description = "ID interne du membre", required = true)
             @PathVariable Long id) {
         Membre membre = membreService.getById(id);
-        membreAccessService.assertCanRead(membre);
         return ResponseEntity.ok(membreMapper.toResponse(membre));
     }
 
@@ -113,11 +116,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/matricule/{matricule}")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadByMatricule(#matricule)")
     public ResponseEntity<MembreResponse> getByMatricule(
             @Parameter(description = "Matricule unique du membre", required = true)
             @PathVariable String matricule) {
         Membre membre = membreService.getByMatricule(matricule);
-        membreAccessService.assertCanRead(membre);
         return ResponseEntity.ok(membreMapper.toResponse(membre));
     }
 
@@ -134,6 +137,7 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/me")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<MembreResponse> me() {
         Membre membre = currentMemberService.currentMember();
         return ResponseEntity.ok(membreMapper.toResponse(membre));
@@ -153,11 +157,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}/penalty")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<Boolean> hasActivePenalty(
             @Parameter(description = "ID du membre à vérifier", required = true)
             @PathVariable Long id) {
         try {
-            membreAccessService.assertCanRead(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasActivePenalty(id));
         } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -179,11 +183,11 @@ public class MembreController {
                     content = @Content)
     })
     @GetMapping("/{id}/balance")
+    @PreAuthorize("hasAnyRole('MEMBER', 'ADMIN') and @membreAccessService.canReadById(#id)")
     public ResponseEntity<Boolean> hasOutstandingBalance(
             @Parameter(description = "ID du membre à vérifier", required = true)
             @PathVariable Long id) {
         try {
-            membreAccessService.assertCanRead(membreService.getById(id));
             return ResponseEntity.ok(membreService.hasOutstandingBalance(id));
         } catch (com.padell.padell.exception.ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -207,11 +211,11 @@ public class MembreController {
                     content = @Content)
     })
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canManageById(#id)")
     public ResponseEntity<MembreResponse> update(
             @Parameter(description = "ID du membre à modifier", required = true)
             @PathVariable Long id,
             @Valid @RequestBody MembreRequest request) {
-        membreAccessService.assertCanManage(membreService.getById(id));
         Membre membre = membreMapper.toEntity(request);
         Membre updated = membreService.update(id, membre);
         return ResponseEntity.ok(membreMapper.toResponse(updated));
@@ -231,10 +235,10 @@ public class MembreController {
                     content = @Content)
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') and @membreAccessService.canManageById(#id)")
     public ResponseEntity<Void> delete(
             @Parameter(description = "ID du membre à supprimer", required = true)
             @PathVariable Long id) {
-        membreAccessService.assertCanManage(membreService.getById(id));
         membreService.delete(id);
         return ResponseEntity.noContent().build();
     }

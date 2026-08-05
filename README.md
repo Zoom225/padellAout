@@ -10,7 +10,7 @@ Projet fullstack de gestion de matchs de padel.
 
 Le projet est compose de deux applications :
 
-- un backend Spring Boot expose sur `http://localhost:8080`
+- un backend Spring Boot expose sur `http://localhost:8082`
 - un frontend Angular expose en developpement sur `http://localhost:4200`
 
 Le frontend appelle le backend via un proxy `/api`.
@@ -156,7 +156,7 @@ Configuration runtime actuelle :
 spring.datasource.url=jdbc:postgresql://localhost:5440/padelService
 spring.datasource.username=padel
 spring.datasource.password=padel
-server.port=8080
+server.port=8082
 springdoc.swagger-ui.path=/swagger-ui.html
 ```
 
@@ -166,6 +166,8 @@ Depuis la racine du projet :
 
 ```bash
 .\mvnw.cmd clean compile
+ou
+a la racine du projet : padellApplication avec la fleche droite
 ```
 
 ### Lancer les tests backend
@@ -218,13 +220,13 @@ Points utiles :
 Quand le backend tourne :
 
 ```text
-http://localhost:8080/swagger-ui.html
+http://localhost:8082/swagger-ui.html
 ```
 
 OpenAPI JSON :
 
 ```text
-http://localhost:8080/v3/api-docs
+http://localhost:8082/v3/api-docs
 ```
 
 ## Frontend Angular
@@ -246,7 +248,7 @@ Configuration proxy :
 ```json
 {
   "/api": {
-    "target": "http://localhost:8080",
+"target": "http://localhost:8082",
     "secure": false,
     "changeOrigin": true
   }
@@ -355,8 +357,8 @@ URLs :
 
 ```text
 Frontend : http://localhost:4200
-Backend  : http://localhost:8080
-Swagger  : http://localhost:8080/swagger-ui.html
+Backend  : http://localhost:8082
+Swagger  : http://localhost:8082/swagger-ui.html
 Postgres : localhost:5440
 ```
 
@@ -412,5 +414,5 @@ http://localhost:4200
 5. Verifier l'API si besoin
 
 ```text
-http://localhost:8080/swagger-ui.html
+http://localhost:8082/swagger-ui.html
 ```

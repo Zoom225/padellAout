@@ -45,8 +45,8 @@ public class JwtConfig {
         return builder.signWith(getSigningKey()).compact();
     }
 
-    // extrait l'email depuis le token
-    public String extractEmail(String token) {
+    // extrait le subject depuis le token
+    public String extractSubject(String token) {
         return extractClaims(token).getSubject();
     }
 
