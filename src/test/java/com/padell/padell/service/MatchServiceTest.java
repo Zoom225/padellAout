@@ -2,6 +2,8 @@ package com.padell.padell.service;
 
 import com.padell.padell.entity.*;
 import com.padell.padell.entity.enums.StatutMatch;
+import com.padell.padell.entity.enums.StatutPaiement;
+import com.padell.padell.entity.enums.StatutReservation;
 import com.padell.padell.entity.enums.TypeMatch;
 import com.padell.padell.entity.enums.TypeMembre;
 import com.padell.padell.exception.BusinessException;
@@ -30,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,7 +105,7 @@ class MatchServiceTest {
                 createMatchRequest.matchDate().plusMinutes(90).toLocalTime(),
                 TypeMatch.PUBLIC,
                 StatutMatch.PLANIFIE,
-                1,
+                0,
                 15.0,
                 null  // dateConversionPublic
         );
@@ -127,11 +130,18 @@ class MatchServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(1, result.nbJoueursActuels());
+        assertEquals(0, result.nbJoueursActuels());
         assertEquals(TypeMatch.PUBLIC, result.typeMatch());
-        verify(matchRepository, times(1)).save(any(Match.class));
-        verify(reservationRepository, times(1)).save(any(Reservation.class));
-        verify(paiementRepository, times(1)).save(any(Paiement.class));
+        verify(matchRepository, times(1)).save(argThat(match ->
+                match.getStatut() == StatutMatch.PLANIFIE &&
+                        match.getNbJoueursActuels() == 0
+        ));
+        verify(reservationRepository, times(1)).save(argThat(reservation ->
+                reservation.getStatut() == StatutReservation.EN_ATTENTE
+        ));
+        verify(paiementRepository, times(1)).save(argThat(paiement ->
+                paiement.getStatut() == StatutPaiement.EN_ATTENTE
+        ));
     }
 
     @Test

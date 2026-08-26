@@ -4,6 +4,7 @@ import com.padell.padell.entity.Membre;
 import com.padell.padell.entity.Match;
 import com.padell.padell.entity.Paiement;
 import com.padell.padell.entity.Reservation;
+import com.padell.padell.entity.enums.StatutMatch;
 import com.padell.padell.entity.enums.StatutPaiement;
 import com.padell.padell.entity.enums.StatutReservation;
 import com.padell.padell.exception.BusinessException;
@@ -62,13 +63,19 @@ public class PaiementServiceImpl implements PaiementService {
         if (paiement.getStatut() == StatutPaiement.ANNULE) {
             throw new BusinessException("Le paiement de cette réservation a été annulé.");
         }
-        // Regle metier : la place est deja bloquee par la reservation en attente.
-        // Le verrou garde un paiement coherent avec l'etat courant du match.
-        matchRepository.findByIdForUpdate(reservation.getMatch().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Match introuvable avec l'ID : " + reservation.getMatch().getId()));
         // Regle metier : seules les reservations en attente peuvent etre payees.
         if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
             throw new BusinessException("Seules les réservations en attente peuvent être payées.");
+        }
+        // La place est attribuee uniquement au moment du paiement, apres verification du match sous verrou.
+        Match match = matchRepository.findByIdForUpdate(reservation.getMatch().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Match introuvable avec l'ID : " + reservation.getMatch().getId()));
+        // Regle metier : le match doit toujours etre valide une fois verrouille.
+        if (match.getStatut() == StatutMatch.ANNULE) {
+            throw new BusinessException("Le match est annulé.");
+        }
+        if (match.getNbJoueursActuels() != null && match.getNbJoueursActuels() >= 4) {
+            throw new BusinessException("Le match est déjà complet.");
         }
         double montantFinal = paiement.getMontant();
         if (membre.getSolde() > 0.0) {
@@ -86,6 +93,13 @@ public class PaiementServiceImpl implements PaiementService {
         paiementRepository.save(paiement);
 
         reservationService.confirm(reservationId);
+        int nbJoueursActuels = match.getNbJoueursActuels() == null ? 0 : match.getNbJoueursActuels();
+        nbJoueursActuels++;
+        match.setNbJoueursActuels(nbJoueursActuels);
+        if (nbJoueursActuels == 4) {
+            match.setStatut(StatutMatch.COMPLET);
+        }
+        matchRepository.save(match);
 
         log.info("Paiement effectué pour la réservation {} par le membre {}", reservationId, membreId);
 

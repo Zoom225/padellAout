@@ -174,7 +174,7 @@ class ReservationServiceTest {
                     paiement.getMontant().equals(15.0) &&
                             paiement.getStatut() == StatutPaiement.EN_ATTENTE
             ));
-            verify(matchService).incrementPlayers(11L);
+            verify(matchService, never()).incrementPlayers(any());
         }
 
         @Test
@@ -193,7 +193,7 @@ class ReservationServiceTest {
 
             assertThat(result).isNotNull();
             assertThat(result.getStatut()).isEqualTo(StatutReservation.EN_ATTENTE);
-            verify(matchService).incrementPlayers(10L);
+            verify(matchService, never()).incrementPlayers(any());
         }
 
         @Test
@@ -212,7 +212,7 @@ class ReservationServiceTest {
 
             assertThat(result.size()).isEqualTo(1);
             verify(membreService).getByMatricule("g1002");
-            verify(matchService).incrementPlayers(10L);
+            verify(matchService, never()).incrementPlayers(any());
         }
 
         @Test
@@ -340,7 +340,7 @@ class ReservationServiceTest {
                     p.getMontant().equals(15.0) &&
                             p.getStatut() == StatutPaiement.EN_ATTENTE
             ));
-            verify(matchService).incrementPlayers(11L);
+            verify(matchService, never()).incrementPlayers(any());
         }
     }
 
@@ -352,7 +352,7 @@ class ReservationServiceTest {
     class CancelTests {
 
         @Test
-        @DisplayName("✅ doit annuler la réservation en attente et décrémenter le nombre de joueurs")
+        @DisplayName("✅ doit annuler la réservation en attente sans décrémenter le nombre de joueurs")
         void shouldCancelReservation() {
             Paiement paiement = Paiement.builder()
                     .montant(15.0)
@@ -373,7 +373,7 @@ class ReservationServiceTest {
             reservationService.cancel(1L);
 
             assertThat(reservation.getStatut()).isEqualTo(StatutReservation.ANNULEE);
-            verify(matchService).decrementPlayers(matchPublic.getId());
+            verify(matchService, never()).decrementPlayers(any());
         }
 
         @Test

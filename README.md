@@ -153,12 +153,18 @@ src/main/resources/application.properties
 Configuration runtime actuelle :
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5440/padelService
-spring.datasource.username=padel
-spring.datasource.password=padel
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5440/padelService}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:padel}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:padel}
+spring.datasource.driver-class-name=org.postgresql.Driver
 server.port=8082
 springdoc.swagger-ui.path=/swagger-ui.html
 ```
+
+Base principale : PostgreSQL.
+Host local : `localhost`
+Port externe : `5440`
+Port PostgreSQL dans Docker : `5432`
 
 ### Compiler le backend
 
