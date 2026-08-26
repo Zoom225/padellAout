@@ -98,8 +98,6 @@ public class ReservationServiceImpl implements ReservationService {
 
         paiement = paiementRepository.save(paiement);
         reservation.setPaiement(paiement);
-        // Regle metier : une reservation en attente bloque temporairement une place.
-        matchService.incrementPlayers(matchId);
 
         log.info("Réservation créée pour le membre {} sur le match {}", membreId, matchId);
 
@@ -156,7 +154,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public void cancel(Long reservationId) {
         Reservation reservation = getById(reservationId);
-        boolean occupiedPlace = reservation.getStatut() != StatutReservation.ANNULEE;
+        boolean wasConfirmed = reservation.getStatut() == StatutReservation.CONFIRMEE;
 
         // Regle metier : impossible d'annuler deux fois la meme reservation.
         if (reservation.getStatut() == StatutReservation.ANNULEE) {
@@ -177,8 +175,8 @@ public class ReservationServiceImpl implements ReservationService {
             paiementRepository.save(paiement);
         }
 
-        // Regle metier : annuler une reservation.
-        if (occupiedPlace
+        // Regle metier : seule une reservation confirmee libere une place.
+        if (wasConfirmed
                 && reservation.getMatch().getNbJoueursActuels() != null
                 && reservation.getMatch().getNbJoueursActuels() > 0) {
             matchService.decrementPlayers(reservation.getMatch().getId());

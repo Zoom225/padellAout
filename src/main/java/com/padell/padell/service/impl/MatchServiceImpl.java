@@ -341,8 +341,5 @@ public class MatchServiceImpl implements MatchService {
                 .build();
         paiement = paiementRepository.save(paiement);
         reservation.setPaiement(paiement);
-
-        // Regle metier : la reservation en attente de l'organisateur bloque une place.
-        incrementPlayersForMatch(match, false);
     }
 }
