@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Unnamed" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="padelmultiple" />
-    <option name="SPRING_BOOT_MAIN_CLASS" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.padell.padell.PadellApplication" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
